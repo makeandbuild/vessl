@@ -21,11 +21,14 @@ setup for function tests
 ------------------
 
 create your database
-```mysql -u root
-create database mnb_persistence```
+
+    mysql -u root
+    create database mnb_persistence
 
 now load the user table
-```mysql -u root mnb_persistence < src/test/resource/create_user.sql```
+
+    mysql -u root mnb_persistence < src/test/resource/create_user.sql
 
 now you can run the function test
-```mvn integration-test -Pft```
+
+     mvn integration-test -Pft
