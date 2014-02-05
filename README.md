@@ -2,8 +2,8 @@ overview
 --------
 
 this framework is an extension of the spring jdbc implementation.  it provided the following services:
-* makes use of jpa annotations in your model class. see User.java as an example
-* can use the simplified ReflectionBasedJdbcMapper to easily create your DAOs - see UserDaoImpl as an example.  This supports all sorts of types including Date, Integer, Long, Enums (as string column mappings), String.  See UserDaoImpl as an example
+* makes use of jpa annotations in your model class.  See User.java as an example
+* can use the simplified ReflectionBasedJdbcMapper to easily create your DAOs.  This supports all sorts of types including Date, Integer, Long, Enums (as string column mappings), String.  See UserDaoImpl as an example
 * if you dont want the overhead of Reflection you can create those implementations as well
 
 the BaseDao has a lot of built in methods including
