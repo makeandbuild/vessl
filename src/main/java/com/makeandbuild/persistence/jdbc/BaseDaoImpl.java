@@ -21,7 +21,7 @@ import com.makeandbuild.persistence.PagedRequest;
 import com.makeandbuild.persistence.PagedResponse;
 import com.makeandbuild.persistence.SortBy;
 
-public abstract class BaseDaoImpl<T> extends NamedParameterJdbcDaoSupport implements BaseDao<T, Long> {
+public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport implements BaseDao<T, ID> {
     protected DomainMapper<T> _mapper = null;
     @SuppressWarnings("unused")
     private String lastSql;
@@ -109,7 +109,7 @@ public abstract class BaseDaoImpl<T> extends NamedParameterJdbcDaoSupport implem
     }
 
     @Override
-    public T find(Long id) throws DaoException {
+    public T find(ID id) throws DaoException {
         try {
             return getJdbcTemplate().queryForObject(
                     "SELECT * FROM " + getDomainMapper().getTablename() + " WHERE " + getDomainMapper().getPrimaryKeyName() + " = ?",
@@ -120,7 +120,7 @@ public abstract class BaseDaoImpl<T> extends NamedParameterJdbcDaoSupport implem
     }
 
     @Override
-    public boolean exists(Long id) throws DaoException {
+    public boolean exists(ID id) throws DaoException {
         try {
             int count = getJdbcTemplate().queryForInt(
                     "SELECT count(*) FROM " + getDomainMapper().getTablename() + " WHERE " + getDomainMapper().getPrimaryKeyName() + " = ?",
@@ -255,7 +255,7 @@ public abstract class BaseDaoImpl<T> extends NamedParameterJdbcDaoSupport implem
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(ID id) {
         String testString = "DELETE FROM " + getDomainMapper().getTablename() + " WHERE " + getDomainMapper().getPrimaryKeyName() + " = ?";
         getJdbcTemplate().update(testString, id);
     }

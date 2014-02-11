@@ -3,9 +3,9 @@ package com.makeandbuild.persistence;
 import com.makeandbuild.persistence.jdbc.BaseDaoImpl;
 import com.makeandbuild.persistence.jdbc.ReflectionBasedJdbcMapper;
 
-public class UserDaoImpl extends BaseDaoImpl<User, Long> implements UserDao {
-    public UserDaoImpl() {
-        super(ReflectionBasedJdbcMapper.proxy(User.class));
+public class EventDaoImpl extends BaseDaoImpl<Event,String> implements EventDao {
+    public EventDaoImpl() {
+        super(ReflectionBasedJdbcMapper.proxy(Event.class));
     }
 
 }
