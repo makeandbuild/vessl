@@ -25,14 +25,29 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
     protected DomainMapper<T> _mapper = null;
     @SuppressWarnings("unused")
     private String lastSql;
+    @SuppressWarnings("rawtypes")
+    private Class entityClass;
+    @SuppressWarnings("rawtypes")
+    private Class idClass;
+    
     Log logger = LogFactory.getLog(getClass());
     
     protected DomainMapper<T> getDomainMapper() {
         return _mapper;
     }
-
-    public BaseDaoImpl(Class<? extends DomainMapper<T>> c) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public BaseDaoImpl(DomainMapper mapper, Class entityClass, Class idClass) {
         super();
+        this.entityClass = entityClass;
+        this.idClass = idClass;
+        this._mapper = mapper;
+    }
+
+    @SuppressWarnings("rawtypes")
+    public BaseDaoImpl(Class<? extends DomainMapper<T>> c, Class entityClass, Class idClass) {
+        super();
+        this.entityClass = entityClass;
+        this.idClass = idClass;
         try {
             _mapper = (DomainMapper<T>) c.newInstance();
         } catch (Exception e) {
@@ -40,10 +55,26 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         }
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public BaseDaoImpl(DomainMapper mapper) {
-        this._mapper = mapper;
+    @SuppressWarnings("rawtypes")
+    public Class getEntityClass() {
+        return entityClass;
     }
+
+    @SuppressWarnings("rawtypes")
+    public void setEntityClass(Class entityClass) {
+        this.entityClass = entityClass;
+    }
+
+    @SuppressWarnings("rawtypes")
+    public Class getIdClass() {
+        return idClass;
+    }
+
+    @SuppressWarnings("rawtypes")
+    public void setIdClass(Class idClass) {
+        this.idClass = idClass;
+    }
+
 
     private SimpleJdbcInsert inserter;
     private SimpleJdbcInsert nonGeneratingInserter;
@@ -98,10 +129,20 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         return item;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public T save(T item) {
         try {
-            return (getDomainMapper().getPrimaryKeyValue(item) == null) ? create(item) : update(item);
+            ID id = (ID) getDomainMapper().getPrimaryKeyValue(item);
+            if (id == null){
+                return create(item);
+            } else {
+                if (this.exists(id)){
+                    return update(item);
+                } else {
+                    return create(item);
+                }
+            }
         }catch (RuntimeException e) {
             logger.error("problem saving "+item, e);
             throw e;

@@ -5,7 +5,7 @@ import com.makeandbuild.persistence.jdbc.ReflectionBasedJdbcMapper;
 
 public class EventDaoImpl extends BaseDaoImpl<Event,String> implements EventDao {
     public EventDaoImpl() {
-        super(ReflectionBasedJdbcMapper.proxy(Event.class));
+        super(ReflectionBasedJdbcMapper.proxy(Event.class), Event.class, String.class);
     }
 
 }

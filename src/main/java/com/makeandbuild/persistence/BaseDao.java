@@ -4,6 +4,11 @@ import java.util.List;
 
 
 public interface BaseDao<T, ID> {
+    @SuppressWarnings("rawtypes")
+    Class getEntityClass();
+    @SuppressWarnings("rawtypes")
+    Class getIdClass();
+
     public T save(T item) throws DaoException;
     public boolean exists(ID id) throws DaoException;
     public boolean exists(List<Criteria> criterias) throws DaoException;

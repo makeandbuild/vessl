@@ -4,7 +4,7 @@
 	<groupId>com.makeandbuild</groupId>
 	<artifactId>persistence</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.2</version>
+	<version>1.0.4</version>
 	<properties>
 		<spring.version>4.0.0.RELEASE</spring.version>
 		<aspectj.version>1.7.3</aspectj.version>
@@ -254,6 +254,26 @@
 			<artifactId>httpmime</artifactId>
 			<version>4.2.5</version>
 		</dependency>
+		<dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-xc</artifactId>
+            <version>1.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.0</version>
+        </dependency>
 	</dependencies>
 	<build>
 		<testSourceDirectory>src/test/java/unit</testSourceDirectory>

@@ -5,7 +5,7 @@ import com.makeandbuild.persistence.jdbc.ReflectionBasedJdbcMapper;
 
 public class UserDaoImpl extends BaseDaoImpl<User, Long> implements UserDao {
     public UserDaoImpl() {
-        super(ReflectionBasedJdbcMapper.proxy(User.class));
+        super(ReflectionBasedJdbcMapper.proxy(User.class), User.class, Long.class);
     }
 
 }

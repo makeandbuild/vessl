@@ -38,4 +38,27 @@
     </bean>
     <bean id="userDao" class="com.makeandbuild.persistence.UserDaoImpl" parent="baseDao" scope="singleton"/>
     <bean id="eventDao" class="com.makeandbuild.persistence.EventDaoImpl" parent="baseDao" scope="singleton"/>
+    
+    <bean id="fixture" class="com.makeandbuild.fixture.FixtureImpl" scope="singleton">
+    	<property name="entityLoaders">
+    		<list>
+    			<bean class="com.makeandbuild.fixture.ResourceEntityLoaderImpl">
+    				<constructor-arg value="/fixtures/com.makeandbuild.persistence.User.json"/>
+   				</bean>
+    			<bean class="com.makeandbuild.fixture.ResourceEntityLoaderImpl">
+    				<constructor-arg value="/fixtures/com.makeandbuild.persistence.Event.json"/>
+   				</bean>
+    		</list>
+    	</property>
+    	<property name="entityManagers">
+    		<list>
+    			<bean class="com.makeandbuild.fixture.DaoEntityManagerImpl">
+    				<constructor-arg ref="userDao"/>
+   				</bean>
+    			<bean class="com.makeandbuild.fixture.DaoEntityManagerImpl">
+    				<constructor-arg ref="eventDao"/>
+   				</bean>
+    		</list>
+    	</property>
+	</bean>    	
 </beans>

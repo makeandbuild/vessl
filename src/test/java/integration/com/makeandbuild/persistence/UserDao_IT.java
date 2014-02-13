@@ -3,8 +3,12 @@ package com.makeandbuild.persistence;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
 
+import java.io.IOException;
 import java.util.Date;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -24,7 +28,7 @@ public class UserDao_IT extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void testAll(){
+    public void testAll() throws JsonGenerationException, JsonMappingException, IOException{
         User user= new User();
         user.setCreatedAt(new Date());
         user.setLatitude(33.801078);
