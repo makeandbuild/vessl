@@ -3,8 +3,6 @@ package com.makeandbuild.fixture;
 import java.io.IOException;
 import java.util.List;
 
-import com.makeandbuild.persistence.BaseDao;
-
 @SuppressWarnings("rawtypes")
 public class FixtureImpl implements Fixture {
     protected List<EntityLoader> entityLoaders;
@@ -40,6 +38,14 @@ public class FixtureImpl implements Fixture {
         }
         throw new RuntimeException("no entity maanager for class "+entityClass);
     }
+    private EntityLoader getEntityLoader(Class entityClass){
+        for (EntityLoader loader : entityLoaders){
+            if (loader.getEntityClass().equals(entityClass)){
+                return loader;
+            }
+        }
+        throw new RuntimeException("no loader for class "+entityClass);
+    }
     @Override
     public void load() throws IOException {
         for (EntityLoader loader : entityLoaders){
@@ -49,7 +55,6 @@ public class FixtureImpl implements Fixture {
                 manager.save(entity);
             }
         }
-        
     }
 
     @Override
@@ -67,6 +72,18 @@ public class FixtureImpl implements Fixture {
         EntityManager manager = getManager(entityClass);
         manager.deleteAll();
     }
-    
 
+    @Override
+    public void load(Class entityClass) throws IOException {
+        EntityLoader loader = getEntityLoader(entityClass);
+        this.load(loader);
+    }
+    @Override
+    public void load(EntityLoader loader) throws IOException {
+        EntityManager manager = getManager(loader.getEntityClass());
+        List<Object> entities = loader.load();
+        for (Object entity : entities) {
+            manager.save(entity);
+        }
+    }
 }

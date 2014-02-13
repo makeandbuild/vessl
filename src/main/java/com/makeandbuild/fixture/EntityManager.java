@@ -1,6 +1,7 @@
 package com.makeandbuild.fixture;
 
 
+@SuppressWarnings("rawtypes")
 public interface EntityManager {
     Class getEntityClass();
     Class getIdClass();
