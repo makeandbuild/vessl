@@ -3,6 +3,9 @@ package com.makeandbuild.fixture;
 import java.io.IOException;
 import java.util.List;
 
+import com.makeandbuild.persistence.BaseDao;
+
+@SuppressWarnings("rawtypes")
 public class FixtureImpl implements Fixture {
     protected List<EntityLoader> entityLoaders;
     protected List<EntityManager> entityManagers;
@@ -29,7 +32,6 @@ public class FixtureImpl implements Fixture {
             entityManager.deleteAll();
         }
     }
-    @SuppressWarnings("rawtypes")
     private EntityManager getManager(Class entityClass){
         for (EntityManager entityManager : entityManagers){
             if (entityManager.getEntityClass().equals(entityClass)){
@@ -49,5 +51,22 @@ public class FixtureImpl implements Fixture {
         }
         
     }
+
+    @Override
+    public void load(String resourceName) throws ClassNotFoundException, IOException {        
+        EntityLoader loader = new ResourceEntityLoaderImpl(resourceName);
+        EntityManager manager = getManager(loader.getEntityClass());
+        List<Object> entities = loader.load();
+        for (Object entity : entities) {
+            manager.save(entity);
+        }
+    }
+
+    @Override
+    public void purge(Class entityClass) {
+        EntityManager manager = getManager(entityClass);
+        manager.deleteAll();
+    }
+    
 
 }

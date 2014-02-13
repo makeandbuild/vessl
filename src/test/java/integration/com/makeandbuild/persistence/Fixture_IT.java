@@ -40,5 +40,15 @@ public class Fixture_IT extends AbstractTestNGSpringContextTests {
         assertTrue(eventDao.exists("1231231231-222"));
         assertTrue(eventDao.exists("1231231231-12312312-12-3123123"));
     }
+    @Test
+    public void testInline() throws IOException, ClassNotFoundException{
+        fixture.purge(User.class);
+        assertTrue(!userDao.exists(1L));
+        assertTrue(!userDao.exists(2L));
+
+        fixture.load("/fixtures/com.makeandbuild.persistence.User.json");
+        assertTrue(userDao.exists(1L));
+        assertTrue(userDao.exists(2L));
+    }
 
 }
