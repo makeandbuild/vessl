@@ -7,8 +7,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.makeandbuild.persistence.jdbc.SaveWhen;
+import com.makeandbuild.persistence.jdbc.Specialize;
 
 @Table(name = "user")
+@Specialize(typeColumn = "javatype")
 public class User {
     @Id
     @Column(name = "user_id")

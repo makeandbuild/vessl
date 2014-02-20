@@ -4,7 +4,7 @@
 	<groupId>com.makeandbuild</groupId>
 	<artifactId>persistence</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.4</version>
+	<version>1.0.5</version>
 	<properties>
 		<spring.version>4.0.0.RELEASE</spring.version>
 		<aspectj.version>1.7.3</aspectj.version>

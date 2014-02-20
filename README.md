@@ -13,6 +13,7 @@ the BaseDao has a lot of built in methods including
 * find by id
 * exists finders
 * delete helpers
+* supports domain model specialization inheritance (see the @Specialize annotation and the UserDao_IT.testSpecialized() test)
 
 For an example of the usage see UserDao_IT
 
@@ -25,6 +26,13 @@ you can also make use of the fixture functionality to load test data from class 
 * src/test/java/integration/com/makeandbuild/fixture/Fixture_IT.java has the tests for loading and purging data
 * src/test/resources/spring.xml definition of fixture sets up the meta data for the project and takes into account the ordering
 
+there are some tests
+* testAll() demonstrates how you can setup a set of resource files to be loaded in spring and purge() or load() as a complete set
+* testResourceSingularly() demonstrates on how to pass in a resource location to load a resoruce explicity
+* testEntityClassSingularly() demonstrates how to purge via a given Model class
+
+
+
 setup for function tests
 ------------------
 
@@ -36,6 +44,7 @@ create your database
 now load the user table
 
     mysql -u root mnb_persistence < src/test/resource/create_user.sql
+    mysql -u root mnb_persistence < src/test/resource/create_event.sql
 
 now you can run the function test
 
