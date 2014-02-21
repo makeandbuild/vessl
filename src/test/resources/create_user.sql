@@ -6,7 +6,7 @@ CREATE TABLE `user` (
   `username` varchar(255) NOT NULL,
   `login_count` int UNSIGNED NOT NULL,
   `created_at` timestamp  NOT NULL,
-  `user_type` varchar(255) NOT NULL,
+  `user_type` varchar(255) DEFAULT NULL,
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
   `javatype` varchar(255) DEFAULT NULL,

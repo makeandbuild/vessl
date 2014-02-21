@@ -249,7 +249,7 @@ public class ReflectionBasedJdbcMapper<T> extends BaseDomainMapper<T> implements
     private Object getResultsetValue(String columnName, Class type, ResultSet rs) throws SQLException {
         if (type.isEnum()){
             String value = rs.getString(columnName);
-            return Enum.valueOf(type, value);
+            return (value == null) ? null : Enum.valueOf(type, value);
         } else if (type.equals(Date.class)){
             return rs.getTimestamp(columnName);
         } else if (type.equals(String.class)){

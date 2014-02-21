@@ -2,6 +2,7 @@ package com.makeandbuild.persistence;
 
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
+import static org.testng.AssertJUnit.assertNull;
 
 import java.io.IOException;
 import java.util.Date;
@@ -26,7 +27,7 @@ public class UserDao_IT extends AbstractTestNGSpringContextTests {
         userDao.deleteAll();
     }
 
-    @Test(enabled=true)
+    @Test
     public void testAll() throws JsonGenerationException, JsonMappingException, IOException{
         User user= new User();
         user.setCreatedAt(new Date());
