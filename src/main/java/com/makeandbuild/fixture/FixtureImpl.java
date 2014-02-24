@@ -24,12 +24,6 @@ public class FixtureImpl implements Fixture {
         this.entityManagers = entityManagers;
     }
 
-    @Override
-    public void purge() {
-        for (EntityManager entityManager : entityManagers){
-            entityManager.deleteAll();
-        }
-    }
     private EntityManager getManager(Class entityClass){
         for (EntityManager entityManager : entityManagers){
             if (entityManager.getEntityClass().equals(entityClass)){
@@ -68,9 +62,20 @@ public class FixtureImpl implements Fixture {
     }
 
     @Override
-    public void purge(Class entityClass) {
+    public void purge() throws IOException {
+        for (EntityManager entityManager : entityManagers){
+            Class clazz = entityManager.getEntityClass();
+            purge(clazz);
+        }
+    }
+    @Override
+    public void purge(Class entityClass) throws IOException {
         EntityManager manager = getManager(entityClass);
-        manager.deleteAll();
+        EntityLoader loader = getEntityLoader(entityClass);
+        List<Object> entities = loader.load();
+        for (Object entity : entities) {
+            manager.delete(entity);
+        }
     }
 
     @Override
