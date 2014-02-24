@@ -5,8 +5,8 @@ import java.util.List;
 
 @SuppressWarnings("rawtypes")
 public interface Fixture {
-    void purge();
-    void purge(Class entityClass);
+    void purge() throws IOException;
+    void purge(Class entityClass) throws IOException;
     void load() throws IOException;
     void setEntityLoaders(List<EntityLoader> entityLoaders);
     void setEntityManagers(List<EntityManager> entityManagers);
