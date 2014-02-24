@@ -43,8 +43,8 @@ create your database
 
 now load the user table
 
-    mysql -u root mnb_persistence < src/test/resource/create_user.sql
-    mysql -u root mnb_persistence < src/test/resource/create_event.sql
+    mysql -u root mnb_persistence < ./src/test/resources/create_user.sql
+    mysql -u root mnb_persistence < ./src/test/resources/create_event.sql
 
 now you can run the function test
 
