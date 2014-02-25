@@ -17,6 +17,7 @@ public interface BaseDao<T, ID> {
 
     public PagedResponse<T> find(PagedRequest request, List<Criteria> criterias, List<SortBy> sortbys) throws DaoException;
     public PagedResponse<T> find(PagedRequest request, Criteria criteria, List<SortBy> sortbys) throws DaoException;
+    public PagedResponse<T> find(PagedRequest request, Criteria criteria) throws DaoException;
 	public T find(ID id) throws DaoException;
 
     public void deleteById(ID id) throws DaoException;

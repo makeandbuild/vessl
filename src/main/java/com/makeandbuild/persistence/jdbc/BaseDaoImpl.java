@@ -192,6 +192,12 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         criterias.add(criteria);
         return find(request, criterias, sortbys);
     }
+    @Override
+    public PagedResponse<T> find(PagedRequest request, Criteria criteria) {
+        List<Criteria> criterias = new ArrayList<Criteria>();
+        criterias.add(criteria);
+        return find(request, criterias, (List<SortBy>) null);
+    }
 
     @Override
     public PagedResponse<T> find(PagedRequest request, List<Criteria> criterias, List<SortBy> sortbys) {
