@@ -37,6 +37,7 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
     <bean id="userDao" class="com.makeandbuild.persistence.UserDaoImpl" parent="baseDao" scope="singleton"/>
+    <bean id="adminUserDao" class="com.makeandbuild.persistence.AdminUserDaoImpl" parent="baseDao" scope="singleton"/>
     <bean id="eventDao" class="com.makeandbuild.persistence.EventDaoImpl" parent="baseDao" scope="singleton"/>
     
     <bean id="fixture" class="com.makeandbuild.fixture.FixtureImpl" scope="singleton">

@@ -163,6 +163,7 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
     @Override
     public boolean exists(ID id) throws DaoException {
         try {
+            @SuppressWarnings("deprecation")
             int count = getJdbcTemplate().queryForInt(
                     "SELECT count(*) FROM " + getDomainMapper().getTablename() + " WHERE " + getDomainMapper().getPrimaryKeyName() + " = ?",
                     new Object[] { id });
@@ -182,6 +183,7 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         sqlList.add(where);
 
         String sql = StringUtils.join(sqlList, " ");
+        @SuppressWarnings("deprecation")
         int count = this.getJdbcTemplate().queryForInt(sql, toArray(parameters));
         return count > 0;
     }

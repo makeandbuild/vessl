@@ -16,14 +16,13 @@ import javax.persistence.Table;
 
 @SuppressWarnings("rawtypes")
 public class ReflectionBasedJdbcMapper<T> extends BaseDomainMapper<T> implements InvocationHandler {
-    @SuppressWarnings("rawtypes")
     private Class domainClass;
     
     private Map<Class, Map<String, SaveWhen>> saveWhensMap;
     private Map<Class, Map<String, String>> columnMapMap;
     private Specialize specialize;
     
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({ "unchecked" })
     public ReflectionBasedJdbcMapper(Class c) {
         super();
         if (c.isAnnotationPresent(Table.class)){
@@ -86,7 +85,6 @@ public class ReflectionBasedJdbcMapper<T> extends BaseDomainMapper<T> implements
         }
         return columnMapMap.get(specializedClass);
     }
-    @SuppressWarnings("rawtypes")
     public static DomainMapper proxy(Class domainClass) {
         Class[] interfaces = new Class[]{DomainMapper.class};
         ReflectionBasedJdbcMapper mapper = new ReflectionBasedJdbcMapper(domainClass);
@@ -114,7 +112,6 @@ public class ReflectionBasedJdbcMapper<T> extends BaseDomainMapper<T> implements
             return this.getColumnMap(item.getClass()).get(attributeName);
         }
     }
-    @SuppressWarnings("rawtypes")
     @Override
     public Map<String, Object> insertParameters(T item) {
         Map<String, Object> response = new HashMap<String, Object>();
@@ -184,7 +181,6 @@ public class ReflectionBasedJdbcMapper<T> extends BaseDomainMapper<T> implements
         return response;
     }
 
-    @SuppressWarnings("rawtypes")
     private Object getBeanValue(T item, String attributeName) throws NoSuchFieldException, IllegalAccessException {
         Field f = getField(item.getClass(), attributeName);
         f.setAccessible(true);
@@ -245,7 +241,7 @@ public class ReflectionBasedJdbcMapper<T> extends BaseDomainMapper<T> implements
         }
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "unchecked"})
     private Object getResultsetValue(String columnName, Class type, ResultSet rs) throws SQLException {
         if (type.isEnum()){
             String value = rs.getString(columnName);

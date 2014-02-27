@@ -30,6 +30,7 @@ public class ResourceEntityLoaderImpl implements EntityLoader {
     public Class getEntityClass() {
         return entityClass;
     }
+    @SuppressWarnings("deprecation")
     private static ObjectMapper getInstance() {
         if (mapper == null) {
             mapper = new ObjectMapper();
