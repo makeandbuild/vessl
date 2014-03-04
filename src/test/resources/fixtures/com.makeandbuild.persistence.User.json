@@ -1,6 +1,6 @@
 [
     {
-        "createdAt": 1392323683000,
+        "createdAt": "2012-01-01T00:00:00.000+0000",
         "id": 1,
         "latitude": 33.801077999999997,
         "loginCount": 1,
@@ -9,7 +9,7 @@
         "username": "azuercher"
     },
     {
-        "createdAt": 1392323683000,
+        "createdAt": "1988-01-01T00:00:00.000+0000",
         "id": 2,
         "latitude": 33.801077999999997,
         "loginCount": 1,
