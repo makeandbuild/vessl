@@ -25,11 +25,12 @@ public class ReflectionBasedJdbcMapper<T> extends BaseDomainMapper<T> implements
     @SuppressWarnings({ "unchecked" })
     public ReflectionBasedJdbcMapper(Class c) {
         super();
-        if (c.isAnnotationPresent(Table.class)){
-            Table table = (Table) c.getAnnotation(Table.class);
+        Class baseclass = getBaseClass(c);
+        if (baseclass.isAnnotationPresent(Table.class)){
+            Table table = (Table) baseclass.getAnnotation(Table.class);
             tablename = table.name();
         }
-        for (Field f : c.getDeclaredFields()) {
+        for (Field f : baseclass.getDeclaredFields()) {
             if (f.isAnnotationPresent(Column.class)) {
                 Column column = f.getAnnotation(Column.class);
                 columnMap.put(f.getName(), column.name());
@@ -40,17 +41,26 @@ public class ReflectionBasedJdbcMapper<T> extends BaseDomainMapper<T> implements
                 }
             }
         }
-        this.domainClass = c;
+        this.domainClass = baseclass;
         saveWhensMap = new HashMap<Class, Map<String, SaveWhen>>();
         Map<String, SaveWhen> saveWhens = new HashMap<String, SaveWhen>();
         //load base class
-        if (c.isAnnotationPresent(Specialize.class)){
-            specialize = (Specialize) c.getAnnotation(Specialize.class);
+        if (baseclass.isAnnotationPresent(Specialize.class)){
+            specialize = (Specialize) baseclass.getAnnotation(Specialize.class);
             columnMapMap = new HashMap<Class, Map<String, String>>();
         }
-        saveWhensMap.put(c, saveWhens);
-        addFields(c, saveWhens);
-
+        saveWhensMap.put(baseclass, saveWhens);
+        addFields(baseclass, saveWhens);
+    }
+    @SuppressWarnings("unchecked")
+    private Class getBaseClass(Class c){
+        if (c.isAnnotationPresent(Table.class)){
+            return c;
+        } else if (c.getSuperclass() == null){
+            return c;
+        } else {
+            return getBaseClass(c.getSuperclass());
+        }
     }
     private Map<String, SaveWhen> getSaveWhens(Class clazz){
         if (!saveWhensMap.containsKey(clazz)){
