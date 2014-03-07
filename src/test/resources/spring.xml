@@ -61,5 +61,15 @@
    				</bean>
     		</list>
     	</property>
-	</bean>    	
+	</bean>
+
+    <bean id="validationProxyManager"
+          class="com.makeandbuild.validation.ValidationProxyManagerImpl" />
+
+    <bean id="jsr303BeanValidator"
+          class="com.makeandbuild.validation.validator.JSR303BeanValidator" />
+    <bean id="userValidator"
+          class="com.makeandbuild.validation.validators.UserValidator" />
+    <bean id="adminUserValidator"
+          class="com.makeandbuild.validation.validators.AdminUserValidator" />
 </beans>
