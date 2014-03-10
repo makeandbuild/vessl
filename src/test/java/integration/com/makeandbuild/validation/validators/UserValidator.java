@@ -34,7 +34,7 @@ public class UserValidator
         //Random but just make sure that the user wasn't created before 1900 or something?
         DateTime dt = new DateTime(user.getCreatedAt().getTime());
         if (dt.year().get() <= 1900) {
-            errors.rejectValue("createdAt", "User must have been created after 1900");
+            errors.rejectValue("createdAt", "local.error.dateold", "User must have been created after 1900");
         }
     }
 }

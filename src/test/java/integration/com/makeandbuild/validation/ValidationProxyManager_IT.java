@@ -1,11 +1,15 @@
 package com.makeandbuild.validation;
 
-import com.makeandbuild.persistence.AdminUser;
-import com.makeandbuild.persistence.User;
-import com.makeandbuild.persistence.UserDao;
-import com.makeandbuild.persistence.UserType;
-import com.makeandbuild.validation.exception.BeanValidationException;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import junit.framework.Assert;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,11 +18,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import static org.testng.AssertJUnit.assertNotNull;
+import com.makeandbuild.persistence.AdminUser;
+import com.makeandbuild.persistence.User;
+import com.makeandbuild.persistence.UserDao;
+import com.makeandbuild.persistence.UserType;
+import com.makeandbuild.validation.exception.BeanValidationException;
 
 /**
  * User: Jeremy Dyer
@@ -60,7 +64,7 @@ public class ValidationProxyManager_IT
 
 
     @Test
-    public void testUserCreatedTooEarly() throws ParseException {
+    public void testUserCreatedTooEarly() throws ParseException, JsonGenerationException, JsonMappingException, IOException {
         User user = new User();
         user.setCreatedAt(new Date());
         user.setLatitude(33.801078);
@@ -87,6 +91,7 @@ public class ValidationProxyManager_IT
             validationUserDao.save(user);   //Should throw validation exception now
             Assert.fail(BeanValidationException.class.getName() + " exception was expected");
         } catch (BeanValidationException bve) {
+            String json= new ObjectMapper().writeValueAsString(bve.getErrors());
             Assert.assertTrue(true);
         }
     }
