@@ -284,13 +284,21 @@ public class CouchDbJacksonImpl extends CouchDBBaseImpl implements CouchDbJackso
         return save(item);
     }
 
+    private Criteria getCriteria(List<Criteria> criterias, String attributeName){
+        for (Criteria criteria : criterias){
+            if (criteria.getAttribute().equals(attributeName)){
+                return criteria;
+            }
+        }
+        return null;
+    }
     @Override
     public AbstractPagedResponse<ObjectNode, ArrayNode> find(AbstractPagedRequest request, List<Criteria> criterias) throws DaoException {
         int skip = request.getPage() * request.getPageSize();
         int limit = request.getPageSize();
         String view = null;
         String snippet = "?skip="+skip+"&limit="+limit;
-        
+
         for (Criteria criteria : criterias){
             if (criteria.getAttribute().equals("view")){
                 view = (String)criteria.getValue();
@@ -305,8 +313,24 @@ public class CouchDbJacksonImpl extends CouchDBBaseImpl implements CouchDbJackso
             }
         }
         String url = dbUrl(view+snippet);
+
+        
+        Criteria method = getCriteria(criterias, "method");
         try {
-            ObjectNode response = (ObjectNode) mapper.readTree(template.getForObject(url, String.class));
+            ObjectNode response = null;
+            if (method != null && method.getValue().equals("post")){
+                ObjectNode payload = mapper.createObjectNode();
+                ArrayNode keys = mapper.createArrayNode();
+                payload.put("keys",keys);
+                for (String key : (List<String>)getCriteria(criterias, "keys").getValue()){
+                    keys.add(key);
+                }
+                String json = mapper.writeValueAsString(payload);
+                response = (ObjectNode) mapper.readTree(template.postForObject(url, json, String.class));
+    
+            } else {
+                    response = (ObjectNode) mapper.readTree(template.getForObject(url, String.class));
+            }
             AbstractPagedResponse<ObjectNode, ArrayNode> pagedResponse = new AbstractPagedResponse<ObjectNode, ArrayNode>();
             ArrayNode items = mapper.createArrayNode();
             ArrayNode rows = (ArrayNode) response.get("rows");
