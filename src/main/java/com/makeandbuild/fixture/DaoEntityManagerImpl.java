@@ -1,26 +1,28 @@
 package com.makeandbuild.fixture;
 
-import java.lang.reflect.Field;
-
-import javax.persistence.Id;
-
-import com.makeandbuild.persistence.BaseDao;
+import com.makeandbuild.persistence.Dao;
 import com.makeandbuild.persistence.DaoException;
 
 @SuppressWarnings("rawtypes")
 public class DaoEntityManagerImpl implements EntityManager {
-    private BaseDao dao;
+    private Dao dao;
+    private String subtype;
 
-    public DaoEntityManagerImpl(BaseDao dao) {
+    public DaoEntityManagerImpl(Dao dao) {
         super();
         this.dao = dao;
     }
+    public DaoEntityManagerImpl(Dao dao, String subtype) {
+        super();
+        this.dao = dao;
+        this.subtype = subtype;
+    }
 
-    public BaseDao getDao() {
+    public Dao getDao() {
         return dao;
     }
 
-    public void setDao(BaseDao dao) {
+    public void setDao(Dao dao) {
         this.dao = dao;
     }
 
@@ -49,25 +51,16 @@ public class DaoEntityManagerImpl implements EntityManager {
     @Override
     public void delete(Object item) throws DaoException {
         try {
-            dao.deleteById(getId(item));
+            dao.deleteById(dao.getId(item));
         } catch (IllegalArgumentException e) {
             throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
         }
     }
-    private Object getId(Object item) throws IllegalArgumentException, IllegalAccessException{
-        Field f = getIdField(item);
-        f.setAccessible(true);
-        Object value = f.get(item);
-        return value;
+    public String getSubtype() {
+        return subtype;
     }
-    private Field getIdField(Object item){
-        for (Field field : getEntityClass().getDeclaredFields()){
-            if (field.isAnnotationPresent(Id.class)){
-                return field;
-            }
-        }
-        throw new RuntimeException("id for class "+getEntityClass() + " not found");
+    public void setSubtype(String subtype) {
+        this.subtype = subtype;
     }
+    
 }

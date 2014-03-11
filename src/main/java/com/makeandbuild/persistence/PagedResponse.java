@@ -1,23 +1,22 @@
 package com.makeandbuild.persistence;
 
-import java.util.List;
 
-public class PagedResponse<T> {
-	private List<T> items;
+public class PagedResponse<T, C> {
+	private C items;
 	private int totalPages;
 	private long totalItems;
 	
 	public PagedResponse() {
 		super();
 	}
-	public PagedResponse(List<T> items, int totalPages, int totalItems) {
+	public PagedResponse(C items, int totalPages, int totalItems) {
 		super();
 		this.items = items;
 	}
-	public List<T> getItems() {
+	public C getItems() {
 		return items;
 	}
-	public void setItems(List<T> items) {
+	public void setItems(C items) {
 		this.items = items;
 	}
 	public int getTotalPages() {
