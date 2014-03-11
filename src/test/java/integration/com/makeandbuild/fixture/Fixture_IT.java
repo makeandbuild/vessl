@@ -16,8 +16,8 @@ import org.testng.annotations.Test;
 
 import com.makeandbuild.persistence.Criteria;
 import com.makeandbuild.persistence.EventDao;
-import com.makeandbuild.persistence.PagedRequest;
-import com.makeandbuild.persistence.PagedResponse;
+import com.makeandbuild.persistence.AbstractPagedRequest;
+import com.makeandbuild.persistence.AbstractPagedResponse;
 import com.makeandbuild.persistence.User;
 import com.makeandbuild.persistence.UserDao;
 import com.makeandbuild.persistence.couch.CouchDao;
@@ -84,13 +84,13 @@ public class Fixture_IT extends AbstractTestNGSpringContextTests {
         List<Criteria> criterias = new ArrayList<Criteria>();
         criterias.add(new Criteria("view", "_design/car/_view/byMake"));
         criterias.add(new Criteria("key", "BMW"));
-        PagedResponse<ObjectNode, ArrayNode> response = carDao.find(new PagedRequest(), criterias);
+        AbstractPagedResponse<ObjectNode, ArrayNode> response = carDao.find(new AbstractPagedRequest(), criterias);
         assertTrue(response.getItems().size() ==2);
         
         criterias = new ArrayList<Criteria>();
         criterias.add(new Criteria("view", "_design/car/_view/byYear"));
         criterias.add(new Criteria("key", 2003));
-        response = carDao.find(new PagedRequest(), criterias);
+        response = carDao.find(new AbstractPagedRequest(), criterias);
         assertTrue(response.getItems().size() ==1);
         
     }

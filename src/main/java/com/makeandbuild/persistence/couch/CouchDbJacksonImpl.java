@@ -22,9 +22,9 @@ import org.springframework.web.client.RestTemplate;
 import com.makeandbuild.persistence.Criteria;
 import com.makeandbuild.persistence.DaoException;
 import com.makeandbuild.persistence.ObjectNotFoundException;
-import com.makeandbuild.persistence.PagedRequest;
-import com.makeandbuild.persistence.PagedResponse;
-import com.makeandbuild.persistence.SortBy;
+import com.makeandbuild.persistence.AbstractPagedRequest;
+import com.makeandbuild.persistence.AbstractPagedResponse;
+import com.makeandbuild.persistence.jdbc.SortBy;
 
 public class CouchDbJacksonImpl extends CouchDBBaseImpl implements CouchDbJackson, CouchDao {
     private Log logger = LogFactory.getLog(getClass());
@@ -268,7 +268,7 @@ public class CouchDbJacksonImpl extends CouchDBBaseImpl implements CouchDbJackso
 
     @Override
     public boolean exists(List<Criteria> criterias) throws DaoException {
-        PagedResponse<ObjectNode, ArrayNode> response = find(new PagedRequest(), criterias);
+        AbstractPagedResponse<ObjectNode, ArrayNode> response = find(new AbstractPagedRequest(), criterias);
         return response.getTotalItems()>0;
     }
 
@@ -285,7 +285,7 @@ public class CouchDbJacksonImpl extends CouchDBBaseImpl implements CouchDbJackso
     }
 
     @Override
-    public PagedResponse<ObjectNode, ArrayNode> find(PagedRequest request, List<Criteria> criterias) throws DaoException {
+    public AbstractPagedResponse<ObjectNode, ArrayNode> find(AbstractPagedRequest request, List<Criteria> criterias) throws DaoException {
         int skip = request.getPage() * request.getPageSize();
         int limit = request.getPageSize();
         String view = null;
@@ -307,8 +307,13 @@ public class CouchDbJacksonImpl extends CouchDBBaseImpl implements CouchDbJackso
         String url = dbUrl(view+snippet);
         try {
             ObjectNode response = (ObjectNode) mapper.readTree(template.getForObject(url, String.class));
-            PagedResponse<ObjectNode, ArrayNode> pagedResponse = new PagedResponse<ObjectNode, ArrayNode>();
-            pagedResponse.setItems((ArrayNode) response.get("rows"));
+            AbstractPagedResponse<ObjectNode, ArrayNode> pagedResponse = new AbstractPagedResponse<ObjectNode, ArrayNode>();
+            ArrayNode items = mapper.createArrayNode();
+            ArrayNode rows = (ArrayNode) response.get("rows");
+            for (int i=0;i<rows.size();i++){
+                items.add(rows.get(i).get("value"));
+            }
+            pagedResponse.setItems(items);
             long totalItems = response.get("total_rows").asLong();
             pagedResponse.setTotalItems(totalItems);
             int totalPages = (int)Math.ceil(totalItems/request.getPageSize());
@@ -362,7 +367,7 @@ public class CouchDbJacksonImpl extends CouchDBBaseImpl implements CouchDbJackso
         return this.baseUrl+"/"+snippet;
     }
     @Override
-    public PagedResponse<ObjectNode, ArrayNode> find(PagedRequest request, Criteria criteria) throws DaoException {
+    public AbstractPagedResponse<ObjectNode, ArrayNode> find(AbstractPagedRequest request, Criteria criteria) throws DaoException {
         List<Criteria> criterias = new ArrayList<Criteria>();
         criterias.add(criteria);
         return find(request, criterias);
@@ -370,8 +375,8 @@ public class CouchDbJacksonImpl extends CouchDBBaseImpl implements CouchDbJackso
 
     @Override
     public void delete(List<Criteria> criterias) throws DaoException {
-        PagedRequest request = new PagedRequest();
-        PagedResponse<ObjectNode, ArrayNode> response = find(request, criterias);
+        AbstractPagedRequest request = new AbstractPagedRequest();
+        AbstractPagedResponse<ObjectNode, ArrayNode> response = find(request, criterias);
         while(response.getTotalItems() > 0){
             ArrayNode items = response.getItems();
             for (int i=0;i<items.size();i++){

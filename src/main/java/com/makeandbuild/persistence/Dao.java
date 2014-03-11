@@ -14,8 +14,8 @@ public interface Dao<T, ID, C> {
     public T update(T item) throws DaoException;
     public T create(T item) throws DaoException;
 
-    public PagedResponse<T, C> find(PagedRequest request, List<Criteria> criterias) throws DaoException;
-    public PagedResponse<T, C> find(PagedRequest request, Criteria criteria) throws DaoException;
+    public AbstractPagedResponse<T, C> find(AbstractPagedRequest request, List<Criteria> criterias) throws DaoException;
+    public AbstractPagedResponse<T, C> find(AbstractPagedRequest request, Criteria criteria) throws DaoException;
     public T find(ID id) throws DaoException;
 
     public void deleteById(ID id) throws DaoException;

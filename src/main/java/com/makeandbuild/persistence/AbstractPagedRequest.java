@@ -1,7 +1,7 @@
 package com.makeandbuild.persistence;
 
 
-public class PagedRequest {
+public class AbstractPagedRequest {
 	private int page;
 	private int pageSize;
 	public int getPageSize() {
@@ -16,12 +16,12 @@ public class PagedRequest {
 	public void setPage(int page) {
 		this.page = page;
 	}
-	public PagedRequest(int page, int pageSize) {
+	public AbstractPagedRequest(int page, int pageSize) {
 		super();
 		this.page = page;
 		this.pageSize = pageSize;
 	}
-	public PagedRequest() {
+	public AbstractPagedRequest() {
 		this(0, 10);
 	}
 }

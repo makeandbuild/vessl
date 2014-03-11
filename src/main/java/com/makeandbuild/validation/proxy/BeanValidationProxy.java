@@ -1,7 +1,8 @@
 package com.makeandbuild.validation.proxy;
 
-import com.makeandbuild.persistence.BaseDao;
+import com.makeandbuild.persistence.jdbc.BaseDao;
 import com.makeandbuild.validation.exception.BeanValidationException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BeanPropertyBindingResult;

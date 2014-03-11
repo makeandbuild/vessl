@@ -1,4 +1,4 @@
-package com.makeandbuild.persistence;
+package com.makeandbuild.persistence.jdbc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

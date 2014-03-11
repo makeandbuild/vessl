@@ -1,15 +1,15 @@
 package com.makeandbuild.persistence;
 
 
-public class PagedResponse<T, C> {
+public class AbstractPagedResponse<T, C> {
 	private C items;
 	private int totalPages;
 	private long totalItems;
 	
-	public PagedResponse() {
+	public AbstractPagedResponse() {
 		super();
 	}
-	public PagedResponse(C items, int totalPages, int totalItems) {
+	public AbstractPagedResponse(C items, int totalPages, int totalItems) {
 		super();
 		this.items = items;
 	}

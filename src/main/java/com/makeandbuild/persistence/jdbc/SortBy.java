@@ -1,4 +1,4 @@
-package com.makeandbuild.persistence;
+package com.makeandbuild.persistence.jdbc;
 
 public class SortBy {
 	private String attribute;

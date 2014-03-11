@@ -10,8 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.makeandbuild.persistence.ResultSetUtil;
-
 public abstract class BaseDomainMapper<T> implements DomainMapper<T>{
 
 	protected Map<String, String> columnMap = new HashMap<String, String>();

@@ -1,6 +1,7 @@
 package com.makeandbuild.validation;
 
-import com.makeandbuild.persistence.BaseDao;
+import com.makeandbuild.persistence.jdbc.BaseDao;
+
 import org.springframework.context.ApplicationContextAware;
 
 /**
