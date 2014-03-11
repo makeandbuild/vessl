@@ -12,4 +12,6 @@ public interface ValidationProxyManager
     extends ApplicationContextAware {
 
     public abstract Object newBeanValidatorProxy(BaseDao obj);
+
+    public abstract Object newSecurityValidatorProxy(BaseDao obj);
 }

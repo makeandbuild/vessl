@@ -11,6 +11,9 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
@@ -90,6 +93,40 @@ public class ValidationProxyManager_IT
         } catch (BeanValidationException bve) {
             String json= new ObjectMapper().writeValueAsString(bve.getErrors());
             Assert.assertTrue(true);
+        }
+    }
+
+
+    @Test
+    public void testValidateSecurity() {
+        User user = new User();
+        user.setCreatedAt(new Date());
+        user.setLatitude(33.801078);
+        user.setLongitude(-84.436287);
+        user.setLoginCount(1);
+        user.setUsername("dummy");
+        user.setUserType(UserType.simple);
+
+        user = userDao.save(user);
+
+        UserDao secureUserDao = (UserDao) validationProxyManager.newSecurityValidatorProxy(userDao);
+
+        User findUser = null;
+        try {
+            findUser = secureUserDao.find(user.getId());
+            Assert.fail("Expected Security exception");
+        } catch (SecurityException se) {
+            Assert.assertTrue(true);
+        }
+
+        //Now create a dummy Authentication and try again.
+        Authentication auth = new UsernamePasswordAuthenticationToken("dummy", "password");
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        try {
+            findUser = secureUserDao.find(user.getId());
+        } catch (SecurityException se) {
+            Assert.fail("Security Exception should not have been thrown");
         }
     }
 }

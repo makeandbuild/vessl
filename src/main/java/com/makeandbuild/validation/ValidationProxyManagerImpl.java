@@ -2,6 +2,7 @@ package com.makeandbuild.validation;
 
 import com.makeandbuild.persistence.BaseDao;
 import com.makeandbuild.validation.proxy.BeanValidationProxy;
+import com.makeandbuild.validation.proxy.SecurityValidationProxy;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
@@ -30,6 +31,11 @@ public class ValidationProxyManagerImpl
     @Override
     public Object newBeanValidatorProxy(BaseDao obj) {
         return BeanValidationProxy.newInstance(obj, cachedValidatorsMap);
+    }
+
+    @Override
+    public Object newSecurityValidatorProxy(BaseDao obj) {
+        return SecurityValidationProxy.newInstance(obj);
     }
 
     @Override
