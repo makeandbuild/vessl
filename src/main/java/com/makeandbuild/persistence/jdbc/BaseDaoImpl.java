@@ -1,9 +1,12 @@
 package com.makeandbuild.persistence.jdbc;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.persistence.Id;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -42,7 +45,25 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         this.idClass = idClass;
         this._mapper = mapper;
     }
-
+    public ID getId(T item) {
+        Field f = getIdField(item);
+        f.setAccessible(true);
+        Object value;
+        try {
+            value = f.get(item);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+        return (ID)value;
+    }
+    private Field getIdField(Object item){
+        for (Field field : getEntityClass().getDeclaredFields()){
+            if (field.isAnnotationPresent(Id.class)){
+                return field;
+            }
+        }
+        throw new RuntimeException("id for class "+getEntityClass() + " not found");
+    }
     @SuppressWarnings("rawtypes")
     public BaseDaoImpl(Class<? extends DomainMapper<T>> c, Class entityClass, Class idClass) {
         super();
@@ -189,21 +210,26 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
     }
 
     @Override
-    public PagedResponse<T> find(PagedRequest request, Criteria criteria, List<SortBy> sortbys) {
+    public PagedResponse<T, List<T>> find(PagedRequest request, Criteria criteria, List<SortBy> sortbys) {
         List<Criteria> criterias = new ArrayList<Criteria>();
         criterias.add(criteria);
         return find(request, criterias, sortbys);
     }
     @Override
-    public PagedResponse<T> find(PagedRequest request, Criteria criteria) {
+    public PagedResponse<T, List<T>> find(PagedRequest request, Criteria criteria) {
         List<Criteria> criterias = new ArrayList<Criteria>();
         criterias.add(criteria);
         return find(request, criterias, (List<SortBy>) null);
     }
 
     @Override
-    public PagedResponse<T> find(PagedRequest request, List<Criteria> criterias, List<SortBy> sortbys) {
-        PagedResponse<T> response = new PagedResponse<T>();
+    public PagedResponse<T, List<T>> find(PagedRequest request, List<Criteria> criterias) throws DaoException {
+        return find(request, criterias, null);
+    }
+
+    @Override
+    public PagedResponse<T, List<T>> find(PagedRequest request, List<Criteria> criterias, List<SortBy> sortbys) {
+        PagedResponse<T, List<T>> response = new PagedResponse<T, List<T>>();
         ArrayList<Object> parameters = new ArrayList<Object>();
         List<String> sqlList = new ArrayList<String>();
 
@@ -218,7 +244,7 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
 
         String sql = StringUtils.join(sqlList, " ");
         this.lastSql = sql;
-        List<T> items = this.getJdbcTemplate().query(sql, toArray(parameters), getDomainMapper());
+        List<T> items =  this.getJdbcTemplate().query(sql, toArray(parameters), getDomainMapper());
         response.setItems(items);
 
         return response;
@@ -233,7 +259,7 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
     }
 
     
-    protected void addPaging(PagedRequest request, PagedResponse<T> response, List<String> sqlList, MapSqlParameterSource parameters, String sql) {
+    protected void addPaging(PagedRequest request, PagedResponse<T, List<T>> response, List<String> sqlList, MapSqlParameterSource parameters, String sql) {
         MapSqlParameterSource countArgs = new MapSqlParameterSource();
         countArgs.addValues(parameters.getValues());
         
@@ -248,7 +274,7 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         }
         
     }
-    protected void addPaging(PagedRequest request, PagedResponse<T> response, List<String> sqlList, ArrayList<Object> parameters, String sql) {
+    protected void addPaging(PagedRequest request, PagedResponse<T, List<T>> response, List<String> sqlList, ArrayList<Object> parameters, String sql) {
         Object[] countArgs = toArray(parameters);
         if (request.getPage() >= 0 && request.getPageSize() >= 0) {
             Long rowCount = this.getJdbcTemplate().queryForObject(sql, countArgs, Long.class);

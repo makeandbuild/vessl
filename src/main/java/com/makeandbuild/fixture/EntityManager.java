@@ -7,6 +7,7 @@ import com.makeandbuild.persistence.DaoException;
 public interface EntityManager {
     Class getEntityClass();
     Class getIdClass();
+    String getSubtype();
     
     public Object save(Object item);
     public void deleteAll();

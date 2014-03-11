@@ -17,6 +17,7 @@ public class ResourceEntityLoaderImpl implements EntityLoader {
     @SuppressWarnings("rawtypes")
     private Class entityClass;
     private String resourcePath;
+    private String subtype=null;
     private static Log logger = LogFactory.getLog(ResourceEntityLoaderImpl.class);
     
     public ResourceEntityLoaderImpl(String resourcePath) throws ClassNotFoundException{
@@ -26,7 +27,11 @@ public class ResourceEntityLoaderImpl implements EntityLoader {
             classname = classname.substring(classname.lastIndexOf("/")+1);
             
         }
-        this.entityClass = Class.forName(classname);
+        String[] split = classname.split("-");
+        this.entityClass = Class.forName(split[0]);
+        if (split.length>1){
+            subtype = split[1];
+        }
         this.resourcePath = resourcePath;
     }
 
@@ -57,5 +62,10 @@ public class ResourceEntityLoaderImpl implements EntityLoader {
             throw e;
         }
 
+    }
+
+    @Override
+    public String getSubtype() {
+        return subtype;
     }
 }

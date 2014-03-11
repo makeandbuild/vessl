@@ -1,0 +1,11 @@
+{
+    "_id": "_design/car",
+    "views": {
+        "byMake": {
+            "map": "function(doc) { emit(doc.make)}"
+        },
+        "byYear": {
+            "map": "function(doc) { emit(doc.year)}"
+        }
+    }
+}

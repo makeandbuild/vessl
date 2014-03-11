@@ -1,17 +1,27 @@
 package com.makeandbuild.fixture;
 
+import static org.testng.AssertJUnit.assertNotNull;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
+import com.makeandbuild.persistence.Criteria;
 import com.makeandbuild.persistence.EventDao;
+import com.makeandbuild.persistence.PagedRequest;
+import com.makeandbuild.persistence.PagedResponse;
 import com.makeandbuild.persistence.User;
 import com.makeandbuild.persistence.UserDao;
+import com.makeandbuild.persistence.couch.CouchDao;
+import com.makeandbuild.persistence.couch.CouchId;
 
 @Test(groups = {"function"})
 @ContextConfiguration(locations={"classpath*:spring.xml"})
@@ -23,9 +33,12 @@ public class Fixture_IT extends AbstractTestNGSpringContextTests {
     UserDao userDao;
 
     @Autowired 
+    CouchDao carDao;
+
+    @Autowired 
     Fixture fixture;
 
-    @Test
+    @Test(enabled=true)
     public void testAll() throws IOException{
         fixture.purge();
         assertTrue(!userDao.exists(1L));
@@ -41,9 +54,9 @@ public class Fixture_IT extends AbstractTestNGSpringContextTests {
         assertTrue(eventDao.exists("1231231231-222"));
         assertTrue(eventDao.exists("1231231231-12312312-12-3123123"));
     }
-    @Test
+    @Test(enabled=true)
     public void testResourceSingularly() throws IOException, ClassNotFoundException{
-        fixture.purge(User.class);
+        fixture.purge(User.class, null);
         assertTrue(!userDao.exists(1L));
         assertTrue(!userDao.exists(2L));
 
@@ -51,14 +64,34 @@ public class Fixture_IT extends AbstractTestNGSpringContextTests {
         assertTrue(userDao.exists(1L));
         assertTrue(userDao.exists(2L));
     }
-    @Test
+    @Test(enabled=true)
     public void testEntityClassSingularly() throws IOException, ClassNotFoundException{
-        fixture.purge(User.class);
+        fixture.purge(User.class, null);
         assertTrue(!userDao.exists(1L));
         assertTrue(!userDao.exists(2L));
 
-        fixture.load(User.class);
+        fixture.load(User.class, null);
         assertTrue(userDao.exists(1L));
         assertTrue(userDao.exists(2L));
+    }
+    @Test
+    public void tesDao() throws IOException, ClassNotFoundException{
+        fixture.purge(ObjectNode.class, "car");
+        fixture.load(ObjectNode.class, "car");
+        ObjectNode car = carDao.find(new CouchId("123123123"));
+        assertNotNull(car);
+        
+        List<Criteria> criterias = new ArrayList<Criteria>();
+        criterias.add(new Criteria("view", "_design/car/_view/byMake"));
+        criterias.add(new Criteria("key", "BMW"));
+        PagedResponse<ObjectNode, ArrayNode> response = carDao.find(new PagedRequest(), criterias);
+        assertTrue(response.getItems().size() ==2);
+        
+        criterias = new ArrayList<Criteria>();
+        criterias.add(new Criteria("view", "_design/car/_view/byYear"));
+        criterias.add(new Criteria("key", 2003));
+        response = carDao.find(new PagedRequest(), criterias);
+        assertTrue(response.getItems().size() ==1);
+        
     }
 }

@@ -1,65 +1,111 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd                   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
-
-    <context:spring-configured/>
-    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/mnb_persistence?zeroDateTimeBehavior=convertToNull"/>
-        <property name="username" value="root"/>
-        <property name="password" value=""/>
-        <property name="jmxEnabled" value="false"/>
-        <property name="testWhileIdle" value="false"/>
-        <property name="testOnBorrow" value="false"/>
-        <property name="testOnReturn" value="false"/>
-        <property name="validationInterval" value="30000"/>
-        <property name="timeBetweenEvictionRunsMillis" value="30000"/>
-        <property name="maxActive" value="100"/>
-        <property name="maxIdle" value="1"/>
-        <property name="initialSize" value="0"/>
-        <property name="maxWait" value="10000"/>
-        <property name="removeAbandonedTimeout" value="60"/>
-        <property name="minEvictableIdleTimeMillis" value="30000"/>
-        <property name="minIdle" value="0"/>
-        <property name="logAbandoned" value="true"/>
-        <property name="removeAbandoned" value="false"/>
-        <property name="defaultAutoCommit" value="true" />
-    </bean>
-    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
-
-    <tx:annotation-driven transaction-manager="txManager"/>
-    <bean id="baseDao" abstract="true">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
-    <bean id="userDao" class="com.makeandbuild.persistence.UserDaoImpl" parent="baseDao" scope="singleton"/>
-    <bean id="adminUserDao" class="com.makeandbuild.persistence.AdminUserDaoImpl" parent="baseDao" scope="singleton"/>
-    <bean id="eventDao" class="com.makeandbuild.persistence.EventDaoImpl" parent="baseDao" scope="singleton"/>
-    
-    <bean id="fixture" class="com.makeandbuild.fixture.FixtureImpl" scope="singleton">
-    	<property name="entityLoaders">
-    		<list>
-    			<bean class="com.makeandbuild.fixture.ResourceEntityLoaderImpl">
-    				<constructor-arg value="/fixtures/com.makeandbuild.persistence.User.json"/>
-   				</bean>
-    			<bean class="com.makeandbuild.fixture.ResourceEntityLoaderImpl">
-    				<constructor-arg value="/fixtures/com.makeandbuild.persistence.Event.json"/>
-   				</bean>
-    		</list>
-    	</property>
-    	<property name="entityManagers">
-    		<list>
-    			<bean class="com.makeandbuild.fixture.DaoEntityManagerImpl">
-    				<constructor-arg ref="userDao"/>
-   				</bean>
-    			<bean class="com.makeandbuild.fixture.DaoEntityManagerImpl">
-    				<constructor-arg ref="eventDao"/>
-   				</bean>
-    		</list>
-    	</property>
-	</bean>    	
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd                   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+	<context:spring-configured/>
+	<bean class="org.apache.tomcat.jdbc.pool.DataSource" id="dataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/mnb_persistence?zeroDateTimeBehavior=convertToNull"/>
+		<property name="username" value="root"/>
+		<property name="password" value=""/>
+		<property name="jmxEnabled" value="false"/>
+		<property name="testWhileIdle" value="false"/>
+		<property name="testOnBorrow" value="false"/>
+		<property name="testOnReturn" value="false"/>
+		<property name="validationInterval" value="30000"/>
+		<property name="timeBetweenEvictionRunsMillis" value="30000"/>
+		<property name="maxActive" value="100"/>
+		<property name="maxIdle" value="1"/>
+		<property name="initialSize" value="0"/>
+		<property name="maxWait" value="10000"/>
+		<property name="removeAbandonedTimeout" value="60"/>
+		<property name="minEvictableIdleTimeMillis" value="30000"/>
+		<property name="minIdle" value="0"/>
+		<property name="logAbandoned" value="true"/>
+		<property name="removeAbandoned" value="false"/>
+		<property name="defaultAutoCommit" value="true"/>
+	</bean>
+	<bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="txManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	<tx:annotation-driven transaction-manager="txManager"/>
+	<bean abstract="true" id="baseDao">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	<bean class="com.makeandbuild.persistence.UserDaoImpl" id="userDao" parent="baseDao" scope="singleton"/>
+	<bean class="com.makeandbuild.persistence.AdminUserDaoImpl" id="adminUserDao" parent="baseDao" scope="singleton"/>
+	<bean class="com.makeandbuild.persistence.EventDaoImpl" id="eventDao" parent="baseDao" scope="singleton"/>
+	<bean class="com.makeandbuild.fixture.FixtureImpl" id="fixture" scope="singleton">
+		<property name="entityLoaders">
+			<list>
+				<bean class="com.makeandbuild.fixture.ResourceEntityLoaderImpl">
+					<constructor-arg value="/fixtures/com.makeandbuild.persistence.User.json"/>
+				</bean>
+				<bean class="com.makeandbuild.fixture.ResourceEntityLoaderImpl">
+					<constructor-arg value="/fixtures/com.makeandbuild.persistence.Event.json"/>
+				</bean>
+				<bean class="com.makeandbuild.fixture.ResourceEntityLoaderImpl">
+					<constructor-arg value="/fixtures/org.codehaus.jackson.node.ObjectNode-car.json"/>
+				</bean>
+			</list>
+		</property>
+		<property name="entityManagers">
+			<list>
+				<bean class="com.makeandbuild.fixture.DaoEntityManagerImpl">
+					<constructor-arg ref="userDao"/>
+				</bean>
+				<bean class="com.makeandbuild.fixture.DaoEntityManagerImpl">
+					<constructor-arg ref="eventDao"/>
+				</bean>
+				<bean class="com.makeandbuild.fixture.DaoEntityManagerImpl">
+					<constructor-arg ref="carDao"/>
+					<constructor-arg value="car"/>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<bean class="com.makeandbuild.validation.ValidationProxyManagerImpl" id="validationProxyManager"/>
+	<bean class="com.makeandbuild.validation.validator.JSR303BeanValidator" id="jsr303BeanValidator"/>
+	<bean class="com.makeandbuild.validation.validators.UserValidator" id="userValidator"/>
+	<bean class="com.makeandbuild.validation.validators.AdminUserValidator" id="adminUserValidator"/>
+	<bean class="com.makeandbuild.persistence.couch.CouchDbJacksonImpl" id="carDao" init-method="init" scope="singleton">
+		<property name="template" ref="restTemplate"/>
+		<property name="baseUrl" value="http://127.0.0.1:5984"/>
+		<property name="databaseName" value="cars"/>
+		<property name="designDocument" value="classpath:_design/car.json"/>
+		<property name="designDocumentLocation" value="cars/_design/car"/>
+	</bean>
+	<bean class="org.springframework.web.client.RestTemplate" id="restTemplate">
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>application/json</value>
+						</list>
+					</property>
+				</bean>
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/plain;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+		<property name="interceptors">
+			<list>
+				<bean class="com.makeandbuild.persistence.couch.BasicAuthClientHttpRequestInterceptor">
+					<constructor-arg type="java.lang.String">
+						<value>admin</value>
+					</constructor-arg>
+					<constructor-arg type="java.lang.String">
+						<value>admin</value>
+					</constructor-arg>
+					<constructor-arg>
+						<bean class="com.makeandbuild.persistence.couch.Base64BasicAuthEncoder"/>
+					</constructor-arg>
+				</bean>
+			</list>
+		</property>
+	</bean>
 </beans>

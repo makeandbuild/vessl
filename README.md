@@ -32,6 +32,18 @@ there are some tests
 * testEntityClassSingularly() demonstrates how to purge via a given Model class
 
 
+validation
+-------
+
+Validation is supported via JSR-303 annotations and custom spring Validator instances you define. Simply defining an
+instance of ValidationProxyManagerImpl in the application context will suffice to load (and cache) all custom
+Validators you have also defined in the application context. Validation does not occur by default on any of your Dao
+classes. To enable bean validation you should create a dynamic proxy instance of your Dao (make sure it extends
+BaseDao) and perform your methods through that proxy. All calls made through your dao proxy instance will have its
+parameters ran through a Validator instance that supports the parameters object type. Multiple validators can be ran
+against the same object. This is controlled by the supports(...) method of your custom Validator instance. If a
+validation errors is encountered the proxy dao instance will throw a RuntimeException (BeanValidationException) that
+contains a list of ObjectError objects defining the validation errors that occured.
 
 setup for function tests
 ------------------
