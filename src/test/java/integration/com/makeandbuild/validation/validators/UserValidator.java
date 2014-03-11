@@ -1,14 +1,12 @@
 package com.makeandbuild.validation.validators;
 
-import com.makeandbuild.persistence.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeFieldType;
-import org.joda.time.LocalTime;
-import org.springframework.format.datetime.joda.LocalTimeParser;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+
+import com.makeandbuild.persistence.User;
 
 /**
  * Provides more low level validation that can occur on the User bean.
