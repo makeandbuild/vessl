@@ -53,6 +53,7 @@ public class Fixture_IT extends AbstractTestNGSpringContextTests {
         
         assertTrue(eventDao.exists("1231231231-222"));
         assertTrue(eventDao.exists("1231231231-12312312-12-3123123"));
+        fixture.purge();
     }
     @Test(enabled=true)
     public void testResourceSingularly() throws IOException, ClassNotFoundException{

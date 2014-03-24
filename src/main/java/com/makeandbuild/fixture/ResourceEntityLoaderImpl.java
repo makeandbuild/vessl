@@ -1,6 +1,8 @@
 package com.makeandbuild.fixture;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -67,5 +69,12 @@ public class ResourceEntityLoaderImpl implements EntityLoader {
     @Override
     public String getSubtype() {
         return subtype;
+    }
+
+    @Override
+    public List<Object> loadReverse() throws IOException {
+        List<Object> items = this.load();
+        Collections.reverse(items);
+        return items;
     }
 }

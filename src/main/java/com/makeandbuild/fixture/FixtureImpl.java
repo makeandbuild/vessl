@@ -85,7 +85,7 @@ public class FixtureImpl implements Fixture {
     public void purge(Class entityClass, String subtype) throws IOException {
         EntityManager manager = getManager(entityClass, subtype);
         EntityLoader loader = getEntityLoader(entityClass, subtype);
-        List<Object> entities = loader.load();
+        List<Object> entities = loader.loadReverse();
         for (Object entity : entities) {
             try {
                 manager.delete(entity);

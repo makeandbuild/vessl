@@ -6,5 +6,15 @@
 	{
 		"type": "user.loggedout",
 		"id": "1231231231-222"
+	},
+	{
+		"type": "child.user.loggedout",
+		"id": "100-1",
+		"parentId": "1231231231-222"
+	},
+	{
+		"type": "child.user.loggedin",
+		"id": "100-2",
+		"parentId": "1231231231-12312312-12-3123123"
 	}
 ]
