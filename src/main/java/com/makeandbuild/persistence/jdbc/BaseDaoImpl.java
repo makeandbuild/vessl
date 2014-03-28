@@ -213,10 +213,8 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         return find(request, criterias, sortbys);
     }
     @Override
-    public PagedResponse<T> find(AbstractPagedRequest request, Criteria criteria) {
-        List<Criteria> criterias = new ArrayList<Criteria>();
-        criterias.add(criteria);
-        return find(request, criterias, (List<SortBy>) null);
+    public PagedResponse<T> find(AbstractPagedRequest request, Criteria... criterias) {
+        return find(request, toList(criterias), (List<SortBy>) null);
     }
 
     @Override
@@ -349,5 +347,20 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
 
         String sql = StringUtils.join(sqlList, " ");
         this.getJdbcTemplate().update(sql, toArray(parameters));
+    }
+    private List<Criteria> toList(Criteria[] params) {
+        List<Criteria> criterias = new ArrayList<Criteria>();
+        for (Criteria c : params){
+            criterias.add(c);
+        }
+        return criterias;
+    }
+    @Override
+    public boolean exists(Criteria... criterias) throws DaoException {
+        return exists(toList(criterias));
+    }
+    @Override
+    public void delete(Criteria... criterias) throws DaoException {
+        delete(toList(criterias));
     }
 }

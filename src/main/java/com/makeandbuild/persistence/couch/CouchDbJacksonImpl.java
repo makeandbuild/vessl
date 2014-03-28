@@ -390,11 +390,16 @@ public class CouchDbJacksonImpl extends CouchDBBaseImpl implements CouchDbJackso
     private String baseUrl(String snippet){
         return this.baseUrl+"/"+snippet;
     }
-    @Override
-    public AbstractPagedResponse<ObjectNode, ArrayNode> find(AbstractPagedRequest request, Criteria criteria) throws DaoException {
+    private List<Criteria> toList(Criteria[] params) {
         List<Criteria> criterias = new ArrayList<Criteria>();
-        criterias.add(criteria);
-        return find(request, criterias);
+        for (Criteria c : params){
+            criterias.add(c);
+        }
+        return criterias;
+    }
+    @Override
+    public AbstractPagedResponse<ObjectNode, ArrayNode> find(AbstractPagedRequest request, Criteria... criteriaParams) throws DaoException {
+        return find(request, toList(criteriaParams));
     }
 
     @Override
@@ -439,6 +444,16 @@ public class CouchDbJacksonImpl extends CouchDBBaseImpl implements CouchDbJackso
 
     public void setDesignDocumentLocation(String designDocumentLocation) {
         this.designDocumentLocation = designDocumentLocation;
+    }
+
+    @Override
+    public boolean exists(Criteria... criterias) throws DaoException {
+        return exists(toList(criterias));
+    }
+
+    @Override
+    public void delete(Criteria... criterias) throws DaoException {
+        delete(toList(criterias));
     }
 
 }
