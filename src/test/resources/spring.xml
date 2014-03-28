@@ -66,6 +66,7 @@
 	<bean class="com.makeandbuild.validation.validator.JSR303BeanValidator" id="jsr303BeanValidator"/>
 	<bean class="com.makeandbuild.validation.validators.UserValidator" id="userValidator"/>
 	<bean class="com.makeandbuild.validation.validators.AdminUserValidator" id="adminUserValidator"/>
+	<bean class="com.makeandbuild.validation.validators.NonDataValidator" id="nonDataValidator"/>
 	<bean class="com.makeandbuild.persistence.couch.CouchDbJacksonImpl" id="carDao" init-method="init" scope="singleton">
 		<property name="template" ref="restTemplate"/>
 		<property name="baseUrl" value="http://127.0.0.1:5984"/>

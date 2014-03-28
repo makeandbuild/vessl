@@ -19,6 +19,7 @@ import java.util.*;
  * Date: 3/6/14
  * Time: 4:59 PM
  */
+@SuppressWarnings({ "unused", "rawtypes" })
 public class ValidationProxyManagerImpl
     implements ValidationProxyManager {
 
@@ -69,5 +70,10 @@ public class ValidationProxyManagerImpl
         }
 
         logger.info("Validation Framework is bootstrapped and ready to roll");
+    }
+
+    @Override
+    public Object newBeanValidatorProxy(BaseDao obj, String... validationTypes) {
+        return BeanValidationProxy.newInstance(obj, cachedValidatorsMap, validationTypes);
     }
 }

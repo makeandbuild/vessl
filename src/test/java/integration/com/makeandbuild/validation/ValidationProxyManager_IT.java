@@ -5,7 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import junit.framework.Assert;
+import static org.testng.AssertJUnit.*;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -23,6 +23,7 @@ import com.makeandbuild.persistence.User;
 import com.makeandbuild.persistence.UserDao;
 import com.makeandbuild.persistence.UserType;
 import com.makeandbuild.validation.exception.BeanValidationException;
+import com.makeandbuild.validation.validators.NonDataValidator;
 
 /**
  * User: Jeremy Dyer
@@ -39,6 +40,36 @@ public class ValidationProxyManager_IT
 
     @Autowired
     UserDao userDao;
+    
+    @Autowired
+    NonDataValidator nonDataValidator;
+
+    @Test
+    public void testExclude() {
+        AdminUser user = new AdminUser();
+        user.setCreatedAt(new Date());
+        user.setLatitude(33.801078);
+        user.setLongitude(-84.436287);
+        user.setLoginCount(1);
+        user.setUsername("jdyer");
+        user.setUserType(UserType.simple);
+        user.setApiKey("TestKeys");       //Omit APIKey to fail validation
+
+        nonDataValidator.setCount(0);
+        UserDao validationUserDao = (UserDao) validationProxyManager.newBeanValidatorProxy(userDao, "data");
+        validationUserDao.save(user);   //Will throw a validation exception
+        assertEquals(0, nonDataValidator.getCount());
+
+        nonDataValidator.setCount(0);
+        validationUserDao = (UserDao) validationProxyManager.newBeanValidatorProxy(userDao, "data", "nondata");
+        validationUserDao.save(user);   //Will throw a validation exception
+        assertEquals(1, nonDataValidator.getCount());
+
+        nonDataValidator.setCount(0);
+        validationUserDao = (UserDao) validationProxyManager.newBeanValidatorProxy(userDao);
+        validationUserDao.save(user);   //Will throw a validation exception
+        assertEquals(1, nonDataValidator.getCount());
+}
 
     @Test
     public void testAdminUserFailValidationWithNoAPIKey() {
@@ -56,12 +87,11 @@ public class ValidationProxyManager_IT
 
         try {
             validationUserDao.save(user);   //Will throw a validation exception
-            Assert.fail(BeanValidationException.class.getName() + " exception was expected");
+            fail(BeanValidationException.class.getName() + " exception was expected");
         } catch (BeanValidationException bve) {
-            Assert.assertTrue(true);
+            assertTrue(true);
         }
     }
-
 
     @Test
     public void testUserCreatedTooEarly() throws ParseException, JsonGenerationException, JsonMappingException, IOException {
@@ -89,10 +119,10 @@ public class ValidationProxyManager_IT
 
         try {
             validationUserDao.save(user);   //Should throw validation exception now
-            Assert.fail(BeanValidationException.class.getName() + " exception was expected");
+            fail(BeanValidationException.class.getName() + " exception was expected");
         } catch (BeanValidationException bve) {
             String json= new ObjectMapper().writeValueAsString(bve.getErrors());
-            Assert.assertTrue(true);
+            assertTrue(true);
         }
     }
 
@@ -114,9 +144,9 @@ public class ValidationProxyManager_IT
         User findUser = null;
         try {
             findUser = secureUserDao.find(user.getId());
-            Assert.fail("Expected Security exception");
+            fail("Expected Security exception");
         } catch (SecurityException se) {
-            Assert.assertTrue(true);
+            assertTrue(true);
         }
 
         //Now create a dummy Authentication and try again.
@@ -126,7 +156,7 @@ public class ValidationProxyManager_IT
         try {
             findUser = secureUserDao.find(user.getId());
         } catch (SecurityException se) {
-            Assert.fail("Security Exception should not have been thrown");
+            fail("Security Exception should not have been thrown");
         }
     }
 }

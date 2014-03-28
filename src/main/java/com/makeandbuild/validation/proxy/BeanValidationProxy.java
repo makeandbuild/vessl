@@ -1,7 +1,12 @@
 package com.makeandbuild.validation.proxy;
 
-import com.makeandbuild.persistence.jdbc.BaseDao;
-import com.makeandbuild.validation.exception.BeanValidationException;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -10,13 +15,9 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.makeandbuild.persistence.jdbc.BaseDao;
+import com.makeandbuild.validation.ValidationType;
+import com.makeandbuild.validation.exception.BeanValidationException;
 
 /**
  * Creates a dynamic proxy for a DAO that extends BaseDao. That dynamic proxy will in turn
@@ -27,27 +28,49 @@ import java.util.Map;
  * Date: 3/6/14
  * Time: 4:54 PM
  */
+@SuppressWarnings({ "unused", "rawtypes" })
 public class BeanValidationProxy
         implements InvocationHandler {
 
     Log logger = LogFactory.getLog(getClass());
 
     private BaseDao obj;
+    private String[] validationTypes;
 
     //Cached Map of Spring validator(s)
     private Map<Class<?>, List<Validator>> cachedValidatorsMap = null;
 
-    public static Object newInstance(BaseDao obj, Map<Class<?>,
-            List<Validator>> validatorCacheMap) {
+    public static Object newInstance(BaseDao obj, Map<Class<?>, List<Validator>> validatorCacheMap) {
         return Proxy.newProxyInstance(obj.getClass().getClassLoader(), obj.getClass().getInterfaces(),
                 new BeanValidationProxy(obj, validatorCacheMap));
     }
 
-    private BeanValidationProxy(BaseDao obj, Map<Class<?>, List<Validator>> validatorCacheMap) {
+    private BeanValidationProxy(BaseDao obj, Map<Class<?>, List<Validator>> validatorCacheMap, String... validationTypes) {
         this.obj = obj;
         this.cachedValidatorsMap = validatorCacheMap;
+        this.validationTypes = validationTypes;
     }
+    public static Object newInstance(BaseDao obj, Map<Class<?>, List<Validator>> validatorCacheMap, String... validationTypes) {
+        return Proxy.newProxyInstance(obj.getClass().getClassLoader(), obj.getClass().getInterfaces(),
+                new BeanValidationProxy(obj, validatorCacheMap, validationTypes));
+    }
+    private boolean skip(Validator validator){
+        if (validationTypes == null || validationTypes.length == 0){
+            return false;
+        } else {
+            String type = "data";
+            if (validator.getClass().isAnnotationPresent(ValidationType.class)){
+                type = validator.getClass().getAnnotation(ValidationType.class).value();
+            }
+            for (String filter : validationTypes){
+                if (filter.equals(type)){
+                    return false;
+                }
+            }
+            return true;
+        }
 
+    }
     public Object invoke(Object proxy, Method m, Object[] args) throws Throwable {
         Object result;
         try {
@@ -73,7 +96,8 @@ public class BeanValidationProxy
                             List<Validator> validators = cachedValidatorsMap.get(paramBean.getClass());
 
                             for (Validator validator : validators) {
-
+                                if (skip(validator))
+                                    continue;
                                 List<ObjectError> validationErrors = null;
                                 if (validator.supports(paramBean.getClass())) {
                                     BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult
@@ -111,4 +135,5 @@ public class BeanValidationProxy
         }
         return result;
     }
+
 }
