@@ -11,23 +11,23 @@ public class ValidatedDaoEntityManagerImpl extends DaoEntityManagerImpl{
     ValidationProxyManager validationProxyManager;
     
     private Dao validationDao;
+    private String[] validationTypes;
 
     public Dao getDao() {
         if (validationDao == null)
-            validationDao = (Dao)validationProxyManager.newBeanValidatorProxy(dao, "data");
+            validationDao = (Dao)validationProxyManager.newBeanValidatorProxy(dao, validationTypes);
         return validationDao;
     }
 
     
     
-    public ValidatedDaoEntityManagerImpl(Dao dao, String subtype) {
+    public ValidatedDaoEntityManagerImpl(Dao dao, String subtype, String... validationTypes) {
         super(dao, subtype);
-        // TODO Auto-generated constructor stub
+        this.validationTypes = validationTypes;
     }
 
     public ValidatedDaoEntityManagerImpl(Dao dao) {
         super(dao);
-        // TODO Auto-generated constructor stub
     }
 
 }

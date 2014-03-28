@@ -1,5 +1,6 @@
 package com.makeandbuild.fixture;
 
+import static org.testng.AssertJUnit.*;
 import static org.testng.AssertJUnit.assertNotNull;
 import static org.testng.AssertJUnit.assertTrue;
 import static org.testng.AssertJUnit.fail;
@@ -15,6 +16,8 @@ import com.makeandbuild.persistence.EventDao;
 import com.makeandbuild.persistence.User;
 import com.makeandbuild.persistence.UserDao;
 import com.makeandbuild.validation.exception.BeanValidationException;
+import com.makeandbuild.validation.validators.NonDataValidator;
+import com.makeandbuild.validation.validators.SecurityValidator;
 
 @Test(groups = {"function"})
 @ContextConfiguration(locations={"classpath*:spring.xml"})
@@ -27,6 +30,12 @@ public class ValidatedFixture_IT extends AbstractTestNGSpringContextTests {
 
     @Autowired 
     Fixture validatedFixture;
+    
+    @Autowired
+    NonDataValidator nonDataValidator;
+
+    @Autowired
+    SecurityValidator securityValidator;
 
     @Test(enabled=true)
     public void testAll() throws IOException{
@@ -51,7 +60,11 @@ public class ValidatedFixture_IT extends AbstractTestNGSpringContextTests {
         assertTrue(!userDao.exists(1L));
         assertTrue(!userDao.exists(2L));
 
+        nonDataValidator.setCount(0);
+        securityValidator.setCount(0);
         validatedFixture.load(new ResourceEntityLoaderImpl("/fixtures/com.makeandbuild.persistence.User.json"));
+        assertNotSame(0, nonDataValidator.getCount());
+        assertEquals(0, securityValidator.getCount());
         assertTrue(userDao.exists(1L));
         assertTrue(userDao.exists(2L));
     }

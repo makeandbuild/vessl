@@ -7,8 +7,8 @@ import com.makeandbuild.persistence.AdminUser;
 import com.makeandbuild.persistence.User;
 import com.makeandbuild.validation.ValidationType;
 
-@ValidationType("nondata")
-public class NonDataValidator implements Validator {
+@ValidationType("security")
+public class SecurityValidator implements Validator {
 
     private int count = 0;
     
