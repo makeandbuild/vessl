@@ -10,7 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.makeandbuild.persistence.jdbc.BaseDao;
+import com.makeandbuild.persistence.Dao;
 
 /**
  * Proxy to examine the Security context and ensure that
@@ -19,20 +19,20 @@ import com.makeandbuild.persistence.jdbc.BaseDao;
  * Date: 3/7/14
  * Time: 1:42 PM
  */
-@SuppressWarnings({ "unused", "rawtypes" })
+@SuppressWarnings({ "rawtypes" })
 public class SecurityValidationProxy
         implements InvocationHandler {
 
     Log logger = LogFactory.getLog(getClass());
 
-    private BaseDao obj;
+    private Dao obj;
 
-    public static Object newInstance(BaseDao obj) {
+    public static Object newInstance(Dao obj) {
         return Proxy.newProxyInstance(obj.getClass().getClassLoader(), obj.getClass().getInterfaces(),
                 new SecurityValidationProxy(obj));
     }
 
-    private SecurityValidationProxy(BaseDao obj) {
+    private SecurityValidationProxy(Dao obj) {
         this.obj = obj;
     }
 

@@ -62,6 +62,28 @@
 			</list>
 		</property>
 	</bean>
+	<bean class="com.makeandbuild.fixture.FixtureImpl" id="validatedFixture" scope="singleton">
+		<property name="entityLoaders">
+			<list>
+				<bean class="com.makeandbuild.fixture.ResourceEntityLoaderImpl">
+					<constructor-arg value="/fixtures/com.makeandbuild.persistence.User.json"/>
+				</bean>
+				<bean class="com.makeandbuild.fixture.ResourceEntityLoaderImpl">
+					<constructor-arg value="/fixtures/com.makeandbuild.persistence.Event.json"/>
+				</bean>
+			</list>
+		</property>
+		<property name="entityManagers">
+			<list>
+				<bean class="com.makeandbuild.fixture.ValidatedDaoEntityManagerImpl">
+					<constructor-arg ref="userDao"/>
+				</bean>
+				<bean class="com.makeandbuild.fixture.ValidatedDaoEntityManagerImpl">
+					<constructor-arg ref="eventDao"/>
+				</bean>
+			</list>
+		</property>
+	</bean>
 	<bean class="com.makeandbuild.validation.ValidationProxyManagerImpl" id="validationProxyManager"/>
 	<bean class="com.makeandbuild.validation.validator.JSR303BeanValidator" id="jsr303BeanValidator"/>
 	<bean class="com.makeandbuild.validation.validators.UserValidator" id="userValidator"/>

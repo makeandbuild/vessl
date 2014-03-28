@@ -7,6 +7,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+
 import java.util.Set;
 
 /**
@@ -26,6 +27,7 @@ public class JSR303BeanValidator
         validator = validatorFactory.usingContext().getValidator();
     }
 
+    @SuppressWarnings("rawtypes")
     public boolean supports(Class clazz) {
         return true;
     }

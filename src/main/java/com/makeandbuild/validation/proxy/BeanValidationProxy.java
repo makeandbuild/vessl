@@ -15,6 +15,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import com.makeandbuild.persistence.Dao;
 import com.makeandbuild.persistence.jdbc.BaseDao;
 import com.makeandbuild.validation.ValidationType;
 import com.makeandbuild.validation.exception.BeanValidationException;
@@ -34,23 +35,23 @@ public class BeanValidationProxy
 
     Log logger = LogFactory.getLog(getClass());
 
-    private BaseDao obj;
+    private Dao obj;
     private String[] validationTypes;
 
     //Cached Map of Spring validator(s)
     private Map<Class<?>, List<Validator>> cachedValidatorsMap = null;
 
-    public static Object newInstance(BaseDao obj, Map<Class<?>, List<Validator>> validatorCacheMap) {
+    public static Object newInstance(Dao obj, Map<Class<?>, List<Validator>> validatorCacheMap) {
         return Proxy.newProxyInstance(obj.getClass().getClassLoader(), obj.getClass().getInterfaces(),
                 new BeanValidationProxy(obj, validatorCacheMap));
     }
 
-    private BeanValidationProxy(BaseDao obj, Map<Class<?>, List<Validator>> validatorCacheMap, String... validationTypes) {
+    private BeanValidationProxy(Dao obj, Map<Class<?>, List<Validator>> validatorCacheMap, String... validationTypes) {
         this.obj = obj;
         this.cachedValidatorsMap = validatorCacheMap;
         this.validationTypes = validationTypes;
     }
-    public static Object newInstance(BaseDao obj, Map<Class<?>, List<Validator>> validatorCacheMap, String... validationTypes) {
+    public static Object newInstance(Dao obj, Map<Class<?>, List<Validator>> validatorCacheMap, String... validationTypes) {
         return Proxy.newProxyInstance(obj.getClass().getClassLoader(), obj.getClass().getInterfaces(),
                 new BeanValidationProxy(obj, validatorCacheMap, validationTypes));
     }
@@ -71,6 +72,7 @@ public class BeanValidationProxy
         }
 
     }
+    @SuppressWarnings("unchecked")
     public Object invoke(Object proxy, Method m, Object[] args) throws Throwable {
         Object result;
         try {
