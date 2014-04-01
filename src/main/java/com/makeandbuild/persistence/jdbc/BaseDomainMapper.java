@@ -90,4 +90,7 @@ public abstract class BaseDomainMapper<T> implements DomainMapper<T>{
     public Double getDouble(ResultSet rs, String columnName) throws SQLException {
         return ResultSetUtil.getDoubleOrNull(rs, columnName);
     }
+    public Float getFloat(ResultSet rs, String columnName) throws SQLException {
+        return ResultSetUtil.getFloatOfNull(rs, columnName);
+    }
 }
