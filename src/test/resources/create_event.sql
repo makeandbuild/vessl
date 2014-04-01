@@ -4,6 +4,9 @@ DROP TABLE IF EXISTS `event`;
 CREATE TABLE `event` (
   `event_id` varchar(255) NOT NULL,
   `type` varchar(255) NOT NULL,
-  PRIMARY KEY (`event_id`)
+  `parent_event_id` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`event_id`),
+  KEY `FK_parent_event` (`parent_event_id`),
+  CONSTRAINT `FK_parent_event` FOREIGN KEY (`parent_event_id`) REFERENCES `event` (`event_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

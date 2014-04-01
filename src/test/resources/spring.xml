@@ -62,10 +62,43 @@
 			</list>
 		</property>
 	</bean>
+	<bean class="com.makeandbuild.fixture.FixtureImpl" id="validatedFixture" scope="singleton">
+		<property name="entityLoaders">
+			<list>
+				<bean class="com.makeandbuild.fixture.ResourceEntityLoaderImpl">
+					<constructor-arg value="/fixtures/com.makeandbuild.persistence.User.json"/>
+				</bean>
+				<bean class="com.makeandbuild.fixture.ResourceEntityLoaderImpl">
+					<constructor-arg value="/fixtures/com.makeandbuild.persistence.Event.json"/>
+				</bean>
+			</list>
+		</property>
+		<property name="entityManagers">
+			<list>
+				<bean class="com.makeandbuild.fixture.ValidatedDaoEntityManagerImpl">
+					<constructor-arg ref="userDao"/>
+					<constructor-arg>
+						<null />
+					</constructor-arg>
+					<constructor-arg>
+						<list>
+							<value>data</value>
+							<value>nondata</value>
+						</list>
+					</constructor-arg>
+				</bean>
+				<bean class="com.makeandbuild.fixture.ValidatedDaoEntityManagerImpl">
+					<constructor-arg ref="eventDao"/>
+				</bean>
+			</list>
+		</property>
+	</bean>
 	<bean class="com.makeandbuild.validation.ValidationProxyManagerImpl" id="validationProxyManager"/>
 	<bean class="com.makeandbuild.validation.validator.JSR303BeanValidator" id="jsr303BeanValidator"/>
 	<bean class="com.makeandbuild.validation.validators.UserValidator" id="userValidator"/>
 	<bean class="com.makeandbuild.validation.validators.AdminUserValidator" id="adminUserValidator"/>
+	<bean class="com.makeandbuild.validation.validators.NonDataValidator" id="nonDataValidator"/>
+	<bean class="com.makeandbuild.validation.validators.SecurityValidator" id="securityValidator"/>
 	<bean class="com.makeandbuild.persistence.couch.CouchDbJacksonImpl" id="carDao" init-method="init" scope="singleton">
 		<property name="template" ref="restTemplate"/>
 		<property name="baseUrl" value="http://127.0.0.1:5984"/>

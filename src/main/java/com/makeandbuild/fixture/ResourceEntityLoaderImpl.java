@@ -1,6 +1,7 @@
 package com.makeandbuild.fixture;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -32,6 +33,12 @@ public class ResourceEntityLoaderImpl implements EntityLoader {
         if (split.length>1){
             subtype = split[1];
         }
+        this.resourcePath = resourcePath;
+    }
+    public ResourceEntityLoaderImpl(String resourcePath, Class entityClass, String subtype) throws ClassNotFoundException{
+        super();
+        this.entityClass = entityClass;
+        this.subtype = subtype;
         this.resourcePath = resourcePath;
     }
 
@@ -67,5 +74,12 @@ public class ResourceEntityLoaderImpl implements EntityLoader {
     @Override
     public String getSubtype() {
         return subtype;
+    }
+
+    @Override
+    public List<Object> loadReverse() throws IOException {
+        List<Object> items = this.load();
+        Collections.reverse(items);
+        return items;
     }
 }

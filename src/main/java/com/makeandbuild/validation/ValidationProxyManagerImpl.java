@@ -1,8 +1,10 @@
 package com.makeandbuild.validation;
 
-import com.makeandbuild.persistence.jdbc.BaseDao;
-import com.makeandbuild.validation.proxy.BeanValidationProxy;
-import com.makeandbuild.validation.proxy.SecurityValidationProxy;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -10,7 +12,10 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.validation.Validator;
 
-import java.util.*;
+import com.makeandbuild.persistence.Dao;
+import com.makeandbuild.persistence.jdbc.BaseDao;
+import com.makeandbuild.validation.proxy.BeanValidationProxy;
+import com.makeandbuild.validation.proxy.SecurityValidationProxy;
 
 /**
  * ValidationProxyManager implementation
@@ -19,6 +24,7 @@ import java.util.*;
  * Date: 3/6/14
  * Time: 4:59 PM
  */
+@SuppressWarnings({ "unused", "rawtypes" })
 public class ValidationProxyManagerImpl
     implements ValidationProxyManager {
 
@@ -30,12 +36,12 @@ public class ValidationProxyManagerImpl
     private final Map<Class<?>, List<Validator>> cachedValidatorsMap = new HashMap<Class<?>, List<Validator>>();
 
     @Override
-    public Object newBeanValidatorProxy(BaseDao obj) {
+    public Object newBeanValidatorProxy(Dao obj) {
         return BeanValidationProxy.newInstance(obj, cachedValidatorsMap);
     }
 
     @Override
-    public Object newSecurityValidatorProxy(BaseDao obj) {
+    public Object newSecurityValidatorProxy(Dao obj) {
         return SecurityValidationProxy.newInstance(obj);
     }
 
@@ -69,5 +75,10 @@ public class ValidationProxyManagerImpl
         }
 
         logger.info("Validation Framework is bootstrapped and ready to roll");
+    }
+
+    @Override
+    public Object newBeanValidatorProxy(Dao obj, String... validationTypes) {
+        return BeanValidationProxy.newInstance(obj, cachedValidatorsMap, validationTypes);
     }
 }

@@ -1,16 +1,16 @@
 package com.makeandbuild.validation.proxy;
 
-import com.makeandbuild.persistence.jdbc.BaseDao;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
+import com.makeandbuild.persistence.Dao;
 
 /**
  * Proxy to examine the Security context and ensure that
@@ -19,19 +19,20 @@ import java.lang.reflect.Proxy;
  * Date: 3/7/14
  * Time: 1:42 PM
  */
+@SuppressWarnings({ "rawtypes" })
 public class SecurityValidationProxy
         implements InvocationHandler {
 
     Log logger = LogFactory.getLog(getClass());
 
-    private BaseDao obj;
+    private Dao obj;
 
-    public static Object newInstance(BaseDao obj) {
+    public static Object newInstance(Dao obj) {
         return Proxy.newProxyInstance(obj.getClass().getClassLoader(), obj.getClass().getInterfaces(),
                 new SecurityValidationProxy(obj));
     }
 
-    private SecurityValidationProxy(BaseDao obj) {
+    private SecurityValidationProxy(Dao obj) {
         this.obj = obj;
     }
 

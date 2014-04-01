@@ -1,0 +1,20 @@
+[
+    {
+        "createdAt": "2012-01-01T00:00:00.000+0000",
+        "id": 1,
+        "latitude": 33.801077999999997,
+        "loginCount": 1,
+        "longitude": -84.436286999999993,
+        "userType": "admin",
+        "username": "azuercher"
+    },
+    {
+        "createdAt": "1870-01-01T00:00:00.000+0000",
+        "id": 2,
+        "latitude": 33.801077999999997,
+        "loginCount": 1,
+        "longitude": -84.436286999999993,
+        "userType": "simple",
+        "username": "telrod"
+    }
+]

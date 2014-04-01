@@ -17,6 +17,10 @@ public class Event {
     @SaveWhen(insert = true, update = true)
     private String type;
 
+    @Column(name = "parent_event_id")
+    @SaveWhen(insert = true, update = false)
+    private String parentId;
+
     public String getId() {
         return id;
     }
@@ -31,6 +35,14 @@ public class Event {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 
 }

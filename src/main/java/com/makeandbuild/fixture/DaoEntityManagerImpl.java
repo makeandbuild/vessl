@@ -5,8 +5,8 @@ import com.makeandbuild.persistence.DaoException;
 
 @SuppressWarnings("rawtypes")
 public class DaoEntityManagerImpl implements EntityManager {
-    private Dao dao;
-    private String subtype;
+    protected Dao dao;
+    protected String subtype;
 
     public DaoEntityManagerImpl(Dao dao) {
         super();
@@ -39,19 +39,19 @@ public class DaoEntityManagerImpl implements EntityManager {
     @SuppressWarnings("unchecked")
     @Override
     public Object save(Object item) {
-        return dao.save(item);
+        return getDao().save(item);
     }
 
     @Override
     public void deleteAll() {
-        dao.deleteAll();       
+        getDao().deleteAll();       
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public void delete(Object item) throws DaoException {
         try {
-            dao.deleteById(dao.getId(item));
+            getDao().deleteById(dao.getId(item));
         } catch (IllegalArgumentException e) {
             throw new RuntimeException(e);
         }

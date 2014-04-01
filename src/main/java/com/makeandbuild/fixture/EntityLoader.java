@@ -7,5 +7,6 @@ import java.util.List;
 public interface EntityLoader {
     Class getEntityClass();
     List<Object> load() throws IOException;
+    List<Object> loadReverse() throws IOException;
     String getSubtype();
 }
