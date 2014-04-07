@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.makeandbuild.persistence.Dao;
 import com.makeandbuild.validation.ValidationProxyManager;
 
+@SuppressWarnings("rawtypes")
 public class ValidatedDaoEntityManagerImpl extends DaoEntityManagerImpl{
-    
     @Autowired
     ValidationProxyManager validationProxyManager;
     
@@ -18,8 +18,6 @@ public class ValidatedDaoEntityManagerImpl extends DaoEntityManagerImpl{
             validationDao = (Dao)validationProxyManager.newBeanValidatorProxy(dao, validationTypes);
         return validationDao;
     }
-
-    
     
     public ValidatedDaoEntityManagerImpl(Dao dao, String subtype, String... validationTypes) {
         super(dao, subtype);
@@ -29,5 +27,4 @@ public class ValidatedDaoEntityManagerImpl extends DaoEntityManagerImpl{
     public ValidatedDaoEntityManagerImpl(Dao dao) {
         super(dao);
     }
-
 }
