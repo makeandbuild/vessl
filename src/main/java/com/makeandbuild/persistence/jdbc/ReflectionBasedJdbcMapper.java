@@ -268,6 +268,8 @@ public class ReflectionBasedJdbcMapper<T> extends BaseDomainMapper<T> implements
             return this.getInt(rs, columnName);
         } else if (type.equals(Double.class) || type.equals(Double.TYPE)){
             return this.getDouble(rs, columnName);
+        } else if (type.equals(Float.class) || type.equals(Float.TYPE)) {
+            return this.getFloat(rs, columnName);
         } else if (type.equals(Boolean.class) || type.equals(Boolean.TYPE)){
             return this.getBoolean(rs, columnName);
         }

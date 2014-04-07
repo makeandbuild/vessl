@@ -45,5 +45,12 @@ public final class ResultSetUtil {
         }       
         return new Double(sVal);
     }
-    
-}
+
+    public static Float getFloatOfNull(ResultSet rs, String columnName) throws SQLException {
+        float fVal = rs.getFloat(columnName);
+        if (rs.wasNull()) {
+            return null;
+        }
+        return new Float(fVal);
+    }
+ }
