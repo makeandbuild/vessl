@@ -1,5 +1,8 @@
 package com.makeandbuild.fixture;
 
+import com.makeandbuild.persistence.AbstractPagedRequest;
+import com.makeandbuild.persistence.AbstractPagedResponse;
+import com.makeandbuild.persistence.Criteria;
 import com.makeandbuild.persistence.Dao;
 import com.makeandbuild.persistence.DaoException;
 
@@ -56,11 +59,18 @@ public class DaoEntityManagerImpl implements EntityManager {
             throw new RuntimeException(e);
         }
     }
+    @Override
+    public Object getId(Object model){
+        return dao.getId(model);
+    }
     public String getSubtype() {
         return subtype;
     }
     public void setSubtype(String subtype) {
         this.subtype = subtype;
     }
-    
+    @Override
+    public AbstractPagedResponse find(AbstractPagedRequest request, Criteria... criterias) {
+        return getDao().find(request, criterias);
+    }    
 }

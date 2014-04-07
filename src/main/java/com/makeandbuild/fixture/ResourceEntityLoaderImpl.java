@@ -61,8 +61,7 @@ public class ResourceEntityLoaderImpl implements EntityLoader {
         try {
             String json = IOUtils.toString(this.getClass().getResourceAsStream(resourcePath));
             ArrayNode node = (ArrayNode) getInstance().readTree(json);
-            JavaType type = mapper.getTypeFactory().
-                    constructCollectionType(List.class, entityClass);
+            JavaType type = mapper.getTypeFactory().constructCollectionType(List.class, entityClass);
             return getInstance().readValue(node, type);
         }catch (IOException e){
             logger.error("problem loading resource "+resourcePath, e);

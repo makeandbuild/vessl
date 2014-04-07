@@ -1,5 +1,6 @@
 package com.makeandbuild.fixture;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -13,4 +14,6 @@ public interface Fixture {
     void load(EntityLoader loader) throws ClassNotFoundException, IOException;
     void load(String resourceName) throws ClassNotFoundException, IOException;
     void load(Class entityClass, String subtype) throws IOException;
+    void dump(Class entityClass, String subtype, File directory) throws IOException;
+    void dump(File directory) throws IOException;
 }

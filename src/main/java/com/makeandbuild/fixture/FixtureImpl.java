@@ -1,17 +1,22 @@
 package com.makeandbuild.fixture;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.makeandbuild.persistence.AbstractPagedRequest;
+import com.makeandbuild.persistence.AbstractPagedResponse;
 import com.makeandbuild.persistence.ObjectNotFoundException;
 
 @SuppressWarnings("rawtypes")
 public class FixtureImpl implements Fixture {
     protected List<EntityLoader> entityLoaders;
     protected List<EntityManager> entityManagers;
+    protected DumperFactory dumperFactory = new DumperFactoryImpl();
+    
     Log logger = LogFactory.getLog(this.getClass());
     
     public List<EntityLoader> getEntityLoaders() {
@@ -108,4 +113,30 @@ public class FixtureImpl implements Fixture {
             manager.save(entity);
         }
     }
+    @Override
+    public void dump(Class entityClass, String subtype, File directory) throws IOException {
+        EntityManager manager = getManager(entityClass, subtype);
+        dumperFactory.setDirectory(directory);
+        Dumper dumper = dumperFactory.create(entityClass, subtype, manager);
+        if (dumper != null)
+            dumper.dump();
+    }
+
+    @Override
+    public void dump(File directory) throws IOException {
+        for (EntityManager entityManager : entityManagers){
+            Class entityClass = entityManager.getEntityClass();
+            String subtype = entityManager.getSubtype();
+            dump(entityClass, subtype, directory);       
+        }
+    }
+
+    public DumperFactory getDumperFactory() {
+        return dumperFactory;
+    }
+
+    public void setDumperFactory(DumperFactory dumperFactory) {
+        this.dumperFactory = dumperFactory;
+    }
+    
 }
