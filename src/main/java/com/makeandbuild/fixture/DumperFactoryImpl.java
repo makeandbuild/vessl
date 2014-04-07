@@ -9,9 +9,6 @@ public class DumperFactoryImpl implements DumperFactory {
     protected File directory;
     @Override
     public Dumper create(Class entityClass, String subtype, EntityManager manager, Object minKey) {
-        if (!directory.exists())
-            directory.mkdir();
-        
         if (entityClass.equals(ObjectNode.class)){
             //todo implement
             return null;

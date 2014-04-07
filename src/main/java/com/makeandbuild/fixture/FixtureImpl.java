@@ -117,6 +117,8 @@ public class FixtureImpl implements Fixture {
     @Override
     public void dump(Class entityClass, String subtype, File directory) throws IOException {
         EntityManager manager = getManager(entityClass, subtype);
+        if (!directory.exists())
+            directory.mkdir();
         dumperFactory.setDirectory(directory);
         Object minimumKey = getMiniumKey(entityClass, subtype);
         Dumper dumper = dumperFactory.create(entityClass, subtype, manager, minimumKey);
