@@ -42,6 +42,7 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         this.idClass = idClass;
         this._mapper = mapper;
     }
+    @Override
     public ID getId(T item) {
         Field f = getIdField(item);
         f.setAccessible(true);
@@ -53,8 +54,16 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         }
         return (ID)value;
     }
+    @Override
+    public String getIdName() {
+        Field f = getIdField(getEntityClass());
+        return f.getName();
+    }
     private Field getIdField(Object item){
-        for (Field field : getEntityClass().getDeclaredFields()){
+        return getIdField(getEntityClass());
+    }
+    private Field getIdField(Class clazz){
+        for (Field field : clazz.getDeclaredFields()){
             if (field.isAnnotationPresent(Id.class)){
                 return field;
             }

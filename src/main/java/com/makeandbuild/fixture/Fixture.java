@@ -16,4 +16,6 @@ public interface Fixture {
     void load(Class entityClass, String subtype) throws IOException;
     void dump(Class entityClass, String subtype, File directory) throws IOException;
     void dump(File directory) throws IOException;
+    public Object getMiniumKey(Class entityClass, String subtype) throws IOException;
+
 }

@@ -25,4 +25,5 @@ public interface Dao<T, ID, C> {
     public void deleteAll() throws DaoException;
     void delete(Criteria criteria);
     public ID getId(T object);
+    public String getIdName();
 }

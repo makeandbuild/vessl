@@ -17,4 +17,5 @@ public interface EntityManager {
     public void delete(Object item) throws DaoException;
     public AbstractPagedResponse find(AbstractPagedRequest request, Criteria... criteria);
     Object getId(Object model);
+    String getIdName();
 }

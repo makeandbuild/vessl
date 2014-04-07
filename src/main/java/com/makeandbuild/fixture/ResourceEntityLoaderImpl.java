@@ -13,13 +13,13 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.type.JavaType;
 
+@SuppressWarnings("rawtypes")
 public class ResourceEntityLoaderImpl implements EntityLoader {
-    private static ObjectMapper mapper;
-    @SuppressWarnings("rawtypes")
-    private Class entityClass;
-    private String resourcePath;
-    private String subtype=null;
-    private static Log logger = LogFactory.getLog(ResourceEntityLoaderImpl.class);
+    protected static ObjectMapper mapper;
+    protected Class entityClass;
+    protected String resourcePath;
+    protected String subtype=null;
+    protected static Log logger = LogFactory.getLog(ResourceEntityLoaderImpl.class);
     
     public ResourceEntityLoaderImpl(String resourcePath) throws ClassNotFoundException{
         super();
@@ -35,20 +35,19 @@ public class ResourceEntityLoaderImpl implements EntityLoader {
         }
         this.resourcePath = resourcePath;
     }
-    public ResourceEntityLoaderImpl(String resourcePath, Class entityClass, String subtype) throws ClassNotFoundException{
+    public ResourceEntityLoaderImpl(String resourcePath,  Class entityClass, String subtype) throws ClassNotFoundException{
         super();
         this.entityClass = entityClass;
         this.subtype = subtype;
         this.resourcePath = resourcePath;
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
     public Class getEntityClass() {
         return entityClass;
     }
     @SuppressWarnings("deprecation")
-    private static ObjectMapper getInstance() {
+    protected static ObjectMapper getInstance() {
         if (mapper == null) {
             mapper = new ObjectMapper();
             mapper.getSerializationConfig().setSerializationInclusion(Inclusion.NON_NULL);

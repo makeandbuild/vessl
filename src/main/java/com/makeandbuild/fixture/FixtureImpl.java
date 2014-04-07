@@ -17,7 +17,7 @@ public class FixtureImpl implements Fixture {
     protected List<EntityManager> entityManagers;
     protected DumperFactory dumperFactory = new DumperFactoryImpl();
     
-    Log logger = LogFactory.getLog(this.getClass());
+    protected Log logger = LogFactory.getLog(this.getClass());
     
     public List<EntityLoader> getEntityLoaders() {
         return entityLoaders;
@@ -117,7 +117,8 @@ public class FixtureImpl implements Fixture {
     public void dump(Class entityClass, String subtype, File directory) throws IOException {
         EntityManager manager = getManager(entityClass, subtype);
         dumperFactory.setDirectory(directory);
-        Dumper dumper = dumperFactory.create(entityClass, subtype, manager);
+        Object minimumKey = getMiniumKey(entityClass, subtype);
+        Dumper dumper = dumperFactory.create(entityClass, subtype, manager, minimumKey);
         if (dumper != null)
             dumper.dump();
     }
@@ -138,5 +139,29 @@ public class FixtureImpl implements Fixture {
     public void setDumperFactory(DumperFactory dumperFactory) {
         this.dumperFactory = dumperFactory;
     }
+
+    @Override
+    public Object getMiniumKey(Class entityClass, String subtype) throws IOException {
+        EntityLoader loader = getEntityLoader(entityClass, subtype);
+        EntityManager manager = getManager(entityClass, subtype);
+        List<Object> entities = loader.load();
+        Object currentKey = null;
+        for (Object entity : entities) {
+            Object entityKey = manager.getId(entity);
+            if (entityKey.getClass().equals(Long.class) || entityKey.getClass().equals(Long.TYPE)){
+                if (currentKey == null){
+                    currentKey = entityKey;
+                } else if ((Long)currentKey > (Long)entityKey){
+                    currentKey = entityKey;
+                }
+            } else {
+                //skip
+                System.out.println("skipping "+entityClass);
+                return null;
+            }
+        }
+        return currentKey;
+    }
+    
     
 }

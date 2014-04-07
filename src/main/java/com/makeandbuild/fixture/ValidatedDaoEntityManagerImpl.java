@@ -10,8 +10,8 @@ public class ValidatedDaoEntityManagerImpl extends DaoEntityManagerImpl{
     @Autowired
     ValidationProxyManager validationProxyManager;
     
-    private Dao validationDao;
-    private String[] validationTypes;
+    protected Dao validationDao;
+    protected String[] validationTypes;
 
     public Dao getDao() {
         if (validationDao == null)

@@ -59,6 +59,7 @@ public class DaoEntityManagerImpl implements EntityManager {
             throw new RuntimeException(e);
         }
     }
+    @SuppressWarnings("unchecked")
     @Override
     public Object getId(Object model){
         return dao.getId(model);
@@ -72,5 +73,9 @@ public class DaoEntityManagerImpl implements EntityManager {
     @Override
     public AbstractPagedResponse find(AbstractPagedRequest request, Criteria... criterias) {
         return getDao().find(request, criterias);
+    }
+    @Override
+    public String getIdName() {
+        return dao.getIdName();
     }    
 }

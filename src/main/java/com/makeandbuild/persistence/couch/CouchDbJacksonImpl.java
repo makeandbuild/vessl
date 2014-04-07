@@ -456,4 +456,10 @@ public class CouchDbJacksonImpl extends CouchDBBaseImpl implements CouchDbJackso
         delete(toList(criterias));
     }
 
+    @Override
+    public String getIdName() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

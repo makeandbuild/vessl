@@ -6,9 +6,9 @@ import org.codehaus.jackson.node.ObjectNode;
 
 @SuppressWarnings("rawtypes")
 public class DumperFactoryImpl implements DumperFactory {
-    private File directory;
+    protected File directory;
     @Override
-    public Dumper create(Class entityClass, String subtype, EntityManager manager) {
+    public Dumper create(Class entityClass, String subtype, EntityManager manager, Object minKey) {
         if (!directory.exists())
             directory.mkdir();
         
@@ -16,7 +16,7 @@ public class DumperFactoryImpl implements DumperFactory {
             //todo implement
             return null;
         }else {
-            return new DaoDumperImpl(entityClass, subtype, manager, directory);
+            return new DaoDumperImpl(entityClass, subtype, manager, directory, minKey);
         }        
     }
 

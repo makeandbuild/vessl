@@ -16,24 +16,27 @@ import org.codehaus.jackson.map.SerializationConfig;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.makeandbuild.persistence.AbstractPagedRequest;
+import com.makeandbuild.persistence.Criteria;
 import com.makeandbuild.persistence.jdbc.PagedResponse;
 
 @SuppressWarnings({"rawtypes", "unused"})
 public class DaoDumperImpl implements Dumper {
-    private Class entityClass;
-    private String subtype;
-    private EntityManager manager;
-    JsonGenerator jGenerator;
-    File file;
-    File directory;
-    ObjectMapper objectMapper;
+    protected Class entityClass;
+    protected String subtype;
+    protected EntityManager manager;
+    protected JsonGenerator jGenerator;
+    protected File file;
+    protected File directory;
+    protected ObjectMapper objectMapper;
+    protected Object minKey;
     static Log logger = LogFactory.getLog(DaoDumperImpl.class);
     
-    public DaoDumperImpl(Class entityClass, String subtype, EntityManager manager, File directory)  {
+    public DaoDumperImpl(Class entityClass, String subtype, EntityManager manager, File directory, Object minKey)  {
         this.entityClass = entityClass;
         this.subtype = subtype;
         this.manager = manager;
         this.directory = directory;
+        this.minKey = minKey;
     }
 
     @SuppressWarnings("deprecation")
@@ -70,8 +73,11 @@ public class DaoDumperImpl implements Dumper {
     public File dump() throws IOException {
         start();
         AbstractPagedRequest request = new AbstractPagedRequest();
+        Criteria criteria = (minKey==null) ? null : new Criteria(manager.getIdName(), ">=", minKey);
+        
         while (true){
-            PagedResponse response = (PagedResponse) manager.find(request);
+            
+            PagedResponse response = (criteria==null) ? (PagedResponse) manager.find(request) : (PagedResponse) manager.find(request, criteria);
             List items = (List) response.getItems();
             if (items.size() == 0)
                 break;
