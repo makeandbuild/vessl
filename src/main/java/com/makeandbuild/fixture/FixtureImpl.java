@@ -2,6 +2,7 @@ package com.makeandbuild.fixture;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -161,6 +162,16 @@ public class FixtureImpl implements Fixture {
             }
         }
         return currentKey;
+    }
+
+    @Override
+    public void dump(Class entityClass, String subtype, OutputStream outputStream) throws IOException {
+        EntityManager manager = getManager(entityClass, subtype);
+        Object minimumKey = getMiniumKey(entityClass, subtype);
+        Dumper dumper = dumperFactory.create(entityClass, subtype, manager, minimumKey);
+        if (dumper != null)
+            dumper.dump(outputStream);
+        
     }
     
     

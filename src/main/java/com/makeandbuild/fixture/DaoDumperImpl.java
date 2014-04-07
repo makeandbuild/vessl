@@ -2,6 +2,7 @@ package com.makeandbuild.fixture;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -40,37 +41,34 @@ public class DaoDumperImpl implements Dumper {
     }
 
     @SuppressWarnings("deprecation")
-    @Override
-    public void start() throws IOException{
-        JsonFactory jfactory = new JsonFactory();
-        String filename = entityClass.getName()+".json";
-        file = new File(directory, filename);
-        jGenerator = jfactory.createJsonGenerator(file, JsonEncoding.UTF8);
+    protected void start() throws IOException{
         jGenerator.writeStartArray();
         objectMapper = new ObjectMapper();
         objectMapper.getSerializationConfig().setSerializationInclusion(Inclusion.NON_NULL);
         objectMapper.configure(SerializationConfig.Feature.WRITE_DATES_AS_TIMESTAMPS, false);
-//        SimpleModule testModule = new SimpleModule("MyModule", new Version(1, 0, 0, null));
-//        testModule.addSerializer(BeanValidationException.class, new BeanValidationExceptionSerializer());
-//        testModule.addSerializer(ObjectNotFoundException.class, new ObjectNotFoundExceptionSerializer());
-//        testModule.addSerializer(RuntimeException.class, new RuntimeExceptionSerializer());
-//        addModuleSerializers(testModule);
-//        objectMapper.registerModule(testModule);
     }
 
-    @Override
-    public void writeObject(Object item) throws JsonProcessingException, IOException {
+    protected void writeObject(Object item) throws JsonProcessingException, IOException {
         objectMapper.writeValue(jGenerator, item);
     }
 
-    @Override
-    public void end() throws JsonGenerationException, IOException {
+    protected void end() throws JsonGenerationException, IOException {
         jGenerator.writeEndArray();
         jGenerator.flush();
         jGenerator.close();        
     }
     @Override
     public File dump() throws IOException {
+        JsonFactory jfactory = new JsonFactory();
+        String filename = entityClass.getName()+".json";
+        file = new File(directory, filename);
+        jGenerator = jfactory.createJsonGenerator(file, JsonEncoding.UTF8);
+        
+        dodump();
+        return file;
+    }
+
+    private void dodump() throws IOException, JsonProcessingException, JsonGenerationException {
         start();
         AbstractPagedRequest request = new AbstractPagedRequest();
         Criteria criteria = (minKey==null) ? null : new Criteria(manager.getIdName(), ">=", minKey);
@@ -89,7 +87,14 @@ public class DaoDumperImpl implements Dumper {
             request.setPage(request.getPage()+1);
         }
         end();
-        return file;
+    }
+
+    @Override
+    public void dump(OutputStream outputStream) throws IOException {
+        JsonFactory jfactory = new JsonFactory();
+        String filename = entityClass.getName()+".json";
+        jGenerator = jfactory.createJsonGenerator(outputStream, JsonEncoding.UTF8);
+        dodump();
     }
     
 }

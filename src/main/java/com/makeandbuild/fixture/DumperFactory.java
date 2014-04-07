@@ -1,6 +1,7 @@
 package com.makeandbuild.fixture;
 
 import java.io.File;
+import java.io.OutputStream;
 
 @SuppressWarnings("rawtypes")
 public interface DumperFactory {

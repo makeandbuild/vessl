@@ -2,6 +2,7 @@ package com.makeandbuild.fixture;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 @SuppressWarnings("rawtypes")
@@ -17,5 +18,6 @@ public interface Fixture {
     void dump(Class entityClass, String subtype, File directory) throws IOException;
     void dump(File directory) throws IOException;
     public Object getMiniumKey(Class entityClass, String subtype) throws IOException;
+    void dump(Class entityClass, String subtype, OutputStream outputStream) throws IOException;
 
 }
