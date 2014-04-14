@@ -2,9 +2,8 @@ package com.makeandbuild.persistence.couch;
 
 import java.io.IOException;
 
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.node.ArrayNode;
-import org.codehaus.jackson.node.ObjectNode;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 public interface CouchDbJackson {
 

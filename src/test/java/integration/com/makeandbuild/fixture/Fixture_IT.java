@@ -7,17 +7,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.node.ArrayNode;
-import org.codehaus.jackson.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
-import com.makeandbuild.persistence.Criteria;
-import com.makeandbuild.persistence.EventDao;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.makeandbuild.persistence.AbstractPagedRequest;
 import com.makeandbuild.persistence.AbstractPagedResponse;
+import com.makeandbuild.persistence.Criteria;
+import com.makeandbuild.persistence.EventDao;
 import com.makeandbuild.persistence.User;
 import com.makeandbuild.persistence.UserDao;
 import com.makeandbuild.persistence.couch.CouchDao;

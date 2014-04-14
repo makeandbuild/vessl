@@ -2,7 +2,7 @@ package com.makeandbuild.fixture;
 
 import java.io.File;
 
-import org.codehaus.jackson.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @SuppressWarnings("rawtypes")
 public class DumperFactoryImpl implements DumperFactory {

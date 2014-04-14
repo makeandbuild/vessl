@@ -7,15 +7,15 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.codehaus.jackson.JsonEncoding;
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonEncoding;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.makeandbuild.persistence.AbstractPagedRequest;
 import com.makeandbuild.persistence.Criteria;
 import com.makeandbuild.persistence.jdbc.PagedResponse;
@@ -40,12 +40,11 @@ public class DaoDumperImpl implements Dumper {
         this.minKey = minKey;
     }
 
-    @SuppressWarnings("deprecation")
     protected void start() throws IOException{
         jGenerator.writeStartArray();
         objectMapper = new ObjectMapper();
-        objectMapper.getSerializationConfig().setSerializationInclusion(Inclusion.NON_NULL);
-        objectMapper.configure(SerializationConfig.Feature.WRITE_DATES_AS_TIMESTAMPS, false);
+        objectMapper.setSerializationInclusion(Include.NON_NULL);
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
     }
 
     protected void writeObject(Object item) throws JsonProcessingException, IOException {
@@ -57,6 +56,7 @@ public class DaoDumperImpl implements Dumper {
         jGenerator.flush();
         jGenerator.close();        
     }
+    @SuppressWarnings("deprecation")
     @Override
     public File dump() throws IOException {
         JsonFactory jfactory = new JsonFactory();
@@ -74,7 +74,6 @@ public class DaoDumperImpl implements Dumper {
         Criteria criteria = (minKey==null) ? null : new Criteria(manager.getIdName(), ">=", minKey);
         
         while (true){
-            
             PagedResponse response = (criteria==null) ? (PagedResponse) manager.find(request) : (PagedResponse) manager.find(request, criteria);
             List items = (List) response.getItems();
             if (items.size() == 0)
@@ -89,6 +88,7 @@ public class DaoDumperImpl implements Dumper {
         end();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void dump(OutputStream outputStream) throws IOException {
         JsonFactory jfactory = new JsonFactory();

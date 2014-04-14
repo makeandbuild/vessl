@@ -7,11 +7,11 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-import org.codehaus.jackson.node.ArrayNode;
-import org.codehaus.jackson.type.JavaType;
+
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 @SuppressWarnings("rawtypes")
 public class InputStreamEntityLoaderImpl implements EntityLoader {
@@ -32,21 +32,21 @@ public class InputStreamEntityLoaderImpl implements EntityLoader {
     public Class getEntityClass() {
         return entityClass;
     }
-    @SuppressWarnings("deprecation")
     protected static ObjectMapper getInstance() {
         if (mapper == null) {
             mapper = new ObjectMapper();
-            mapper.getSerializationConfig().setSerializationInclusion(Inclusion.NON_NULL);
-            mapper.configure(SerializationConfig.Feature.WRITE_DATES_AS_TIMESTAMPS, false);
+            mapper.setSerializationInclusion(Include.NON_NULL);
+            mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         }
         return mapper;
     }
     @Override
     public List<Object> load() throws IOException {
         try {
-            ArrayNode node = (ArrayNode) getInstance().readTree(inputStream);
+//            ArrayNode node = (ArrayNode) getInstance().readTree(inputStream);
             JavaType type = mapper.getTypeFactory().constructCollectionType(List.class, entityClass);
-            return getInstance().readValue(node, type);
+//            return getInstance().convertValue(node, type);
+            return getInstance().readValue(inputStream, type);
         }catch (IOException e){
             logger.error("problem loading inputsream ", e);
             throw e;

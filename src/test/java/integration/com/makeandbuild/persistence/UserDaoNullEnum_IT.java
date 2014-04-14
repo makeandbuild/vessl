@@ -6,13 +6,14 @@ import static org.testng.AssertJUnit.assertNull;
 import java.io.IOException;
 import java.util.Date;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 @Test(groups = {"function"})
 @ContextConfiguration(locations={"classpath*:spring.xml"})

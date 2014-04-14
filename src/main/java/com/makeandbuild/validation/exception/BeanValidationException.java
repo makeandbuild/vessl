@@ -1,10 +1,8 @@
 package com.makeandbuild.validation.exception;
 
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
-import org.springframework.validation.Validator;
-
 import java.util.List;
+
+import org.springframework.validation.ObjectError;
 
 /**
  * Bean validation RuntimeException to propagate errors back to the calling
@@ -14,6 +12,7 @@ import java.util.List;
  * Date: 3/6/14
  * Time: 6:07 PM
  */
+@SuppressWarnings("serial")
 public class BeanValidationException
     extends RuntimeException {
 

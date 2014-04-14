@@ -7,11 +7,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ArrayNode;
-import org.codehaus.jackson.node.ObjectNode;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -19,12 +14,16 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.makeandbuild.persistence.AbstractPagedRequest;
+import com.makeandbuild.persistence.AbstractPagedResponse;
 import com.makeandbuild.persistence.Criteria;
 import com.makeandbuild.persistence.DaoException;
 import com.makeandbuild.persistence.ObjectNotFoundException;
-import com.makeandbuild.persistence.AbstractPagedRequest;
-import com.makeandbuild.persistence.AbstractPagedResponse;
-import com.makeandbuild.persistence.jdbc.SortBy;
 
 public class CouchDbJacksonImpl extends CouchDBBaseImpl implements CouchDbJackson, CouchDao {
     private Log logger = LogFactory.getLog(getClass());
