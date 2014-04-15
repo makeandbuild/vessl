@@ -16,10 +16,10 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
+import com.makeandbuild.persistence.AbstractPagedRequest;
 import com.makeandbuild.persistence.Criteria;
 import com.makeandbuild.persistence.DaoException;
 import com.makeandbuild.persistence.ObjectNotFoundException;
-import com.makeandbuild.persistence.AbstractPagedRequest;
 
 public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport implements BaseDao<T, ID> {
     protected DomainMapper<T> _mapper = null;
@@ -335,8 +335,26 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
 
     @Override
     public void deleteById(ID id) {
+        cascadeDeletes(id);
         String testString = "DELETE FROM " + getDomainMapper().getTablename() + " WHERE " + getDomainMapper().getPrimaryKeyName() + " = ?";
         getJdbcTemplate().update(testString, id);
+    }
+    @SuppressWarnings("rawtypes")
+    protected void cascadeDeletes(ID id){
+        Class clazz = this.getClass();
+        for (Field field : clazz.getDeclaredFields()){
+            if (field.isAnnotationPresent(CascadeDelete.class)){
+                CascadeDelete cascadeDelete = field.getAnnotation(CascadeDelete.class);
+                field.setAccessible(true);
+                BaseDao dao;
+                try {
+                    dao = (BaseDao)field.get(this);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+                this.cascadeDeletes(id, cascadeDelete.joinAttributeName(), dao);
+            }
+        }
     }
     @Override
     public void delete(Criteria criteria) {
@@ -372,4 +390,17 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
     public void delete(Criteria... criterias) throws DaoException {
         delete(toList(criterias));
     }
+    @SuppressWarnings({ "rawtypes", "unused", "unchecked" })
+    protected void cascadeDeletes(ID id, String joinAttribute, BaseDao dao) {
+        while (true){
+            List items = (List)dao.find(new AbstractPagedRequest(), new Criteria(joinAttribute, id)).getItems();
+            if (items.size()==0)
+                break;
+            for (Object item : items){
+                Object itemId = dao.getId(item);
+                dao.deleteById(itemId);
+            }
+        }
+    }
+
 }

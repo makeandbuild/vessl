@@ -12,7 +12,16 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.makeandbuild.persistence.ObjectNotFoundException;
+import com.makeandbuild.rest.serializers.BeanValidationExceptionSerializer;
+import com.makeandbuild.rest.serializers.ObjectNotFoundExceptionSerializer;
+import com.makeandbuild.rest.serializers.RuntimeExceptionSerializer;
+import com.makeandbuild.validation.exception.BeanValidationException;
 
 /**
  * Base class for restful web service endpoint classes.  Will provide standard helper methods for configuration and response builders.
@@ -22,6 +31,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class ResourceBase {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
+    private ObjectMapper objectMapper = null;
+    @SuppressWarnings("deprecation")
+    protected final ObjectMapper getObjectMapper() {
+        if (objectMapper == null){
+            objectMapper = new ObjectMapper();
+            objectMapper.setSerializationInclusion(Include.NON_NULL);
+            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+            SimpleModule testModule = new SimpleModule("MyModule", new Version(1, 0, 0, null));
+            testModule.addSerializer(BeanValidationException.class, new BeanValidationExceptionSerializer());
+            testModule.addSerializer(ObjectNotFoundException.class, new ObjectNotFoundExceptionSerializer());
+            testModule.addSerializer(RuntimeException.class, new RuntimeExceptionSerializer());
+            addModuleSerializers(testModule);
+            objectMapper.registerModule(testModule);
+        }
+        return objectMapper;        
+    }
+    protected void addModuleSerializers(SimpleModule testModule){}
 
     /**
      * To be used to build OK response with passed json as the response payload.  Will return response code of 200 unless
@@ -76,6 +102,19 @@ public class ResourceBase {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
+    
+    protected Response buildExceptionResponse(Throwable ex, String message) {
+        return buildExceptionResponse(Response.Status.INTERNAL_SERVER_ERROR, ex, message);
+    }
+
+    protected Response buildExceptionResponse(Response.Status status, Throwable ex, String message) {
+        try {
+            return Response.status(status).entity(new ObjectMapper().writeValueAsString(failure(status.getStatusCode(), (String)null, message,ex, message, (Integer) null))).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 
     public static  String getStackTrace(Throwable aThrowable) {
         final Writer result = new StringWriter();
@@ -84,11 +123,13 @@ public class ResourceBase {
         return result.toString();
     }
 
-    public static Map<String,Object> failure(int statusCode, String propertyName, String reason, Throwable e, String devMessage, int code) {
+    public static Map<String,Object> failure(int statusCode, String propertyName, String reason, Throwable e, String devMessage, Integer code) {
         Map<String, Object> result = new HashMap<String, Object>();
 
         result.put("status", statusCode);
-        result.put("code", code);
+        if (code != null) {
+            result.put("code", code);            
+        }
         if(propertyName != null) {
             result.put("property", propertyName);
         }
