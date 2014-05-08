@@ -169,9 +169,7 @@ public abstract class ResourceSerializedBaseBare<T, ID> extends ResourceBase {
             T model = (T) getObjectMapper().readValue(json, resourceClass);
             model = getDao(validate).update(model);
             return Response.ok().entity(getObjectMapper().writeValueAsString(model)).build();
-        }catch(ObjectNotFoundException e){
-            return Response.status(400).build();
-        }catch(Exception e){
+        }catch(Throwable e){
             logger.warn("could not update resource with payload "+json, e);
             return handleException(e, "error updating object");
         }
@@ -181,9 +179,7 @@ public abstract class ResourceSerializedBaseBare<T, ID> extends ResourceBase {
         try{
             getDao().deleteById(id);
             return Response.ok().build();
-        }catch(ObjectNotFoundException e){
-            return Response.status(400).build();
-        }catch(Exception e){
+        }catch(Throwable e){
             logger.warn("could not delete resource with id "+id, e);
             return handleException(e, "error deleting object");
         }

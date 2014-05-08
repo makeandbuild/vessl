@@ -10,6 +10,5 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
     protected void writeObjectField(JsonGenerator jgen, String field, Object value) throws JsonProcessingException, IOException{
         if (value != null)
             jgen.writeObjectField(field, value);
-
     }
 }

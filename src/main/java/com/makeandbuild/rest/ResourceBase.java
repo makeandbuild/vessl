@@ -137,8 +137,6 @@ public class ResourceBase {
         result.put("developerMessage", devMessage);
         if (e!=null) {
             result.put("exception", e.getMessage());
-            // TODO: Should we include stack trace in production responses?
-            // Nice for dev but not sure we want in prod
             result.put("stacktrace", getStackTrace(e));
         }
         return result;

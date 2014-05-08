@@ -12,6 +12,8 @@ public class ObjectNotFoundExceptionSerializer extends BaseSerializer<ObjectNotF
     public void serialize(ObjectNotFoundException value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
         jgen.writeStartObject();
         writeObjectField(jgen, "message", value.getMessage());
+        writeObjectField(jgen, "localizedMessage", value.getLocalizedMessage());
+        writeObjectField(jgen, "class", value.getClass().getName());
         jgen.writeEndObject();
     }
 
