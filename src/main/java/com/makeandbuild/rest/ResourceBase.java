@@ -3,11 +3,17 @@ package com.makeandbuild.rest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
+import com.makeandbuild.persistence.AbstractPagedRequest;
+import com.makeandbuild.persistence.Criteria;
+import com.makeandbuild.persistence.jdbc.SortBy;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,4 +147,72 @@ public class ResourceBase {
         }
         return result;
     }
+
+	protected Response handleException(Throwable e, String message){
+		try {
+			return Response.status(400).entity(getObjectMapper().writeValueAsString(e)).build();
+		}catch (Throwable e2){
+			return buildExceptionResponse(e, message);
+		}
+
+	}
+	protected List<SortBy> getSortBys(MultivaluedMap<String, String> queryParams){
+		List<SortBy> sortBys = new ArrayList<SortBy>();
+		if (queryParams.containsKey("sortBys")){
+			List<String> value = queryParams.get("sortBys");
+			String[] sortyBys = value.get(0).split(",");
+			for (String sortyBy : sortyBys) {
+				String[] pair = sortyBy.split(":");
+				String attribute = pair[0];
+				boolean order = pair.length == 0 ? true : Boolean.parseBoolean(pair[1]);
+				sortBys.add(new SortBy(attribute, order));
+			}
+		}
+		return sortBys;
+	}
+	protected Integer getPageSize(MultivaluedMap<String, String> queryParams){
+		if (queryParams.containsKey("pageSize")){
+			List<String> value = queryParams.get("pageSize");
+			return Integer.parseInt(value.get(0));
+		}
+		return null;
+	}
+	protected Integer getPage(MultivaluedMap<String, String> queryParams){
+		if (queryParams.containsKey("page")){
+			List<String> value = queryParams.get("page");
+			return Integer.parseInt(value.get(0));
+		}
+		return null;
+	}
+	protected List<Criteria> getCriterias(MultivaluedMap<String, String> queryParams){
+		List<Criteria> criterias = new ArrayList<Criteria>();
+		for (Map.Entry<String, List<String>> entry : queryParams.entrySet()) {
+			String key = entry.getKey();
+			if (!"sortBys".equals(key) && !"pageSize".equals(key) && !"page".equals(key) && !key.endsWith("Operation") && !key.endsWith("JoinLogic")){
+				Criteria criteria = new Criteria(key, entry.getValue().get(0));
+				criterias.add(criteria);
+				if (queryParams.containsKey(key+"Operation")){
+					String operation = queryParams.getFirst(key+"Operation");
+					criteria.setOperation(operation);
+				}
+				if (queryParams.containsKey(key+"JoinLogic")){
+					Criteria.JoinLogic joinLogic = Criteria.JoinLogic.valueOf(queryParams.getFirst(key + "JoinLogic"));
+					criteria.setJoinLogic(joinLogic);
+				}
+			}
+		}
+		return criterias;
+	}
+	protected AbstractPagedRequest getAbstractPagedRequest(MultivaluedMap<String, String> queryParams){
+		AbstractPagedRequest request = new AbstractPagedRequest();
+		Integer pageSize = getPageSize(queryParams);
+		if (pageSize != null){
+			request.setPageSize(pageSize);
+		}
+		Integer page = getPage(queryParams);
+		if (page != null){
+			request.setPage(page);
+		}
+		return request;
+	}
 }
