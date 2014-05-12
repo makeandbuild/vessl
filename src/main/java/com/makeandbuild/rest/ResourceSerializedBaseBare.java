@@ -76,8 +76,6 @@ public abstract class ResourceSerializedBaseBare<T, ID> extends ResourceBase {
             List<SortBy> sortBys = getSortBys(queryParams);
             AbstractPagedRequest request = getAbstractPagedRequest(queryParams);
             PagedResponse<T> response = getDao().find(request, criterias, sortBys);
-            Object id = getDao().getId(model);
-            URI location = uriInfo.getAbsolutePathBuilder().path(id.toString()).build();
             return Response.ok().entity(getObjectMapper().writeValueAsString(response)).build();
         }catch(Throwable e){
             logger.warn("error gettting list", e);
