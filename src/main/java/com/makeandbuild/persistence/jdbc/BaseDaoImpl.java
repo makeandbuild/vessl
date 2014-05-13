@@ -2,9 +2,12 @@ package com.makeandbuild.persistence.jdbc;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.persistence.Id;
 
@@ -21,13 +24,13 @@ import com.makeandbuild.persistence.Criteria;
 import com.makeandbuild.persistence.DaoException;
 import com.makeandbuild.persistence.ObjectNotFoundException;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport implements BaseDao<T, ID> {
+    protected Map<String, DomainMapper> mappers = new HashMap<String, DomainMapper>();
+    protected Map<String, String> innerJoins = new HashMap<String, String>();
     protected DomainMapper<T> _mapper = null;
-    @SuppressWarnings("unused")
     protected String lastSql;
-    @SuppressWarnings("rawtypes")
     protected Class entityClass;
-    @SuppressWarnings("rawtypes")
     protected Class idClass;
     
     Log logger = LogFactory.getLog(getClass());
@@ -35,7 +38,6 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
     protected DomainMapper<T> getDomainMapper() {
         return _mapper;
     }
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     public BaseDaoImpl(DomainMapper mapper, Class entityClass, Class idClass) {
         super();
         this.entityClass = entityClass;
@@ -70,7 +72,6 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         }
         throw new RuntimeException("id for class "+getEntityClass() + " not found");
     }
-    @SuppressWarnings("rawtypes")
     public BaseDaoImpl(Class<? extends DomainMapper<T>> c, Class entityClass, Class idClass) {
         super();
         this.entityClass = entityClass;
@@ -82,22 +83,18 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         }
     }
 
-    @SuppressWarnings("rawtypes")
     public Class getEntityClass() {
         return entityClass;
     }
 
-    @SuppressWarnings("rawtypes")
     public void setEntityClass(Class entityClass) {
         this.entityClass = entityClass;
     }
 
-    @SuppressWarnings("rawtypes")
     public Class getIdClass() {
         return idClass;
     }
 
-    @SuppressWarnings("rawtypes")
     public void setIdClass(Class idClass) {
         this.idClass = idClass;
     }
@@ -156,7 +153,6 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         return item;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T save(T item) {
         try {
@@ -231,29 +227,6 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         return find(request, criterias, null);
     }
 
-    @Override
-    public PagedResponse<T> find(AbstractPagedRequest request, List<Criteria> criterias, List<SortBy> sortbys) {
-        PagedResponse<T> response = new PagedResponse<T>();
-        ArrayList<Object> parameters = new ArrayList<Object>();
-        List<String> sqlList = new ArrayList<String>();
-
-        sqlList.add("SELECT "+getDomainMapper().getTablename()+".* FROM " + getDomainMapper().getTablename());
-
-        String where = createWhere(criterias, parameters);
-        sqlList.add(where);
-
-        sqlList.add(createOrderBy(sortbys));
-
-        addPaging(request, response, sqlList, parameters, "SELECT COUNT(*) FROM " + getDomainMapper().getTablename() + " " + where);
-
-        String sql = StringUtils.join(sqlList, " ");
-        this.lastSql = sql;
-        List<T> items =  this.getJdbcTemplate().query(sql, toArray(parameters), getDomainMapper());
-        response.setItems(items);
-
-        return response;
-    }
-
     protected Object[] toArray(List<Object> parameters) {
         Object[] args = new Object[parameters.size()];
         if (!parameters.isEmpty()) {
@@ -291,43 +264,6 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         }
     }
 
-    protected String createWhere(List<Criteria> criterias, ArrayList<Object> parameters) {
-        List<String> whereList = new ArrayList<String>();
-        if (criterias == null || criterias.isEmpty()){
-            return "";
-        }
-        whereList.add("WHERE");
-        for (int i = 0; i < criterias.size(); i++) {
-            Criteria criteria = criterias.get(i);
-            if (i != 0) {
-                whereList.add(criteria.getJoinLogic().name());
-            }
-            whereList.add(getDomainMapper().getTablename()+"."+getDomainMapper().getColumn(criteria.getAttribute()));
-            whereList.add(criteria.getOperation());
-            if (criteria.getValue() != null) {
-                whereList.add("?");
-                parameters.add(criteria.getValue());
-            }
-        }
-
-        return StringUtils.join(whereList, " ");
-    }
-
-    protected String createOrderBy(List<SortBy> sortbys) {
-        if (sortbys == null)
-            return "";
-        List<String> orderBy = new ArrayList<String>();
-        for (SortBy sortBy : sortbys) {
-            String asc = (sortBy.isAscending()) ? " ASC" : " DESC";
-            orderBy.add(getDomainMapper().getTablename()+"."+getDomainMapper().getColumn(sortBy.getAttribute()) + asc);
-        }
-        if (orderBy.size() > 0) {
-            return "ORDER BY " + StringUtils.join(orderBy, ",");
-        } else {
-            return "";
-        }
-    }
-
     @Override
     public void deleteAll() {
         getJdbcTemplate().update("DELETE FROM " + getDomainMapper().getTablename());
@@ -339,7 +275,6 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         String testString = "DELETE FROM " + getDomainMapper().getTablename() + " WHERE " + getDomainMapper().getPrimaryKeyName() + " = ?";
         getJdbcTemplate().update(testString, id);
     }
-    @SuppressWarnings("rawtypes")
     protected void cascadeDeletes(ID id){
         Class clazz = this.getClass();
         for (Field field : clazz.getDeclaredFields()){
@@ -390,7 +325,6 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
     public void delete(Criteria... criterias) throws DaoException {
         delete(toList(criterias));
     }
-    @SuppressWarnings({ "rawtypes", "unused", "unchecked" })
     protected void cascadeDeletes(ID id, String joinAttribute, BaseDao dao) {
         while (true){
             List items = (List)dao.find(new AbstractPagedRequest(), new Criteria(joinAttribute, id)).getItems();
@@ -402,5 +336,102 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
             }
         }
     }
+    @Override
+    public PagedResponse<T> find(AbstractPagedRequest request, List<Criteria> criterias, List<SortBy> sortbys) throws DaoException {
+        PagedResponse<T> response = new PagedResponse<T>();
+        ArrayList<Object> parameters = new ArrayList<Object>();
+        List<String> sqlList = new ArrayList<String>();
+    
+        String innerJoins = innerJoins(sortbys, criterias);
+        sqlList.add("SELECT " + getDomainMapper().getTablename() +".* FROM " + getDomainMapper().getTablename() +" " + innerJoins + " ");
+    
+        String where = createWhere(criterias, parameters);
+        sqlList.add(where);
+    
+        sqlList.add(createOrderBy(sortbys));
+    
+        addPaging(request, response, sqlList, parameters, "SELECT COUNT(*) FROM " + getDomainMapper().getTablename() +" " + innerJoins + " " + where);
+    
+        String sql = StringUtils.join(sqlList, " ");
+        this.lastSql = sql;
+        List<T> items =  this.getJdbcTemplate().query(sql, toArray(parameters), getDomainMapper());
+        response.setItems(items);
+    
+        return response;
+    }
+    protected String createWhere(List<Criteria> criterias, ArrayList<Object> parameters) {
+        List<String> whereList = new ArrayList<String>();
+        if (criterias == null || criterias.isEmpty()){
+            return "";
+        }
+        whereList.add("WHERE");
+        for (int i = 0; i < criterias.size(); i++) {
+            Criteria criteria = criterias.get(i);
+            if (i != 0) {
+                whereList.add(criteria.getJoinLogic().name());
+            }
+            String attribute = AttributeParser.getAttribute(criteria.getAttribute());
+            String domainName = AttributeParser.getDomainName(criteria.getAttribute());
+            DomainMapper domainMapper = getDomainMapper(domainName);
 
+            whereList.add(domainMapper.getTablename()+"."+domainMapper.getColumn(attribute));
+            whereList.add(criteria.getOperation());
+            if (criteria.getValue() != null) {
+                whereList.add("?");
+                parameters.add(criteria.getValue());
+            }
+        }
+
+        return StringUtils.join(whereList, " ");
+    }
+
+    protected String innerJoins(List<SortBy> sortbys, List<Criteria> criterias) {
+        if (sortbys == null){
+            return "";
+        }
+        Set<String> joins = new HashSet<String>();
+        for (SortBy sortBy : sortbys) {
+            String domainName = AttributeParser.getDomainName(sortBy.getAttribute());
+            if (domainName != null){
+                joins.add(innerJoins.get(domainName));
+            }
+        }
+        for (Criteria criteria : criterias) {
+            String domainName = AttributeParser.getDomainName(criteria.getAttribute());
+            if (domainName != null){
+                joins.add(innerJoins.get(domainName));
+            }
+        }
+        return StringUtils.join(joins, " ");
+    }
+
+    protected DomainMapper getDomainMapper(String domainName) {
+        if (domainName == null){
+            return this.getDomainMapper();
+        }else {
+            return mappers.get(domainName);
+        }
+    }
+
+    protected String createOrderBy(List<SortBy> sortbys) {
+        if (sortbys == null)
+            return "";
+        List<String> orderBy = new ArrayList<String>();
+        for (SortBy sortBy : sortbys) {
+            String asc = (sortBy.isAscending()) ? " ASC" : " DESC";
+            String attribute = AttributeParser.getAttribute(sortBy.getAttribute());
+            String domainName = AttributeParser.getDomainName(sortBy.getAttribute());
+            DomainMapper domainMapper = getDomainMapper(domainName);
+            orderBy.add(domainMapper.getTablename()+"."+domainMapper.getColumn(attribute) + asc);                
+        }
+        if (orderBy.size() > 0) {
+            return "ORDER BY " + StringUtils.join(orderBy, ",");
+        } else {
+            return "";
+        }
+    }
+    protected void addQueryJoinSupport(String domainName, String joinClause, DomainMapper mapper){
+        mappers.put(domainName, mapper);
+        innerJoins.put(domainName, joinClause);
+    }
 }
