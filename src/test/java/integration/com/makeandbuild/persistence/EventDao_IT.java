@@ -3,6 +3,7 @@ package com.makeandbuild.persistence;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,10 @@ public class EventDao_IT extends AbstractTestNGSpringContextTests {
         
         assertEquals("user.loggedOut", event.getType());
         assertTrue(eventDao.exists(uuid));
+        
+        List<Event> items = eventDao.find(new AbstractPagedRequest(), new Criteria("id", uuid)).getItems();
+        event = items.get(0);
+        assertEquals("user.loggedOut", event.getType());
+        
     }
 }

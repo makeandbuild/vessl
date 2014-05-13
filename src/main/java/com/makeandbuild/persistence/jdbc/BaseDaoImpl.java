@@ -24,11 +24,11 @@ import com.makeandbuild.persistence.ObjectNotFoundException;
 public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport implements BaseDao<T, ID> {
     protected DomainMapper<T> _mapper = null;
     @SuppressWarnings("unused")
-    private String lastSql;
+    protected String lastSql;
     @SuppressWarnings("rawtypes")
-    private Class entityClass;
+    protected Class entityClass;
     @SuppressWarnings("rawtypes")
-    private Class idClass;
+    protected Class idClass;
     
     Log logger = LogFactory.getLog(getClass());
     
@@ -59,10 +59,10 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         Field f = getIdField(getEntityClass());
         return f.getName();
     }
-    private Field getIdField(Object item){
+    protected Field getIdField(Object item){
         return getIdField(getEntityClass());
     }
-    private Field getIdField(Class clazz){
+    protected Field getIdField(Class clazz){
         for (Field field : clazz.getDeclaredFields()){
             if (field.isAnnotationPresent(Id.class)){
                 return field;
@@ -103,8 +103,8 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
     }
 
 
-    private SimpleJdbcInsert inserter;
-    private SimpleJdbcInsert nonGeneratingInserter;
+    protected SimpleJdbcInsert inserter;
+    protected SimpleJdbcInsert nonGeneratingInserter;
 
     protected SimpleJdbcInsert getInserter() {
         if (inserter == null) {
@@ -237,7 +237,7 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         ArrayList<Object> parameters = new ArrayList<Object>();
         List<String> sqlList = new ArrayList<String>();
 
-        sqlList.add("SELECT * FROM " + getDomainMapper().getTablename());
+        sqlList.add("SELECT "+getDomainMapper().getTablename()+".* FROM " + getDomainMapper().getTablename());
 
         String where = createWhere(criterias, parameters);
         sqlList.add(where);
@@ -291,7 +291,7 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         }
     }
 
-    private String createWhere(List<Criteria> criterias, ArrayList<Object> parameters) {
+    protected String createWhere(List<Criteria> criterias, ArrayList<Object> parameters) {
         List<String> whereList = new ArrayList<String>();
         if (criterias == null || criterias.isEmpty()){
             return "";
@@ -302,7 +302,7 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
             if (i != 0) {
                 whereList.add(criteria.getJoinLogic().name());
             }
-            whereList.add(getDomainMapper().getColumn(criteria.getAttribute()));
+            whereList.add(getDomainMapper().getTablename()+"."+getDomainMapper().getColumn(criteria.getAttribute()));
             whereList.add(criteria.getOperation());
             if (criteria.getValue() != null) {
                 whereList.add("?");
@@ -319,7 +319,7 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         List<String> orderBy = new ArrayList<String>();
         for (SortBy sortBy : sortbys) {
             String asc = (sortBy.isAscending()) ? " ASC" : " DESC";
-            orderBy.add(getDomainMapper().getColumn(sortBy.getAttribute()) + asc);
+            orderBy.add(getDomainMapper().getTablename()+"."+getDomainMapper().getColumn(sortBy.getAttribute()) + asc);
         }
         if (orderBy.size() > 0) {
             return "ORDER BY " + StringUtils.join(orderBy, ",");
@@ -375,7 +375,7 @@ public abstract class BaseDaoImpl<T, ID> extends NamedParameterJdbcDaoSupport im
         String sql = StringUtils.join(sqlList, " ");
         this.getJdbcTemplate().update(sql, toArray(parameters));
     }
-    private List<Criteria> toList(Criteria[] params) {
+    protected List<Criteria> toList(Criteria[] params) {
         List<Criteria> criterias = new ArrayList<Criteria>();
         for (Criteria c : params){
             criterias.add(c);
