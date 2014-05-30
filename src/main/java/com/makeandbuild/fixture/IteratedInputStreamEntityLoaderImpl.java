@@ -63,7 +63,7 @@ public class IteratedInputStreamEntityLoaderImpl implements EntityLoader, Iterat
     protected void setup() throws JsonParseException, IOException {
         if (!initialized){
             initialized = true;
-            JsonFactory jsonFactory = mapper.getJsonFactory();
+            JsonFactory jsonFactory = getInstance().getJsonFactory();
             jp = jsonFactory.createJsonParser(this.inputStream);
             countRead = 0;
         }
@@ -77,7 +77,7 @@ public class IteratedInputStreamEntityLoaderImpl implements EntityLoader, Iterat
             switch (token) {
                 case START_OBJECT:
                     countRead++;
-                    Object value = mapper.readValue(jp, entityClass);
+                    Object value = getInstance().readValue(jp, entityClass);
                     System.out.println("Read object" + countRead +": " + value.toString());
                     return value;
             }
