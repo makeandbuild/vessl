@@ -61,21 +61,29 @@ public class FixtureImpl implements Fixture {
     public void load() throws IOException {
         for (EntityLoader loader : entityLoaders){
             EntityManager manager = getManager(loader.getEntityClass(), loader.getSubtype());
+            doLoad(loader, manager);
+        }
+    }
+    private void doLoad(EntityLoader loader, EntityManager manager) throws IOException{
+        if (loader instanceof IteratedLoader){
+            IteratedLoader iteratedLoader = (IteratedLoader)loader;
+            Object value = iteratedLoader.read();
+            while(value != null){
+                manager.save(value);
+                value = iteratedLoader.read();
+            }
+        } else {
             List<Object> entities = loader.load();
             for (Object entity : entities) {
                 manager.save(entity);
-            }
+            }                
         }
     }
-
     @Override
     public void load(String resourceName) throws ClassNotFoundException, IOException {        
         EntityLoader loader = new ResourceEntityLoaderImpl(resourceName);
         EntityManager manager = getManager(loader.getEntityClass(), loader.getSubtype());
-        List<Object> entities = loader.load();
-        for (Object entity : entities) {
-            manager.save(entity);
-        }
+        doLoad(loader, manager);
     }
 
     @Override
@@ -89,13 +97,27 @@ public class FixtureImpl implements Fixture {
     public void purge(Class entityClass, String subtype) throws IOException {
         EntityManager manager = getManager(entityClass, subtype);
         EntityLoader loader = getEntityLoader(entityClass, subtype);
-        List<Object> entities = loader.loadReverse();
-        for (Object entity : entities) {
-            try {
-                manager.delete(entity);
-            }catch (ObjectNotFoundException squash){
-                logger.info("not found for "+entity);
+        doPurge(manager, loader);
+    }
+
+    private void doPurge(EntityManager manager, EntityLoader loader) throws IOException {
+        if (loader instanceof IteratedLoader){
+            IteratedLoader iteratedLoader = (IteratedLoader)loader;
+            Object value = iteratedLoader.read();
+            while(value != null){
+                manager.delete(value);
+                value = iteratedLoader.read();
             }
+
+        } else {
+            List<Object> entities = loader.loadReverse();
+            for (Object entity : entities) {
+                try {
+                    manager.delete(entity);
+                }catch (ObjectNotFoundException squash){
+                    logger.info("not found for "+entity);
+                }
+            }            
         }
     }
 
@@ -107,10 +129,7 @@ public class FixtureImpl implements Fixture {
     @Override
     public void load(EntityLoader loader) throws IOException {
         EntityManager manager = getManager(loader.getEntityClass(), loader.getSubtype());
-        List<Object> entities = loader.load();
-        for (Object entity : entities) {
-            manager.save(entity);
-        }
+        doLoad(loader, manager);
     }
     @Override
     public void dump(Class entityClass, String subtype, File directory) throws IOException {
