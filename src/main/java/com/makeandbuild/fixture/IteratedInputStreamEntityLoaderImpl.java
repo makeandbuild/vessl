@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.core.io.Resource;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonFactory;
@@ -25,12 +26,20 @@ public class IteratedInputStreamEntityLoaderImpl implements EntityLoader, Iterat
     protected JsonParser jp;
     protected int countRead = 0;
     protected boolean initialized = false;
-    
+    public IteratedInputStreamEntityLoaderImpl() {
+        super();
+    }
     public IteratedInputStreamEntityLoaderImpl(InputStream inputStream,  Class entityClass, String subtype) throws ClassNotFoundException{
         super();
         this.entityClass = entityClass;
         this.subtype = subtype;
         this.inputStream = inputStream;
+    }
+    public IteratedInputStreamEntityLoaderImpl(Resource inputStreamResource, Class entityClass, String subtype) throws IllegalStateException, IOException{
+        super();
+        this.entityClass = entityClass;
+        this.subtype = subtype;
+        this.inputStream = inputStreamResource.getInputStream();
     }
 
     @Override
@@ -78,10 +87,19 @@ public class IteratedInputStreamEntityLoaderImpl implements EntityLoader, Iterat
                 case START_OBJECT:
                     countRead++;
                     Object value = getInstance().readValue(jp, entityClass);
-                    System.out.println("Read object" + countRead +": " + value.toString());
                     return value;
             }
         }
         return null;
     }
+    public void setInputStream(Resource inputStream) throws IOException {
+        this.inputStream = inputStream.getInputStream();
+    }
+    public void setEntityClass(Class entityClass) {
+        this.entityClass = entityClass;
+    }
+    public void setSubtype(String subtype) {
+        this.subtype = subtype;
+    }
+    
 }
