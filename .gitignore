@@ -6,3 +6,4 @@ test-output
 /classes
 .DS_Store
 .iml
+dumped-fixtures
