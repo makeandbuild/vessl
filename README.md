@@ -1,5 +1,17 @@
-jdbc based persistence
---------
+# Make and Build Persistence
+
+Welcome to the Make & Build Persistence framework which provides application developers with tools to:
+* perform data access in a lightweight manner
+* create and execute fixtures for loading data
+* perform validation logic with the data services
+* integrate with RESTful services
+
+Make & Build Persistence is licensed under the Apache Public License, Version 2.0 (see [LICENSE](./LICENSE))
+
+
+
+## jdbc based persistence
+
 
 this framework is an extension of the spring jdbc implementation.  it provided the following services:
 * makes use of jpa annotations in your model class.  See User.java as an example
@@ -17,8 +29,7 @@ the BaseDao has a lot of built in methods including
 
 For an example of the usage see UserDao_IT
 
-fixtures
--------
+## fixtures
 
 you can also make use of the fixture functionality to load test data from class resources.  the solution this is based upon seperates loaders from persisters and takes into account order of data that is being loaded.  if you have cross referencing associations, then you will probably want to write your own custom EntityLoaders and EntityManagers.
 
@@ -32,8 +43,7 @@ there are some tests
 * testEntityClassSingularly() demonstrates how to purge via a given Model class
 
 
-validation
--------
+## validation
 
 Validation is supported via JSR-303 annotations and custom spring Validator instances you define. Simply defining an
 instance of ValidationProxyManagerImpl in the application context will suffice to load (and cache) all custom
@@ -45,8 +55,7 @@ against the same object. This is controlled by the supports(...) method of your 
 validation errors is encountered the proxy dao instance will throw a RuntimeException (BeanValidationException) that
 contains a list of ObjectError objects defining the validation errors that occured.
 
-setup for function tests
-------------------
+## setup for function tests
 
 create your database
 
