@@ -6,6 +6,17 @@
 	<!-- <artifactId>persistence-spring3</artifactId> -->
 	<packaging>jar</packaging>
 	<version>1.0.45</version>
+	<name>Make and Build persistence</name>
+	<description>a lightweight persistence framework</description>
+	<url>http://makeandbuild.com</url>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
 	<properties>
 		<spring.version>4.0.0.RELEASE</spring.version>
 		<!-- <spring.version>3.1.1.RELEASE</spring.version> -->
