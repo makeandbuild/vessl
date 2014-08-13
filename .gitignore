@@ -7,3 +7,5 @@ test-output
 .DS_Store
 .iml
 dumped-fixtures
+pom.xml.releaseBackup
+release.properties
