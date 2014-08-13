@@ -6,7 +6,7 @@
 	<!-- <artifactId>persistence-spring3</artifactId> -->
 	<packaging>jar</packaging>
 	<version>1.0.45</version>
-	<name>Make and Build persistence</name>
+	<name>${project.groupId}:${project.artifactId}</name>
 	<description>a lightweight persistence framework</description>
 	<url>http://makeandbuild.com</url>
 	<licenses>
@@ -16,7 +16,39 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-
+	<developers>
+		<developer>
+			<name>Andrew Zuercher</name>
+			<email>andrew.zuercher@makeandbuild.com</email>
+			<organization>Make and Build</organization>
+			<organizationUrl>http://makeandbuild.com</organizationUrl>
+		</developer>
+	</developers>
+	<scm>
+		<connection>scm:git:git@github.com:makeandbuild/persistence.git</connection>
+		<developerConnection>scm:git:git@github.com:makeandbuild/persistence.git</developerConnection>
+		<url>git@github.com:makeandbuild/persistence.git</url>
+	</scm>
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-release-plugin</artifactId>
+		<version>2.2.2</version>
+		<configuration>
+			<arguments>-Dgpg.passphrase=${gpg.passphrase}</arguments>
+		</configuration>
+	</plugin>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>Sonatype Nexus snapshot repository</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>sonatype-nexus-staging</id>
+			<name>Sonatype Nexus release repository</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
 	<properties>
 		<spring.version>4.0.0.RELEASE</spring.version>
 		<!-- <spring.version>3.1.1.RELEASE</spring.version> -->
@@ -298,35 +330,34 @@
 			<version>2.0</version>
 		</dependency>
 
-        <!-- For bean validation -->
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>1.1.0.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>5.0.3.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>2.3</version>
-        </dependency>
+		<!-- For bean validation -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.1.0.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>5.0.3.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.3</version>
+		</dependency>
 
-        <!-- Spring Security implementation -->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-            <version>${spring.security.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-            <version>${spring.security.version}</version>
-        </dependency>
-
+		<!-- Spring Security implementation -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<testSourceDirectory>src/test/java/unit</testSourceDirectory>
@@ -579,6 +610,36 @@
 								<goals>
 									<goal>integration-test</goal>
 									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>release-sign-artifacts</id>
+			<activation>
+				<property>
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.4</version>
+						<configuration>
+							<passphrase>${gpg.passphrase}</passphrase>
+						</configuration>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
 								</goals>
 							</execution>
 						</executions>
