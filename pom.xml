@@ -602,7 +602,7 @@
 							<testSourceDirectory>${basedir}/src/test/java/integration</testSourceDirectory>
 							<useSystemClassLoader>false</useSystemClassLoader>
 							<includes>
-								<include>${name}</include>
+								<include>${project.name}</include>
 							</includes>
 						</configuration>
 						<executions>
