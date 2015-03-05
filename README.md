@@ -1,12 +1,13 @@
-# Make and Build Persistence
+# Make and Build Vessl
 
-Welcome to the Make & Build Persistence framework which provides application developers with tools to:
+Welcome to the Make & Build Vessl framework which provides application developers with tools to:
 * perform data access in a lightweight manner
 * create and execute fixtures for loading data
 * perform validation logic with the data services
 * integrate with RESTful services
+* configure properties in a environmentally specific manner
 
-Make & Build Persistence is licensed under the Apache Public License, Version 2.0 (see [LICENSE](./LICENSE))
+Make & Build Vessl is licensed under the Apache Public License, Version 2.0 (see [LICENSE](./LICENSE))
 
 
 
@@ -34,7 +35,7 @@ For an example of the usage see UserDao_IT
 you can also make use of the fixture functionality to load test data from class resources.  the solution this is based upon seperates loaders from persisters and takes into account order of data that is being loaded.  if you have cross referencing associations, then you will probably want to write your own custom EntityLoaders and EntityManagers.
 
 * src/test/resources/fixtures includes json resources to be loaded
-* src/test/java/integration/com/makeandbuild/fixture/Fixture_IT.java has the tests for loading and purging data
+* src/test/java/integration/com/makeandbuild/vessl/fixture/Fixture_IT.java has the tests for loading and purging data
 * src/test/resources/spring.xml definition of fixture sets up the meta data for the project and takes into account the ordering
 
 there are some tests
