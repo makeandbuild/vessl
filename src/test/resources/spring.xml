@@ -66,10 +66,10 @@
 		<property name="entityLoaders">
 			<list>
 				<bean class="com.makeandbuild.vessl.fixture.ResourceEntityLoaderImpl">
-					<constructor-arg value="/fixtures/com.makeandbuild.persistence.User.json"/>
+					<constructor-arg value="/fixtures/com.makeandbuild.vessl.persistence.User.json"/>
 				</bean>
 				<bean class="com.makeandbuild.vessl.fixture.ResourceEntityLoaderImpl">
-					<constructor-arg value="/fixtures/com.makeandbuild.persistence.Event.json"/>
+					<constructor-arg value="/fixtures/com.makeandbuild.vessl.persistence.Event.json"/>
 				</bean>
 			</list>
 		</property>

@@ -28,16 +28,16 @@ import com.makeandbuild.vessl.persistence.couch.CouchId;
 @Test(groups = {"function"})
 @ContextConfiguration(locations={"classpath*:spring.xml"})
 public class Fixture_IT extends AbstractTestNGSpringContextTests {
-    @Autowired 
+    @Autowired
     EventDao eventDao;
-    
-    @Autowired 
+
+    @Autowired
     UserDao userDao;
 
-    @Autowired 
+    @Autowired
     CouchDao carDao;
 
-    @Autowired 
+    @Autowired
     Fixture fixture;
 
     @Test(enabled=true)
@@ -45,14 +45,14 @@ public class Fixture_IT extends AbstractTestNGSpringContextTests {
         fixture.purge();
         assertTrue(!userDao.exists(1L));
         assertTrue(!userDao.exists(2L));
-        
+
         assertTrue(!eventDao.exists("1231231231-222"));
         assertTrue(!eventDao.exists("1231231231-12312312-12-3123123"));
 
         fixture.load();
         assertTrue(userDao.exists(1L));
         assertTrue(userDao.exists(2L));
-        
+
         assertTrue(eventDao.exists("1231231231-222"));
         assertTrue(eventDao.exists("1231231231-12312312-12-3123123"));
         fixture.purge();
@@ -63,7 +63,7 @@ public class Fixture_IT extends AbstractTestNGSpringContextTests {
         assertTrue(!userDao.exists(1L));
         assertTrue(!userDao.exists(2L));
 
-        fixture.load(new ResourceEntityLoaderImpl("/fixtures/com.makeandbuild.persistence.User.json"));
+        fixture.load(new ResourceEntityLoaderImpl("/fixtures/com.makeandbuild.vessl.persistence.User.json"));
         assertTrue(userDao.exists(1L));
         assertTrue(userDao.exists(2L));
     }
@@ -83,18 +83,18 @@ public class Fixture_IT extends AbstractTestNGSpringContextTests {
         fixture.load(ObjectNode.class, "car");
         ObjectNode car = carDao.find(new CouchId("123123123"));
         assertNotNull(car);
-        
+
         List<Criteria> criterias = new ArrayList<Criteria>();
         criterias.add(new Criteria("view", "_design/car/_view/byMake"));
         criterias.add(new Criteria("key", "BMW"));
         AbstractPagedResponse<ObjectNode, ArrayNode> response = carDao.find(new AbstractPagedRequest(), criterias);
         assertTrue(response.getItems().size() ==2);
-        
+
         criterias = new ArrayList<Criteria>();
         criterias.add(new Criteria("view", "_design/car/_view/byYear"));
         criterias.add(new Criteria("key", 2003));
         response = carDao.find(new AbstractPagedRequest(), criterias);
         assertTrue(response.getItems().size() ==1);
-        
+
     }
 }
