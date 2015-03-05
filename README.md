@@ -12,7 +12,7 @@ Make & Build Vessl is licensed under the Apache Public License, Version 2.0 (see
 
 
 
-## JDBC based persistence
+## JDBC Based Persistence
 
 
 This framework is an extension of the spring jdbc implementation.  it provided the following services:
@@ -76,7 +76,7 @@ JAVA_OPTS="-DenvironmentName=dev -Dlog4j.configuration=file:/home/dev/log4j.prop
 export JAVA_OPTS
 ```
 
-## Integration tests
+## Integration Tests
 
 Create your database
 
