@@ -12,15 +12,15 @@ Make & Build Vessl is licensed under the Apache Public License, Version 2.0 (see
 
 
 
-## jdbc based persistence
+## JDBC based persistence
 
 
-this framework is an extension of the spring jdbc implementation.  it provided the following services:
+This framework is an extension of the spring jdbc implementation.  it provided the following services:
 * makes use of jpa annotations in your model class.  See User.java as an example
 * can use the simplified ReflectionBasedJdbcMapper to easily create your DAOs.  This supports all sorts of types including Date, Integer, Long, Enums (as string column mappings), String.  See UserDaoImpl as an example
 * if you dont want the overhead of Reflection you can create those implementations as well
 
-the BaseDao has a lot of built in methods including
+The BaseDao has a lot of built in methods including
 * criteria based finders
 * paging
 * sorting
@@ -31,21 +31,21 @@ the BaseDao has a lot of built in methods including
 
 For an example of the usage see UserDao_IT
 
-## fixtures
+## Fixtures
 
-you can also make use of the fixture functionality to load test data from class resources.  the solution this is based upon seperates loaders from persisters and takes into account order of data that is being loaded.  if you have cross referencing associations, then you will probably want to write your own custom EntityLoaders and EntityManagers.
+You can also make use of the fixture functionality to load test data from class resources.  the solution this is based upon seperates loaders from persisters and takes into account order of data that is being loaded.  if you have cross referencing associations, then you will probably want to write your own custom EntityLoaders and EntityManagers.
 
 * src/test/resources/fixtures includes json resources to be loaded
 * src/test/java/integration/com/makeandbuild/vessl/fixture/Fixture_IT.java has the tests for loading and purging data
 * src/test/resources/spring.xml definition of fixture sets up the meta data for the project and takes into account the ordering
 
-there are some tests
+There are some tests
 * testAll() demonstrates how you can setup a set of resource files to be loaded in spring and purge() or load() as a complete set
 * testResourceSingularly() demonstrates on how to pass in a resource location to load a resoruce explicity
 * testEntityClassSingularly() demonstrates how to purge via a given Model class
 
 
-## validation
+## Validation
 
 Validation is supported via JSR-303 annotations and custom spring Validator instances you define. Simply defining an
 instance of ValidationProxyManagerImpl in the application context will suffice to load (and cache) all custom
@@ -57,37 +57,37 @@ against the same object. This is controlled by the supports(...) method of your 
 validation errors is encountered the proxy dao instance will throw a RuntimeException (BeanValidationException) that
 contains a list of ObjectError objects defining the validation errors that occured.
 
-## property configuration
+## Property Configuration
 
-for a full example, please see the SpringEnvironmentPropertyPlaceholderConfigurerTest for some examples.  You can also see the configuration of src/test/resources/spring-propconfig.xml
+For a full example, please see the SpringEnvironmentPropertyPlaceholderConfigurerTest for some examples.  You can also see the configuration of src/test/resources/spring-propconfig.xml
 
 
-here is a snippet in $TOMCAT_HOME/bin/setenv.sh using the full filename
+Here is a snippet in $TOMCAT_HOME/bin/setenv.sh using the full filename
 
 ```
 JAVA_OPTS="-DenvironmentFilename=/home/dev/config-dev.properties -Dlog4j.configuration=file:/home/dev/log4j.properties"
 export JAVA_OPTS
 ```
 
-here is a snippet in $TOMCAT_HOME/bin/setenv.sh using the environment name (will load /config-dev.properties in classpath)
+Here is a snippet in $TOMCAT_HOME/bin/setenv.sh using the environment name (will load /config-dev.properties in classpath)
 
 ```
 JAVA_OPTS="-DenvironmentName=dev -Dlog4j.configuration=file:/home/dev/log4j.properties"
 export JAVA_OPTS
 ```
 
-## setup for function tests
+## Integration tests
 
-create your database
+Create your database
 
     mysql -u root
     create database mnb_persistence
 
-now load the user table
+Now load the user table
 
     mysql -u root mnb_persistence < ./src/test/resources/create_user.sql
     mysql -u root mnb_persistence < ./src/test/resources/create_event.sql
 
-now you can run the function test
+Now you can run the function test
 
      mvn integration-test -Pft
