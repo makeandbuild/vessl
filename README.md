@@ -81,12 +81,12 @@ export JAVA_OPTS
 Create your database
 
     mysql -u root
-    create database mnb_persistence
+    create database vessl
 
 Now load the user table
 
-    mysql -u root mnb_persistence < ./src/test/resources/create_user.sql
-    mysql -u root mnb_persistence < ./src/test/resources/create_event.sql
+    mysql -u root vessl < ./src/test/resources/create_user.sql
+    mysql -u root vessl < ./src/test/resources/create_event.sql
 
 Now you can run the function test
 
