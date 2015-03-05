@@ -3,7 +3,7 @@ package com.makeandbuild;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.makeandbuild.persistence.jdbc.AttributeParser;
+import com.makeandbuild.vessl.persistence.jdbc.AttributeParser;
 
 public class JoinAttributeTest {
     @Test

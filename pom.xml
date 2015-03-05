@@ -2,12 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.makeandbuild</groupId>
-	<artifactId>persistence</artifactId>
-	<!-- <artifactId>persistence-spring3</artifactId> -->
+	<artifactId>vessl</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.47</version>
+	<version>1.0.50</version>
 	<name>${project.groupId}:${project.artifactId}</name>
-	<description>a lightweight persistence framework</description>
+	<description>a lightweight persistence, REST, fixture, property configuration, and validation framework</description>
 	<url>http://makeandbuild.com</url>
 	<licenses>
 		<license>
@@ -25,9 +24,9 @@
 		</developer>
 	</developers>
 	<scm>
-		<connection>scm:git:git@github.com:makeandbuild/persistence.git</connection>
-		<developerConnection>scm:git:git@github.com:makeandbuild/persistence.git</developerConnection>
-		<url>git@github.com:makeandbuild/persistence.git</url>
+		<connection>scm:git:git@github.com:makeandbuild/vessl.git</connection>
+		<developerConnection>scm:git:git@github.com:makeandbuild/vessl.git</developerConnection>
+		<url>git@github.com:makeandbuild/vessl.git</url>
 	</scm>
 	<distributionManagement>
 		<snapshotRepository>
@@ -47,8 +46,8 @@
 		<aspectj.version>1.7.3</aspectj.version>
 		<slf4j.version>1.6.1</slf4j.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.name>persistence</project.name>
-		<!-- <project.name>persistence-spring3</project.name> -->
+		<project.name>vessl</project.name>
+		<!-- <project.name>vessl-spring3</project.name> -->
 		<jersey.version>1.18</jersey.version>
 		<jackson.version>2.3.1</jackson.version>
 	</properties>
