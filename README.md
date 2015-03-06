@@ -76,6 +76,10 @@ JAVA_OPTS="-DenvironmentName=dev -Dlog4j.configuration=file:/home/dev/log4j.prop
 export JAVA_OPTS
 ```
 
+## REST resources
+
+We have implemented a way to be able to expose the persistance framework directly with augmentation.  Please see the sibling project for an example web app https://github.com/makeandbuild/vessl-webapp
+
 ## Integration Tests
 
 Create your database
