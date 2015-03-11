@@ -202,7 +202,7 @@ Paging is built into the framework for the list functionality where page index s
       "totalItems": 6
     }
 
-Query support cascades into the course grained persistence (DAO) layer for the list functionality querying with a $attributeName=$value notation
+Query support cascades into the course grained persistence layer for the list functionality querying with a $attributeName=$value notation
 
     GET http://localhost:8080/vessl-webapp/rest/events?type=user.loggedin
     RESPONSE
@@ -243,7 +243,7 @@ Like and other operators besides equals are also supported.  here we look for al
       "totalPages": 1,
       "totalItems": 4
     }
-Using joined properties in the criteria is also supported for join attributes defined via [BaseDaoImpl.addQueryJoinSupport()](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDaoImpl.java)
+Using joined properties in the criteria is also supported for join attributes defined via [BaseDaoImpl.addQueryJoinSupport()](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDaoImpl.java), here we look based upon event.user.username
 
     GET http://localhost:8080/vessl-webapp/rest/events?user.username=telrod
     RESPONSE
@@ -302,7 +302,7 @@ Using joined properties in the criteria is also supported for join attributes de
       "totalItems": 1
     }
 
-Sorting is also supported
+Sorting is also supported - here we sort by "type" ascending
 
     GET http://localhost:8080/vessl-webapp/rest/events?sortBys=type:true
     RESPONSE
@@ -345,7 +345,7 @@ Sorting is also supported
       "totalItems": 6
     }
 
-As well as descending sorting and multple attributes
+As well as descending sorting and multple attributes - here we sort by "type" ascending and then by "id" descending
 
     GET http://localhost:8080/vessl-webapp/rest/events?sortBys=type:true,id:false
     RESPONSE
