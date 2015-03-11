@@ -111,10 +111,12 @@ Query support cascades into the course grained persistence (DAO) layer for the l
     {"items":[{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"}],"totalPages":1,"totalItems":1}
 
 Sorting is also supported (with multiple attributes)
+
     GET http://localhost:8080/vessl-webapp/rest/events?sortBys=type:true
     {"items":[{"id":"100-2","parent":{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},"type":"child.user.loggedin"},{"id":"100-1","parent":{"id":"1231231231-222","type":"user.loggedout"},"type":"child.user.loggedout"},{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},{"id":"1231231231-222","type":"user.loggedout"},{"id":"1231231231-223","type":"user.loggedout"},{"id":"1231231231-224","type":"user.loggedout"}],"totalPages":1,"totalItems":6}
 
 As well as descending sorting and multple attributes
+
     GET http://localhost:8080/vessl-webapp/rest/events?sortBys=type:true,id:false
     {"items":[{"id":"100-2","parent":{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},"type":"child.user.loggedin"},{"id":"100-1","parent":{"id":"1231231231-222","type":"user.loggedout"},"type":"child.user.loggedout"},{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},{"id":"1231231231-224","type":"user.loggedout"},{"id":"1231231231-223","type":"user.loggedout"},{"id":"1231231231-222","type":"user.loggedout"}],"totalPages":1,"totalItems":6}
 
