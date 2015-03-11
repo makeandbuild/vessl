@@ -29,6 +29,8 @@ The BaseDao has a lot of built in methods including
 * exists finders
 * delete helpers
 * supports domain model specialization inheritance (see the @Specialize annotation and the [UserDao_IT.testSpecialized()](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java) test)
+* join logic for advanced criteria support in [BaseDaoImpl.addQueryJoinSupport](./src/java/com/makeandbuild/vessl/persistence/jdbc/BaseDaoImpl.java)) which you call explicity in the constructor of your specialized Daos see EventDaoImpl
+* cascade deletes for dao based dependencies - simply by annotating your Daos with [@CascadeDelete](./src/java/com/makeandbuild/vessl/persistence/jdbc/CascadeDelete.java)) see UserDaoImpl
 
 For an example of the usage see [UserDao_IT](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java)
 
@@ -113,7 +115,16 @@ Query support cascades into the course grained persistence (DAO) layer for the l
 but like and other operators besides equals are also supported (here we look for all events that have a type that starts with "user."")
 
     GET http://localhost:8080/vessl-webapp/rest/events?type=user.%&typeOperation=like
-    {"items":[{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"}],"totalPages":1,"totalItems":1}
+    {"items":[{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},{"id":"1231231231-222","type":"user.loggedout"},{"id":"1231231231-223","type":"user.loggedout"},{"id":"1231231231-224","type":"user.loggedout"}],"totalPages":1,"totalItems":4}
+
+and also for the join attributes defined via Dao.addQueryJoinSupport()
+
+    GET http://localhost:8080/vessl-webapp/rest/events?user.username=telrod
+    {"items":[{"id":"1231231231-223","user":{"id":2,"createdAt":"1988-01-01T00:00:00.000+0000","latitude":33.801078,"loginCount":1,"longitude":-84.436287,"username":"telrod","userType":"simple"},"type":"user.loggedout"},{"id":"1231231231-224","user":{"id":2,"createdAt":"1988-01-01T00:00:00.000+0000","latitude":33.801078,"loginCount":1,"longitude":-84.436287,"username":"telrod","userType":"simple"},"type":"user.loggedout"}],"totalPages":1,"totalItems":2}
+
+
+    GET http://localhost:8080/vessl-webapp/rest/events?user.username=azuercher
+    {"items":[{"id":"1231231231-222","user":{"id":1,"createdAt":"2012-01-01T00:00:00.000+0000","latitude":33.801078,"loginCount":1,"longitude":-84.436287,"username":"azuercher","userType":"admin"},"type":"user.loggedout"}],"totalPages":1,"totalItems":1}
 
 
 Sorting is also supported (with multiple attributes)

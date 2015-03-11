@@ -5,7 +5,18 @@
 	},
 	{
 		"type": "user.loggedout",
-		"id": "1231231231-222"
+		"id": "1231231231-222",
+		"userId":1
+	},
+	{
+		"type": "user.loggedout",
+		"id": "1231231231-223",
+		"userId":2
+	},
+	{
+		"type": "user.loggedout",
+		"id": "1231231231-224",
+		"userId":2
 	},
 	{
 		"type": "child.user.loggedout",

@@ -21,6 +21,10 @@ public class Event {
     @SaveWhen(insert = true, update = false)
     private String parentId;
 
+    @Column(name = "user_id")
+    @SaveWhen(insert = true, update = false)
+    private Long userId;
+
     public String getId() {
         return id;
     }
@@ -44,5 +48,13 @@ public class Event {
     public void setParentId(String parentId) {
         this.parentId = parentId;
     }
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
 }
