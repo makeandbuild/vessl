@@ -158,7 +158,7 @@ Resource validation logic for the persistence layer - see [EventValidator](https
       }
     }
 
-Paging is built into the framework for the list functionality (page index starts at 0)
+Paging is built into the framework for the list functionality where page index starts at 0
 
     GET http://localhost:8080/vessl-webapp/rest/events?pageSize=2&page=0
     RESPONSE
@@ -202,7 +202,7 @@ Paging is built into the framework for the list functionality (page index starts
       "totalItems": 6
     }
 
-Query support cascades into the course grained persistence (DAO) layer for the list functionality. this uses a $name=$value notation,
+Query support cascades into the course grained persistence (DAO) layer for the list functionality querying with a $attributeName=$value notation
 
     GET http://localhost:8080/vessl-webapp/rest/events?type=user.loggedin
     RESPONSE
@@ -217,7 +217,7 @@ Query support cascades into the course grained persistence (DAO) layer for the l
       "totalItems": 1
     }
 
-Like and other operators besides equals are also supported (here we look for all events that have a type that starts with "user."")
+Like and other operators besides equals are also supported.  here we look for all events that have a type that starts with "user."
 
     GET http://localhost:8080/vessl-webapp/rest/events?type=user.%&typeOperation=like
     RESPONSE
@@ -243,7 +243,7 @@ Like and other operators besides equals are also supported (here we look for all
       "totalPages": 1,
       "totalItems": 4
     }
-Using joined properties in the criteria is also supported for join attributes defined via Dao.addQueryJoinSupport()
+Using joined properties in the criteria is also supported for join attributes defined via [BaseDaoImpl.addQueryJoinSupport()](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDaoImpl.java)
 
     GET http://localhost:8080/vessl-webapp/rest/events?user.username=telrod
     RESPONSE
@@ -302,7 +302,7 @@ Using joined properties in the criteria is also supported for join attributes de
       "totalItems": 1
     }
 
-Sorting is also supported (with multiple attributes)
+Sorting is also supported
 
     GET http://localhost:8080/vessl-webapp/rest/events?sortBys=type:true
     RESPONSE
@@ -344,6 +344,7 @@ Sorting is also supported (with multiple attributes)
       "totalPages": 1,
       "totalItems": 6
     }
+
 As well as descending sorting and multple attributes
 
     GET http://localhost:8080/vessl-webapp/rest/events?sortBys=type:true,id:false
