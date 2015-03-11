@@ -10,3 +10,4 @@ dumped-fixtures
 pom.xml.releaseBackup
 release.properties
 doc
+/build

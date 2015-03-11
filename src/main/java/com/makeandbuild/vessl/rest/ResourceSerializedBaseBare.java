@@ -24,10 +24,6 @@ import com.makeandbuild.vessl.persistence.jdbc.PagedResponse;
 import com.makeandbuild.vessl.persistence.jdbc.SortBy;
 import com.makeandbuild.vessl.validation.ValidationProxyManager;
 
-/**
- * User: telrod
- * Date: 3/4/14
- */
 @SuppressWarnings({"unchecked", "rawtypes"})
 public abstract class ResourceSerializedBaseBare<T, ID> extends ResourceBase {
 

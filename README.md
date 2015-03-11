@@ -10,6 +10,7 @@ Welcome to the Make & Build Vessl framework which provides application developer
 
 Make & Build Vessl is licensed under the Apache Public License, Version 2.0 (see [LICENSE](./LICENSE))
 
+Please see the sibling project for an example web app https://github.com/makeandbuild/vessl-webapp
 
 
 ## JDBC Based Persistence
@@ -76,9 +77,47 @@ JAVA_OPTS="-DenvironmentName=dev -Dlog4j.configuration=file:/home/dev/log4j.prop
 export JAVA_OPTS
 ```
 
-## REST resources
+# REST resources
 
-We have implemented a way to be able to expose the persistance framework directly with augmentation.  Please see the sibling project for an example web app https://github.com/makeandbuild/vessl-webapp
+If you look at EventResource you'll see that there is a lot built into a class including:
+* show: GET {resource}/#id
+* list: GET {resource}
+* update: PUT {resource}/#id
+* create: POST {resource}
+
+Examples of using serializers to return full objects at render time (see EventResoruce and EventSerializer):
+
+    GET http://localhost:8080/vessl-webapp/rest/events
+    {"items":[{"id":"100-1","parent":{"id":"1231231231-222","type":"user.loggedout"},"type":"child.user.loggedout"},{"id":"100-2","parent":{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},"type":"child.user.loggedin"},{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},{"id":"1231231231-222","type":"user.loggedout"}],"totalPages":1,"totalItems":4}
+
+
+Resource validation logic for the persistence layer (see EventValidator and UserValidatior)
+
+    POST http://localhost:8080/vessl-webapp/rest/users {"id":9999,"username":"azuercher","loginCount":1,"createdAt":1426031160872,"userType":"simple","longitude":-84.436287,"latitude":33.801078}
+    {"errors":[{"codes":["local.error.exists.com.makeandbuild.vessl.sample.domain.User.username","local.error.exists.username","local.error.exists.java.lang.String","local.error.exists"],"defaultMessage":"Username already taken","objectName":"com.makeandbuild.vessl.sample.domain.User","field":"username","rejectedValue":"azuercher","bindingFailure":false,"code":"local.error.exists"}],"localizedMessage":"com.makeandbuild.vessl.sample.domain.User validation failed","message":"com.makeandbuild.vessl.sample.domain.User validation failed","validatedBean":{"id":9999,"createdAt":"2015-03-10T23:46:00.872+0000","latitude":33.801078,"loginCount":1,"longitude":-84.436287,"username":"azuercher","userType":"simple"}}
+
+
+Paging is built into the framework for the list functionality (page index starts at 0)
+
+    GET http://localhost:8080/vessl-webapp/rest/events?pageSize=2&page=0
+    {"items":[{"id":"100-1","parent":{"id":"1231231231-222","type":"user.loggedout"},"type":"child.user.loggedout"},{"id":"100-2","parent":{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},"type":"child.user.loggedin"}],"totalPages":3,"totalItems":6}
+
+    GET http://localhost:8080/vessl-webapp/rest/events?pageSize=2&page=1
+    {"items":[{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},{"id":"1231231231-222","type":"user.loggedout"}],"totalPages":3,"totalItems":6}
+
+Query support cascades into the course grained persistence (DAO) layer for the list functionality. this uses a $name=$value notation, but like and other operators besides equals are also supported
+
+    GET http://localhost:8080/vessl-webapp/rest/events?type=user.loggedin
+    {"items":[{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"}],"totalPages":1,"totalItems":1}
+
+Sorting is also supported (with multiple attributes)
+    GET http://localhost:8080/vessl-webapp/rest/events?sortBys=type:true
+    {"items":[{"id":"100-2","parent":{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},"type":"child.user.loggedin"},{"id":"100-1","parent":{"id":"1231231231-222","type":"user.loggedout"},"type":"child.user.loggedout"},{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},{"id":"1231231231-222","type":"user.loggedout"},{"id":"1231231231-223","type":"user.loggedout"},{"id":"1231231231-224","type":"user.loggedout"}],"totalPages":1,"totalItems":6}
+
+As well as descending sorting and multple attributes
+    GET http://localhost:8080/vessl-webapp/rest/events?sortBys=type:true,id:false
+    {"items":[{"id":"100-2","parent":{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},"type":"child.user.loggedin"},{"id":"100-1","parent":{"id":"1231231231-222","type":"user.loggedout"},"type":"child.user.loggedout"},{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},{"id":"1231231231-224","type":"user.loggedout"},{"id":"1231231231-223","type":"user.loggedout"},{"id":"1231231231-222","type":"user.loggedout"}],"totalPages":1,"totalItems":6}
+
 
 ## Integration Tests
 
@@ -87,7 +126,7 @@ Create your database
     mysql -u root
     create database vessl
 
-Now load the user table
+Now create the user and event tables
 
     mysql -u root vessl < ./src/test/resources/create_user.sql
     mysql -u root vessl < ./src/test/resources/create_event.sql
