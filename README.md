@@ -5,8 +5,7 @@ Welcome to the Make & Build Vessl framework which provides application developer
 * create and execute fixtures for loading data
 * perform validation logic with the data services
 * integrate with RESTful services
-* configuration via an environment name - this will allow for resource matching for a property file included in the classpath
-* configuration via a propertyfile - the passed system property to the jvm will be used to load this property file
+* configuration via an environment name or a propertyfile to allow for environment specific configurations without requiring seperate war packaging
 
 Make & Build Vessl is licensed under the Apache Public License, Version 2.0 (see [LICENSE](./LICENSE))
 
@@ -15,35 +14,31 @@ Please see the sibling project for an example web app https://github.com/makeand
 
 ## JDBC Based Persistence
 
-
-This framework is an extension of the spring jdbc implementation.  it provided the following services:
-* makes use of jpa annotations in your model class.  See [User](./src/test/java/integration/com/makeandbuild/vessl/persistence/User.java)
+This framework is an extension of the spring JDBC implementation providing the following services:
+* makes use of JPA annotations in your models - see [User](./src/test/java/integration/com/makeandbuild/vessl/persistence/User.java)
  as an example
-* can use the simplified [ReflectionBasedJdbcMapper](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/ReflectionBasedJdbcMapper.java) to easily create your DAOs.  This supports all sorts of types including Date, Integer, Long, Enums (as string column mappings), String.  See UserDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDaoImpl.java) as an example
-* if you dont want the overhead of Reflection you can create those implementations as well
+* can use the simplified [ReflectionBasedJdbcMapper](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/ReflectionBasedJdbcMapper.java) to easily create your DAOs.  This supports all sorts of types including Date, Integer, Long, Enums (as string column mappings), String - see [UserDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDaoImpl.java) as an example
+* if you dont want the overhead of Reflection you can create those implementations as well by extending [BaseDaoImpl](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDaoImpl.java)
 
-The BaseDao has a lot of built in methods including
+The BaseDao has a lot of built in functionality including
 * criteria based finders
 * paging
 * sorting
 * find by id
 * exists finders
 * delete helpers
-* supports domain model specialization inheritance  - see the @Specialize annotation and the [UserDao_IT.testSpecialized()](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java) test
+* supports domain model specialization inheritance  - see the [@Specialize](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/Specialize.java) annotation and the [UserDao_IT.testSpecialized()](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java) test
 * join logic for advanced criteria support in [BaseDaoImpl.addQueryJoinSupport()](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDaoImpl.java) which you call explicity in the constructor of your specialized Daos see see [EventDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/EventDaoImpl.java)
 * cascade deletes for dao based dependencies - simply by annotating your Daos with [@CascadeDelete](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/CascadeDelete.java) see [UserDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDaoImpl.java)
 
-For an example of the usage see [UserDao_IT](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java)
-
 ## Fixtures
 
-You can also make use of the fixture functionality to load test data from class resources.  the solution this is based upon seperates loaders from persisters and takes into account order of data that is being loaded.  if you have cross referencing associations, then you will probably want to write your own custom EntityLoaders and EntityManagers.
+You can also make use of the fixture functionality to load test data from class resources.  The solution this is based upon seperates loaders from persisters and takes into account order of data that is being loaded.  if you have cross referencing associations, then you will probably want to write your own custom EntityLoaders and EntityManagers.
 
 * [src/test/resources/fixtures](./src/test/resources/fixtures) includes json resources to be loaded
-* [src/test/java/integration/com/makeandbuild/vessl/fixture/Fixture_IT](src/test/java/integration/com/makeandbuild/vessl/fixture/Fixture_IT.java) has the tests for loading and purging data
 * [src/test/resources/spring.xml](src/test/resources/spring.xml) definition of fixture sets up the meta data for the project and takes into account the ordering
 
-There are some tests
+[Fixture_IT](src/test/java/integration/com/makeandbuild/vessl/fixture/Fixture_IT.java) has the tests for loading and purging data
 * testAll() demonstrates how you can setup a set of resource files to be loaded in spring and purge() or load() as a complete set
 * testResourceSingularly() demonstrates on how to pass in a resource location to load a resoruce explicity
 * testEntityClassSingularly() demonstrates how to purge via a given Model class
@@ -52,41 +47,35 @@ There are some tests
 ## Validation
 
 Validation is supported via JSR-303 annotations and custom spring Validator instances you define. Simply defining an
-instance of ValidationProxyManagerImpl in the application context will suffice to load (and cache) all custom
+instance of [ValidationProxyManagerImpl](./src/main/java/com/makeandbuild/vessl/validation/ValidationProxyManagerImpl.java) in the application context will suffice to load (and cache) all custom
 Validators you have also defined in the application context. Validation does not occur by default on any of your Dao
-classes. To enable bean validation you should create a dynamic proxy instance of your Dao (make sure it extends
-BaseDao) and perform your methods through that proxy. All calls made through your dao proxy instance will have its
+classes.
+
+To enable bean validation you should create a dynamic proxy instance of your Dao (make sure it extends [BaseDao](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDao.java)) and perform your methods through that proxy. All calls made through your dao proxy instance will have its
 parameters ran through a Validator instance that supports the parameters object type. Multiple validators can be ran
 against the same object. This is controlled by the supports(...) method of your custom Validator instance. If a
-validation errors is encountered the proxy dao instance will throw a RuntimeException (BeanValidationException) that
+validation errors is encountered the proxy dao instance will throw a RuntimeException ([BeanValidationException](./src/main/java/com/makeandbuild/vessl/validation/exception/BeanValidationException.java)) that
 contains a list of ObjectError objects defining the validation errors that occured.
 
 ## Property Configuration
 
-For a full example, please see the [SpringEnvironmentPropertyPlaceholderConfigurerTest](./src/test/java/unit/com/makeandbuild/vessl/propconfig/SpringEnvironmentPropertyPlaceholderConfigurerTest.java) for some examples.  You can also see the configuration of [src/test/resources/spring-propconfig.xml](./src/test/resources/spring-propconfig.xml)
+It's possible to configure your application via an environment name which will match to a resource property file included in the classpath.  This is great if you dont mind including environment settings in your packaging.  For a full example, please see the [SpringEnvironmentPropertyPlaceholderConfigurerTest](./src/test/java/unit/com/makeandbuild/vessl/propconfig/SpringEnvironmentPropertyPlaceholderConfigurerTest.java).  You can also see the configuration of [src/test/resources/spring-propconfig.xml](./src/test/resources/spring-propconfig.xml).  Here is a snippet in $TOMCAT_HOME/bin/setenv.sh using the environment name (will load /config-dev.properties in classpath)
 
+    JAVA_OPTS="-DenvironmentName=dev -Dlog4j.configuration=file:/home/dev/log4j.properties"
+    export JAVA_OPTS
 
-Here is a snippet in $TOMCAT_HOME/bin/setenv.sh using the full filename
+Its also possible to explicitly define the property file on the local filesystem you want to use.  If you are in dev/ops this is probably what you want to have for your produciton environmets.  Here is a snippet in $TOMCAT_HOME/bin/setenv.sh using the full filename
 
-```
-JAVA_OPTS="-DenvironmentFilename=/home/dev/config-dev.properties -Dlog4j.configuration=file:/home/dev/log4j.properties"
-export JAVA_OPTS
-```
-
-Here is a snippet in $TOMCAT_HOME/bin/setenv.sh using the environment name (will load /config-dev.properties in classpath)
-
-```
-JAVA_OPTS="-DenvironmentName=dev -Dlog4j.configuration=file:/home/dev/log4j.properties"
-export JAVA_OPTS
-```
+    JAVA_OPTS="-DenvironmentFilename=/home/dev/config-dev.properties -Dlog4j.configuration=file:/home/dev/log4j.properties"
+    export JAVA_OPTS
 
 # REST resources
 
 If you look at EventResource you'll see that there is a lot built into a class including:
-* show: GET {resource}/#id
-* list: GET {resource}
-* update: PUT {resource}/#id
-* create: POST {resource}
+* GET {resource}/#id to get item details
+* GET {resource} to query a list of items
+* PUT {resource}/#id to update an item
+* POST {resource} to create an item
 
 Examples of using serializers to return full objects at render time (see EventResoruce and EventSerializer in https://github.com/makeandbuild/vessl-webapp):
 
@@ -113,12 +102,12 @@ Query support cascades into the course grained persistence (DAO) layer for the l
     GET http://localhost:8080/vessl-webapp/rest/events?type=user.loggedin
     {"items":[{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"}],"totalPages":1,"totalItems":1}
 
-but like and other operators besides equals are also supported (here we look for all events that have a type that starts with "user."")
+Like and other operators besides equals are also supported (here we look for all events that have a type that starts with "user."")
 
     GET http://localhost:8080/vessl-webapp/rest/events?type=user.%&typeOperation=like
     {"items":[{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},{"id":"1231231231-222","type":"user.loggedout"},{"id":"1231231231-223","type":"user.loggedout"},{"id":"1231231231-224","type":"user.loggedout"}],"totalPages":1,"totalItems":4}
 
-and also for the join attributes defined via Dao.addQueryJoinSupport()
+Using joined properties in the criteria is also supported for join attributes defined via Dao.addQueryJoinSupport()
 
     GET http://localhost:8080/vessl-webapp/rest/events?user.username=telrod
     {"items":[{"id":"1231231231-223","user":{"id":2,"createdAt":"1988-01-01T00:00:00.000+0000","latitude":33.801078,"loginCount":1,"longitude":-84.436287,"username":"telrod","userType":"simple"},"type":"user.loggedout"},{"id":"1231231231-224","user":{"id":2,"createdAt":"1988-01-01T00:00:00.000+0000","latitude":33.801078,"loginCount":1,"longitude":-84.436287,"username":"telrod","userType":"simple"},"type":"user.loggedout"}],"totalPages":1,"totalItems":2}
