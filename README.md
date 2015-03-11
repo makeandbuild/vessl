@@ -80,13 +80,13 @@ If you look at [EventResource](https://github.com/makeandbuild/vessl-webapp/blob
 * PUT {resource}/#id to update an item
 * POST {resource} to create an item
 
-Examples of using serializers to return full objects at render time (see [EventResource](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/EventResource.java) and [EventSerializer](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/serializers/EventSerializer.java) in https://github.com/makeandbuild/vessl-webapp):
+Examples of using serializers to return full objects at render time - see [EventResource](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/EventResource.java) and [EventSerializer](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/serializers/EventSerializer.java)
 
     GET http://localhost:8080/vessl-webapp/rest/events
     {"items":[{"id":"100-1","parent":{"id":"1231231231-222","type":"user.loggedout"},"type":"child.user.loggedout"},{"id":"100-2","parent":{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},"type":"child.user.loggedin"},{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},{"id":"1231231231-222","type":"user.loggedout"}],"totalPages":1,"totalItems":4}
 
 
-Resource validation logic for the persistence layer (see [EventValidator](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/validators/EventValidator.java) and [UserValidatior](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/validators/UserValidator.java)
+Resource validation logic for the persistence layer - see [EventValidator](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/validators/EventValidator.java) and [UserValidatior](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/validators/UserValidator.java)
 
     POST http://localhost:8080/vessl-webapp/rest/users {"id":9999,"username":"azuercher","loginCount":1,"createdAt":1426031160872,"userType":"simple","longitude":-84.436287,"latitude":33.801078}
     {"errors":[{"codes":["local.error.exists.com.makeandbuild.vessl.sample.domain.User.username","local.error.exists.username","local.error.exists.java.lang.String","local.error.exists"],"defaultMessage":"Username already taken","objectName":"com.makeandbuild.vessl.sample.domain.User","field":"username","rejectedValue":"azuercher","bindingFailure":false,"code":"local.error.exists"}],"localizedMessage":"com.makeandbuild.vessl.sample.domain.User validation failed","message":"com.makeandbuild.vessl.sample.domain.User validation failed","validatedBean":{"id":9999,"createdAt":"2015-03-10T23:46:00.872+0000","latitude":33.801078,"loginCount":1,"longitude":-84.436287,"username":"azuercher","userType":"simple"}}
