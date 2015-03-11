@@ -30,7 +30,7 @@ The BaseDao has a lot of built in methods including
 * delete helpers
 * supports domain model specialization inheritance (see the @Specialize annotation and the [UserDao_IT.testSpecialized()](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java) test)
 
-For an example of the usage see [UserDao_IT.testSpecialized()](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java)
+For an example of the usage see [UserDao_IT](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java)
 
 ## Fixtures
 
@@ -105,10 +105,16 @@ Paging is built into the framework for the list functionality (page index starts
     GET http://localhost:8080/vessl-webapp/rest/events?pageSize=2&page=1
     {"items":[{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},{"id":"1231231231-222","type":"user.loggedout"}],"totalPages":3,"totalItems":6}
 
-Query support cascades into the course grained persistence (DAO) layer for the list functionality. this uses a $name=$value notation, but like and other operators besides equals are also supported
+Query support cascades into the course grained persistence (DAO) layer for the list functionality. this uses a $name=$value notation,
 
     GET http://localhost:8080/vessl-webapp/rest/events?type=user.loggedin
     {"items":[{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"}],"totalPages":1,"totalItems":1}
+
+but like and other operators besides equals are also supported (here we look for all events that have a type that starts with "user."")
+
+    GET http://localhost:8080/vessl-webapp/rest/events?type=user.%&typeOperation=like
+    {"items":[{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"}],"totalPages":1,"totalItems":1}
+
 
 Sorting is also supported (with multiple attributes)
 
