@@ -243,7 +243,7 @@ Like and other operators besides equals are also supported.  here we look for al
       "totalPages": 1,
       "totalItems": 4
     }
-Using joined properties in the criteria is also supported for join attributes defined via [BaseDaoImpl.addQueryJoinSupport()](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDaoImpl.java) and implemented in [EventDaoImpl](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/persistence/EventDaoImpl.java), here we look based upon event.user.username
+Using joined properties in the criteria is also supported for join attributes defined via [BaseDaoImpl.addQueryJoinSupport()](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDaoImpl.java) and implemented in [EventDaoImpl](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/persistence/EventDaoImpl.java), here we look based upon the Event attribute "user.username"
 
     GET http://localhost:8080/vessl-webapp/rest/events?user.username=telrod
     RESPONSE
