@@ -33,15 +33,16 @@ The BaseDao has a lot of built in functionality including
 
 ## Fixtures
 
-You can also make use of the fixture functionality to load test data from class resources.  The solution this is based upon seperates loaders from persisters and takes into account order of data that is being loaded.  if you have cross referencing associations, then you will probably want to write your own custom EntityLoaders and EntityManagers.
+You can also make use of the fixture functionality to load test data from class resources.  The solution seperates two seperate conceptual elements:
+* [EntityLoader](./src/main/java/com/makeandbuild/vessl/fixture/EntityLoader.java) - is responsible for loading the fixture data from a source
+* [EntityManager](./src/main/java/com/makeandbuild/vessl/fixture/EntityManager.java) - is responsible for persisting the loaded entity to the target data source
 
+To understand how to use this, please see
 * [src/test/resources/fixtures](./src/test/resources/fixtures) includes json resources to be loaded
 * [src/test/resources/spring.xml](src/test/resources/spring.xml) definition of fixture sets up the meta data for the project and takes into account the ordering
-
-[Fixture_IT](src/test/java/integration/com/makeandbuild/vessl/fixture/Fixture_IT.java) has the tests for loading and purging data
-* testAll() demonstrates how you can setup a set of resource files to be loaded in spring and purge() or load() as a complete set
-* testResourceSingularly() demonstrates on how to pass in a resource location to load a resoruce explicity
-* testEntityClassSingularly() demonstrates how to purge via a given Model class
+* [Fixture_IT.testAll()](src/test/java/integration/com/makeandbuild/vessl/fixture/Fixture_IT.java) demonstrates how you can setup a set of resource files to be loaded in spring and purge() or load() as a complete set
+* [Fixture_IT.testResourceSingularly()](src/test/java/integration/com/makeandbuild/vessl/fixture/Fixture_IT.java) demonstrates on how to pass in a resource location to load a resoruce explicity
+* [Fixture_IT.testEntityClassSingularly()](src/test/java/integration/com/makeandbuild/vessl/fixture/Fixture_IT.java)  demonstrates how to purge via a given Model class
 
 
 ## Validation
@@ -52,19 +53,21 @@ Validators you have also defined in the application context. Validation does not
 classes.
 
 To enable bean validation you should create a dynamic proxy instance of your Dao (make sure it extends [BaseDao](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDao.java)) and perform your methods through that proxy. All calls made through your dao proxy instance will have its
-parameters ran through a Validator instance that supports the parameters object type. Multiple validators can be ran
+parameters ran through a Validator instance that supports the parameters object type.
+
+Multiple validators can be ran
 against the same object. This is controlled by the supports(...) method of your custom Validator instance. If a
-validation errors is encountered the proxy dao instance will throw a RuntimeException ([BeanValidationException](./src/main/java/com/makeandbuild/vessl/validation/exception/BeanValidationException.java)) that
+validation error is encountered the proxy dao instance will throw a RuntimeException ([BeanValidationException](./src/main/java/com/makeandbuild/vessl/validation/exception/BeanValidationException.java)) that
 contains a list of ObjectError objects defining the validation errors that occured.
 
 ## Property Configuration
 
-It's possible to configure your application via an environment name which will match to a resource property file included in the classpath.  This is great if you dont mind including environment settings in your packaging.  For a full example, please see the [SpringEnvironmentPropertyPlaceholderConfigurerTest](./src/test/java/unit/com/makeandbuild/vessl/propconfig/SpringEnvironmentPropertyPlaceholderConfigurerTest.java).  You can also see the configuration of [src/test/resources/spring-propconfig.xml](./src/test/resources/spring-propconfig.xml).  Here is a snippet in $TOMCAT_HOME/bin/setenv.sh using the environment name (will load /config-dev.properties in classpath)
+It's possible to configure your application via an environment name which will match to a resource property file included in the classpath.  This is great if you dont mind including environment settings in your packaging.  For a full example, please see the [SpringEnvironmentPropertyPlaceholderConfigurerTest](./src/test/java/unit/com/makeandbuild/vessl/propconfig/SpringEnvironmentPropertyPlaceholderConfigurerTest.java).  You can also see the configuration of [src/test/resources/spring-propconfig.xml](./src/test/resources/spring-propconfig.xml).  Here is a snippet in $TOMCAT_HOME/bin/setenv.sh using the environment name (will load [/config-dev.properties](./src/test/resources/config-dev.properties) in classpath)
 
     JAVA_OPTS="-DenvironmentName=dev -Dlog4j.configuration=file:/home/dev/log4j.properties"
     export JAVA_OPTS
 
-Its also possible to explicitly define the property file on the local filesystem you want to use.  If you are in dev/ops this is probably what you want to have for your produciton environmets.  Here is a snippet in $TOMCAT_HOME/bin/setenv.sh using the full filename
+It's also possible to explicitly define the property file on the local filesystem you want to use.  If you are in dev/ops this is probably what you want to have for your produciton environmets.  Here is a snippet in $TOMCAT_HOME/bin/setenv.sh using the full filename
 
     JAVA_OPTS="-DenvironmentFilename=/home/dev/config-dev.properties -Dlog4j.configuration=file:/home/dev/log4j.properties"
     export JAVA_OPTS
