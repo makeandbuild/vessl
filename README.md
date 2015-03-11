@@ -83,6 +83,8 @@ If you look at [EventResource](https://github.com/makeandbuild/vessl-webapp/blob
 Examples of using serializers to return full objects at render time - see [EventResource](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/EventResource.java) and [EventSerializer](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/serializers/EventSerializer.java)
 
     GET http://localhost:8080/vessl-webapp/rest/events
+
+    RESPONSE
     {
       "items": [
         {
@@ -116,7 +118,18 @@ Examples of using serializers to return full objects at render time - see [Event
 
 Resource validation logic for the persistence layer - see [EventValidator](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/validators/EventValidator.java) and [UserValidatior](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/validators/UserValidator.java)
 
-    POST http://localhost:8080/vessl-webapp/rest/users {"id":9999,"username":"azuercher","loginCount":1,"createdAt":1426031160872,"userType":"simple","longitude":-84.436287,"latitude":33.801078}
+    POST http://localhost:8080/vessl-webapp/rest/users
+    {
+      "id": 9999,
+      "username": "azuercher",
+      "loginCount": 1,
+      "createdAt": 1426031160872,
+      "userType": "simple",
+      "longitude": -84.436287,
+      "latitude": 33.801078
+    }
+
+    RESPONSE
     {
       "errors": [
         {
@@ -150,6 +163,8 @@ Resource validation logic for the persistence layer - see [EventValidator](https
 Paging is built into the framework for the list functionality (page index starts at 0)
 
     GET http://localhost:8080/vessl-webapp/rest/events?pageSize=2&page=0
+
+    RESPONSE
     {
       "items": [
         {
@@ -174,6 +189,8 @@ Paging is built into the framework for the list functionality (page index starts
     }
 
     GET http://localhost:8080/vessl-webapp/rest/events?pageSize=2&page=1
+
+    RESPONSE
     {
       "items": [
         {
@@ -206,6 +223,8 @@ Query support cascades into the course grained persistence (DAO) layer for the l
 Like and other operators besides equals are also supported (here we look for all events that have a type that starts with "user."")
 
     GET http://localhost:8080/vessl-webapp/rest/events?type=user.%&typeOperation=like
+
+        RESPONSE
     {
       "items": [
         {
@@ -231,6 +250,8 @@ Like and other operators besides equals are also supported (here we look for all
 Using joined properties in the criteria is also supported for join attributes defined via Dao.addQueryJoinSupport()
 
     GET http://localhost:8080/vessl-webapp/rest/events?user.username=telrod
+
+    RESPONSE
     {
       "items": [
         {
@@ -265,6 +286,8 @@ Using joined properties in the criteria is also supported for join attributes de
     }
 
     GET http://localhost:8080/vessl-webapp/rest/events?user.username=azuercher
+
+    RESPONSE
     {
       "items": [
         {
@@ -288,6 +311,8 @@ Using joined properties in the criteria is also supported for join attributes de
 Sorting is also supported (with multiple attributes)
 
     GET http://localhost:8080/vessl-webapp/rest/events?sortBys=type:true
+
+    RESPONSE
     {
       "items": [
         {
@@ -329,6 +354,8 @@ Sorting is also supported (with multiple attributes)
 As well as descending sorting and multple attributes
 
     GET http://localhost:8080/vessl-webapp/rest/events?sortBys=type:true,id:false
+
+    RESPONSE
     {
       "items": [
         {
