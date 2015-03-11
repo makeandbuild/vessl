@@ -28,17 +28,17 @@ The BaseDao has a lot of built in methods including
 * find by id
 * exists finders
 * delete helpers
-* supports domain model specialization inheritance (see the @Specialize annotation and the UserDao_IT.testSpecialized() test)
+* supports domain model specialization inheritance (see the @Specialize annotation and the [UserDao_IT.testSpecialized()](./com/makeandbuild/vessl/persistence/UserDao_IT.java) test)
 
-For an example of the usage see UserDao_IT
+For an example of the usage see [UserDao_IT](./com/makeandbuild/vessl/persistence/UserDao_IT.java)
 
 ## Fixtures
 
 You can also make use of the fixture functionality to load test data from class resources.  the solution this is based upon seperates loaders from persisters and takes into account order of data that is being loaded.  if you have cross referencing associations, then you will probably want to write your own custom EntityLoaders and EntityManagers.
 
-* src/test/resources/fixtures includes json resources to be loaded
-* src/test/java/integration/com/makeandbuild/vessl/fixture/Fixture_IT.java has the tests for loading and purging data
-* src/test/resources/spring.xml definition of fixture sets up the meta data for the project and takes into account the ordering
+* [src/test/resources/fixtures](./src/test/resources/fixtures) includes json resources to be loaded
+* [src/test/java/integration/com/makeandbuild/vessl/fixture/Fixture_IT](src/test/java/integration/com/makeandbuild/vessl/fixture/Fixture_IT.java) has the tests for loading and purging data
+* [src/test/resources/spring.xml](src/test/resources/spring.xml) definition of fixture sets up the meta data for the project and takes into account the ordering
 
 There are some tests
 * testAll() demonstrates how you can setup a set of resource files to be loaded in spring and purge() or load() as a complete set
@@ -60,7 +60,7 @@ contains a list of ObjectError objects defining the validation errors that occur
 
 ## Property Configuration
 
-For a full example, please see the SpringEnvironmentPropertyPlaceholderConfigurerTest for some examples.  You can also see the configuration of src/test/resources/spring-propconfig.xml
+For a full example, please see the [SpringEnvironmentPropertyPlaceholderConfigurerTest](./src/test/java/unit/com/makeandbuild/vessl/propconfig/SpringEnvironmentPropertyPlaceholderConfigurerTest.java) for some examples.  You can also see the configuration of [src/test/resources/spring-propconfig.xml](./src/test/resources/spring-propconfig.xml)
 
 
 Here is a snippet in $TOMCAT_HOME/bin/setenv.sh using the full filename
