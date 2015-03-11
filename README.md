@@ -75,10 +75,10 @@ It's also possible to explicitly define the property file on the local filesyste
 # REST resources
 
 If you look at [EventResource](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/EventResource.java) you'll see that there is a lot built into a class including:
-* GET {resource}/#id to get item details
-* GET {resource} to query a list of items
-* PUT {resource}/#id to update an item
-* POST {resource} to create an item
+* GET {resource}/#id:  to get item details
+* GET {resource}:  to query a list of items
+* PUT {resource}/#id:  to update an item
+* POST {resource}:  to create an item
 
 Examples of using serializers to return full objects at render time - see [EventResource](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/EventResource.java) and [EventSerializer](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/serializers/EventSerializer.java)
 
@@ -146,3 +146,5 @@ Now create the user and event tables
 Now you can run the function test
 
      mvn integration-test -Pft
+
+For a bigger example of please see the sibling project for an example web app https://github.com/makeandbuild/vessl-webapp
