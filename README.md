@@ -80,7 +80,7 @@ If you look at [EventResource](https://github.com/makeandbuild/vessl-webapp/blob
 * PUT {resource}/#id
 * POST {resource}
 
-Examples of using serializers to return full objects at render time - see [EventResource](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/EventResource.java) and [EventSerializer](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/serializers/EventSerializer.java).  NOTE that POST and PUT expect shallow objects.  GET methods can support rendering nested/full objects, if the developer implements the serializers in the REST resource.
+NOTE that POST and PUT expect shallow objects.  GET methods can support rendering nested/full objects, if the developer implements the serializers in the REST resource - see [EventResource](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/EventResource.java) and [EventSerializer](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/serializers/EventSerializer.java)
 
     GET http://localhost:8080/vessl-webapp/rest/events
     RESPONSE
