@@ -30,7 +30,7 @@ The BaseDao has a lot of built in methods including
 * delete helpers
 * supports domain model specialization inheritance (see the @Specialize annotation and the [UserDao_IT.testSpecialized()](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java) test)
 
-For an example of the usage see [UserDao_IT](./com/makeandbuild/vessl/persistence/UserDao_IT.java)
+For an example of the usage see [UserDao_IT.testSpecialized()](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java)
 
 ## Fixtures
 
