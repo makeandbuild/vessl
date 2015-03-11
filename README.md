@@ -75,17 +75,15 @@ It's also possible to explicitly define the property file on the local filesyste
 # REST resources
 
 If you look at [EventResource](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/EventResource.java) you'll see that there is a lot built into a class including:
-* GET {resource}/#id:  to get item details
-* GET {resource}:  to query a list of items
-* PUT {resource}/#id:  to update an item
-* POST {resource}:  to create an item
+* GET {resource}/#id
+* GET {resource}
+* PUT {resource}/#id
+* POST {resource}
 
 Examples of using serializers to return full objects at render time - see [EventResource](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/EventResource.java) and [EventSerializer](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/serializers/EventSerializer.java)
 
     GET http://localhost:8080/vessl-webapp/rest/events
-
-RESPONSE
-
+    RESPONSE
     {
       "items": [
         {
@@ -129,9 +127,7 @@ Resource validation logic for the persistence layer - see [EventValidator](https
       "longitude": -84.436287,
       "latitude": 33.801078
     }
-
-RESPONSE
-
+    RESPONSE
     {
       "errors": [
         {
@@ -165,9 +161,7 @@ RESPONSE
 Paging is built into the framework for the list functionality (page index starts at 0)
 
     GET http://localhost:8080/vessl-webapp/rest/events?pageSize=2&page=0
-
-RESPONSE
-
+    RESPONSE
     {
       "items": [
         {
@@ -192,9 +186,7 @@ RESPONSE
     }
 
     GET http://localhost:8080/vessl-webapp/rest/events?pageSize=2&page=1
-
-RESPONSE
-
+    RESPONSE
     {
       "items": [
         {
@@ -213,9 +205,7 @@ RESPONSE
 Query support cascades into the course grained persistence (DAO) layer for the list functionality. this uses a $name=$value notation,
 
     GET http://localhost:8080/vessl-webapp/rest/events?type=user.loggedin
-
-RESPONSE
-
+    RESPONSE
     {
       "items": [
         {
@@ -230,9 +220,7 @@ RESPONSE
 Like and other operators besides equals are also supported (here we look for all events that have a type that starts with "user."")
 
     GET http://localhost:8080/vessl-webapp/rest/events?type=user.%&typeOperation=like
-
-RESPONSE
-
+    RESPONSE
     {
       "items": [
         {
@@ -258,9 +246,7 @@ RESPONSE
 Using joined properties in the criteria is also supported for join attributes defined via Dao.addQueryJoinSupport()
 
     GET http://localhost:8080/vessl-webapp/rest/events?user.username=telrod
-
-RESPONSE
-
+    RESPONSE
     {
       "items": [
         {
@@ -295,9 +281,7 @@ RESPONSE
     }
 
     GET http://localhost:8080/vessl-webapp/rest/events?user.username=azuercher
-
-RESPONSE
-
+    RESPONSE
     {
       "items": [
         {
@@ -321,9 +305,7 @@ RESPONSE
 Sorting is also supported (with multiple attributes)
 
     GET http://localhost:8080/vessl-webapp/rest/events?sortBys=type:true
-
-RESPONSE
-
+    RESPONSE
     {
       "items": [
         {
@@ -365,9 +347,7 @@ RESPONSE
 As well as descending sorting and multple attributes
 
     GET http://localhost:8080/vessl-webapp/rest/events?sortBys=type:true,id:false
-
-RESPONSE
-
+    RESPONSE
     {
       "items": [
         {
