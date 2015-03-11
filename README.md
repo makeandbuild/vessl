@@ -17,8 +17,9 @@ Please see the sibling project for an example web app https://github.com/makeand
 
 
 This framework is an extension of the spring jdbc implementation.  it provided the following services:
-* makes use of jpa annotations in your model class.  See User.java as an example
-* can use the simplified ReflectionBasedJdbcMapper to easily create your DAOs.  This supports all sorts of types including Date, Integer, Long, Enums (as string column mappings), String.  See UserDaoImpl as an example
+* makes use of jpa annotations in your model class.  See [User](./src/test/java/integration/com/makeandbuild/vessl/persistence/User.java)
+ as an example
+* can use the simplified [ReflectionBasedJdbcMapper](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/ReflectionBasedJdbcMapper.java) to easily create your DAOs.  This supports all sorts of types including Date, Integer, Long, Enums (as string column mappings), String.  See UserDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDaoImpl.java) as an example
 * if you dont want the overhead of Reflection you can create those implementations as well
 
 The BaseDao has a lot of built in methods including
@@ -28,9 +29,9 @@ The BaseDao has a lot of built in methods including
 * find by id
 * exists finders
 * delete helpers
-* supports domain model specialization inheritance (see the @Specialize annotation and the [UserDao_IT.testSpecialized()](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java) test)
+* supports domain model specialization inheritance  - see the @Specialize annotation and the [UserDao_IT.testSpecialized()](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java) test
 * join logic for advanced criteria support in [BaseDaoImpl.addQueryJoinSupport()](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDaoImpl.java) which you call explicity in the constructor of your specialized Daos see see [EventDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/EventDaoImpl.java)
-* cascade deletes for dao based dependencies - simply by annotating your Daos with [@CascadeDelete](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/CascadeDelete.java)) see [UserDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDaoImpl.java)
+* cascade deletes for dao based dependencies - simply by annotating your Daos with [@CascadeDelete](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/CascadeDelete.java) see [UserDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDaoImpl.java)
 
 For an example of the usage see [UserDao_IT](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java)
 
