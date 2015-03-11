@@ -4,8 +4,8 @@ Welcome to the Make & Build Vessl framework which provides application developer
 * perform data access in a lightweight manner
 * create and execute fixtures for loading data
 * perform validation logic with the data services
-* integrate with RESTful services
-* configuration via an environment name or a propertyfile to allow for environment specific configurations without requiring seperate war packaging
+* expose REST resources to the underlying persistance functionality
+* configure applications specific to different environments without requiring seperate packaging
 
 Make & Build Vessl is licensed under the Apache Public License, Version 2.0 (see [LICENSE](./LICENSE))
 
