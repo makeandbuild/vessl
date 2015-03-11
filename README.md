@@ -83,53 +83,290 @@ If you look at [EventResource](https://github.com/makeandbuild/vessl-webapp/blob
 Examples of using serializers to return full objects at render time - see [EventResource](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/EventResource.java) and [EventSerializer](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/serializers/EventSerializer.java)
 
     GET http://localhost:8080/vessl-webapp/rest/events
-    {"items":[{"id":"100-1","parent":{"id":"1231231231-222","type":"user.loggedout"},"type":"child.user.loggedout"},{"id":"100-2","parent":{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},"type":"child.user.loggedin"},{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},{"id":"1231231231-222","type":"user.loggedout"}],"totalPages":1,"totalItems":4}
-
+    {
+      "items": [
+        {
+          "id": "100-1",
+          "parent": {
+            "id": "1231231231-222",
+            "type": "user.loggedout"
+          },
+          "type": "child.user.loggedout"
+        },
+        {
+          "id": "100-2",
+          "parent": {
+            "id": "1231231231-12312312-12-3123123",
+            "type": "user.loggedin"
+          },
+          "type": "child.user.loggedin"
+        },
+        {
+          "id": "1231231231-12312312-12-3123123",
+          "type": "user.loggedin"
+        },
+        {
+          "id": "1231231231-222",
+          "type": "user.loggedout"
+        }
+      ],
+      "totalPages": 1,
+      "totalItems": 4
+    }
 
 Resource validation logic for the persistence layer - see [EventValidator](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/validators/EventValidator.java) and [UserValidatior](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/validators/UserValidator.java)
 
     POST http://localhost:8080/vessl-webapp/rest/users {"id":9999,"username":"azuercher","loginCount":1,"createdAt":1426031160872,"userType":"simple","longitude":-84.436287,"latitude":33.801078}
-    {"errors":[{"codes":["local.error.exists.com.makeandbuild.vessl.sample.domain.User.username","local.error.exists.username","local.error.exists.java.lang.String","local.error.exists"],"defaultMessage":"Username already taken","objectName":"com.makeandbuild.vessl.sample.domain.User","field":"username","rejectedValue":"azuercher","bindingFailure":false,"code":"local.error.exists"}],"localizedMessage":"com.makeandbuild.vessl.sample.domain.User validation failed","message":"com.makeandbuild.vessl.sample.domain.User validation failed","validatedBean":{"id":9999,"createdAt":"2015-03-10T23:46:00.872+0000","latitude":33.801078,"loginCount":1,"longitude":-84.436287,"username":"azuercher","userType":"simple"}}
-
+    {
+      "errors": [
+        {
+          "codes": [
+            "local.error.exists.com.makeandbuild.vessl.sample.domain.User.username",
+            "local.error.exists.username",
+            "local.error.exists.java.lang.String",
+            "local.error.exists"
+          ],
+          "defaultMessage": "Username already taken",
+          "objectName": "com.makeandbuild.vessl.sample.domain.User",
+          "field": "username",
+          "rejectedValue": "azuercher",
+          "bindingFailure": false,
+          "code": "local.error.exists"
+        }
+      ],
+      "localizedMessage": "com.makeandbuild.vessl.sample.domain.User validation failed",
+      "message": "com.makeandbuild.vessl.sample.domain.User validation failed",
+      "validatedBean": {
+        "id": 9999,
+        "createdAt": "2015-03-10T23:46:00.872+0000",
+        "latitude": 33.801078,
+        "loginCount": 1,
+        "longitude": -84.436287,
+        "username": "azuercher",
+        "userType": "simple"
+      }
+    }
 
 Paging is built into the framework for the list functionality (page index starts at 0)
 
     GET http://localhost:8080/vessl-webapp/rest/events?pageSize=2&page=0
-    {"items":[{"id":"100-1","parent":{"id":"1231231231-222","type":"user.loggedout"},"type":"child.user.loggedout"},{"id":"100-2","parent":{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},"type":"child.user.loggedin"}],"totalPages":3,"totalItems":6}
+    {
+      "items": [
+        {
+          "id": "100-1",
+          "parent": {
+            "id": "1231231231-222",
+            "type": "user.loggedout"
+          },
+          "type": "child.user.loggedout"
+        },
+        {
+          "id": "100-2",
+          "parent": {
+            "id": "1231231231-12312312-12-3123123",
+            "type": "user.loggedin"
+          },
+          "type": "child.user.loggedin"
+        }
+      ],
+      "totalPages": 3,
+      "totalItems": 6
+    }
 
     GET http://localhost:8080/vessl-webapp/rest/events?pageSize=2&page=1
-    {"items":[{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},{"id":"1231231231-222","type":"user.loggedout"}],"totalPages":3,"totalItems":6}
+    {
+      "items": [
+        {
+          "id": "1231231231-12312312-12-3123123",
+          "type": "user.loggedin"
+        },
+        {
+          "id": "1231231231-222",
+          "type": "user.loggedout"
+        }
+      ],
+      "totalPages": 3,
+      "totalItems": 6
+    }
 
 Query support cascades into the course grained persistence (DAO) layer for the list functionality. this uses a $name=$value notation,
 
     GET http://localhost:8080/vessl-webapp/rest/events?type=user.loggedin
-    {"items":[{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"}],"totalPages":1,"totalItems":1}
+    {
+      "items": [
+        {
+          "id": "1231231231-12312312-12-3123123",
+          "type": "user.loggedin"
+        }
+      ],
+      "totalPages": 1,
+      "totalItems": 1
+    }
 
 Like and other operators besides equals are also supported (here we look for all events that have a type that starts with "user."")
 
     GET http://localhost:8080/vessl-webapp/rest/events?type=user.%&typeOperation=like
-    {"items":[{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},{"id":"1231231231-222","type":"user.loggedout"},{"id":"1231231231-223","type":"user.loggedout"},{"id":"1231231231-224","type":"user.loggedout"}],"totalPages":1,"totalItems":4}
-
+    {
+      "items": [
+        {
+          "id": "1231231231-12312312-12-3123123",
+          "type": "user.loggedin"
+        },
+        {
+          "id": "1231231231-222",
+          "type": "user.loggedout"
+        },
+        {
+          "id": "1231231231-223",
+          "type": "user.loggedout"
+        },
+        {
+          "id": "1231231231-224",
+          "type": "user.loggedout"
+        }
+      ],
+      "totalPages": 1,
+      "totalItems": 4
+    }
 Using joined properties in the criteria is also supported for join attributes defined via Dao.addQueryJoinSupport()
 
     GET http://localhost:8080/vessl-webapp/rest/events?user.username=telrod
-    {"items":[{"id":"1231231231-223","user":{"id":2,"createdAt":"1988-01-01T00:00:00.000+0000","latitude":33.801078,"loginCount":1,"longitude":-84.436287,"username":"telrod","userType":"simple"},"type":"user.loggedout"},{"id":"1231231231-224","user":{"id":2,"createdAt":"1988-01-01T00:00:00.000+0000","latitude":33.801078,"loginCount":1,"longitude":-84.436287,"username":"telrod","userType":"simple"},"type":"user.loggedout"}],"totalPages":1,"totalItems":2}
-
+    {
+      "items": [
+        {
+          "id": "1231231231-223",
+          "user": {
+            "id": 2,
+            "createdAt": "1988-01-01T00:00:00.000+0000",
+            "latitude": 33.801078,
+            "loginCount": 1,
+            "longitude": -84.436287,
+            "username": "telrod",
+            "userType": "simple"
+          },
+          "type": "user.loggedout"
+        },
+        {
+          "id": "1231231231-224",
+          "user": {
+            "id": 2,
+            "createdAt": "1988-01-01T00:00:00.000+0000",
+            "latitude": 33.801078,
+            "loginCount": 1,
+            "longitude": -84.436287,
+            "username": "telrod",
+            "userType": "simple"
+          },
+          "type": "user.loggedout"
+        }
+      ],
+      "totalPages": 1,
+      "totalItems": 2
+    }
 
     GET http://localhost:8080/vessl-webapp/rest/events?user.username=azuercher
-    {"items":[{"id":"1231231231-222","user":{"id":1,"createdAt":"2012-01-01T00:00:00.000+0000","latitude":33.801078,"loginCount":1,"longitude":-84.436287,"username":"azuercher","userType":"admin"},"type":"user.loggedout"}],"totalPages":1,"totalItems":1}
-
+    {
+      "items": [
+        {
+          "id": "1231231231-222",
+          "user": {
+            "id": 1,
+            "createdAt": "2012-01-01T00:00:00.000+0000",
+            "latitude": 33.801078,
+            "loginCount": 1,
+            "longitude": -84.436287,
+            "username": "azuercher",
+            "userType": "admin"
+          },
+          "type": "user.loggedout"
+        }
+      ],
+      "totalPages": 1,
+      "totalItems": 1
+    }
 
 Sorting is also supported (with multiple attributes)
 
     GET http://localhost:8080/vessl-webapp/rest/events?sortBys=type:true
-    {"items":[{"id":"100-2","parent":{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},"type":"child.user.loggedin"},{"id":"100-1","parent":{"id":"1231231231-222","type":"user.loggedout"},"type":"child.user.loggedout"},{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},{"id":"1231231231-222","type":"user.loggedout"},{"id":"1231231231-223","type":"user.loggedout"},{"id":"1231231231-224","type":"user.loggedout"}],"totalPages":1,"totalItems":6}
-
+    {
+      "items": [
+        {
+          "id": "100-2",
+          "parent": {
+            "id": "1231231231-12312312-12-3123123",
+            "type": "user.loggedin"
+          },
+          "type": "child.user.loggedin"
+        },
+        {
+          "id": "100-1",
+          "parent": {
+            "id": "1231231231-222",
+            "type": "user.loggedout"
+          },
+          "type": "child.user.loggedout"
+        },
+        {
+          "id": "1231231231-12312312-12-3123123",
+          "type": "user.loggedin"
+        },
+        {
+          "id": "1231231231-222",
+          "type": "user.loggedout"
+        },
+        {
+          "id": "1231231231-223",
+          "type": "user.loggedout"
+        },
+        {
+          "id": "1231231231-224",
+          "type": "user.loggedout"
+        }
+      ],
+      "totalPages": 1,
+      "totalItems": 6
+    }
 As well as descending sorting and multple attributes
 
     GET http://localhost:8080/vessl-webapp/rest/events?sortBys=type:true,id:false
-    {"items":[{"id":"100-2","parent":{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},"type":"child.user.loggedin"},{"id":"100-1","parent":{"id":"1231231231-222","type":"user.loggedout"},"type":"child.user.loggedout"},{"id":"1231231231-12312312-12-3123123","type":"user.loggedin"},{"id":"1231231231-224","type":"user.loggedout"},{"id":"1231231231-223","type":"user.loggedout"},{"id":"1231231231-222","type":"user.loggedout"}],"totalPages":1,"totalItems":6}
-
+    {
+      "items": [
+        {
+          "id": "100-2",
+          "parent": {
+            "id": "1231231231-12312312-12-3123123",
+            "type": "user.loggedin"
+          },
+          "type": "child.user.loggedin"
+        },
+        {
+          "id": "100-1",
+          "parent": {
+            "id": "1231231231-222",
+            "type": "user.loggedout"
+          },
+          "type": "child.user.loggedout"
+        },
+        {
+          "id": "1231231231-12312312-12-3123123",
+          "type": "user.loggedin"
+        },
+        {
+          "id": "1231231231-224",
+          "type": "user.loggedout"
+        },
+        {
+          "id": "1231231231-223",
+          "type": "user.loggedout"
+        },
+        {
+          "id": "1231231231-222",
+          "type": "user.loggedout"
+        }
+      ],
+      "totalPages": 1,
+      "totalItems": 6
+    }
 
 ## Integration Tests
 
