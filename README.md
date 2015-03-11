@@ -84,7 +84,8 @@ Examples of using serializers to return full objects at render time - see [Event
 
     GET http://localhost:8080/vessl-webapp/rest/events
 
-    RESPONSE
+RESPONSE
+
     {
       "items": [
         {
@@ -129,7 +130,8 @@ Resource validation logic for the persistence layer - see [EventValidator](https
       "latitude": 33.801078
     }
 
-    RESPONSE
+RESPONSE
+
     {
       "errors": [
         {
@@ -164,7 +166,8 @@ Paging is built into the framework for the list functionality (page index starts
 
     GET http://localhost:8080/vessl-webapp/rest/events?pageSize=2&page=0
 
-    RESPONSE
+RESPONSE
+
     {
       "items": [
         {
@@ -190,7 +193,8 @@ Paging is built into the framework for the list functionality (page index starts
 
     GET http://localhost:8080/vessl-webapp/rest/events?pageSize=2&page=1
 
-    RESPONSE
+RESPONSE
+
     {
       "items": [
         {
@@ -209,6 +213,9 @@ Paging is built into the framework for the list functionality (page index starts
 Query support cascades into the course grained persistence (DAO) layer for the list functionality. this uses a $name=$value notation,
 
     GET http://localhost:8080/vessl-webapp/rest/events?type=user.loggedin
+
+RESPONSE
+
     {
       "items": [
         {
@@ -224,7 +231,8 @@ Like and other operators besides equals are also supported (here we look for all
 
     GET http://localhost:8080/vessl-webapp/rest/events?type=user.%&typeOperation=like
 
-        RESPONSE
+RESPONSE
+
     {
       "items": [
         {
@@ -251,7 +259,8 @@ Using joined properties in the criteria is also supported for join attributes de
 
     GET http://localhost:8080/vessl-webapp/rest/events?user.username=telrod
 
-    RESPONSE
+RESPONSE
+
     {
       "items": [
         {
@@ -287,7 +296,8 @@ Using joined properties in the criteria is also supported for join attributes de
 
     GET http://localhost:8080/vessl-webapp/rest/events?user.username=azuercher
 
-    RESPONSE
+RESPONSE
+
     {
       "items": [
         {
@@ -312,7 +322,8 @@ Sorting is also supported (with multiple attributes)
 
     GET http://localhost:8080/vessl-webapp/rest/events?sortBys=type:true
 
-    RESPONSE
+RESPONSE
+
     {
       "items": [
         {
@@ -355,7 +366,8 @@ As well as descending sorting and multple attributes
 
     GET http://localhost:8080/vessl-webapp/rest/events?sortBys=type:true,id:false
 
-    RESPONSE
+RESPONSE
+
     {
       "items": [
         {
