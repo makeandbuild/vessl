@@ -13,8 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
-import com.makeandbuild.vessl.fixture.Fixture;
-import com.makeandbuild.vessl.fixture.ResourceEntityLoaderImpl;
+import com.makeandbuild.vessl.persistence.Event;
 import com.makeandbuild.vessl.persistence.EventDao;
 import com.makeandbuild.vessl.persistence.User;
 import com.makeandbuild.vessl.persistence.UserDao;
@@ -59,6 +58,8 @@ public class ValidatedFixture_IT extends AbstractTestNGSpringContextTests {
     }
     @Test(enabled=true)
     public void testResourceSingularly() throws IOException, ClassNotFoundException{
+        validatedFixture.purge(Event.class, null);
+        
         validatedFixture.purge(User.class, null);
         assertTrue(!userDao.exists(1L));
         assertTrue(!userDao.exists(2L));
@@ -73,6 +74,8 @@ public class ValidatedFixture_IT extends AbstractTestNGSpringContextTests {
     }
     @Test(enabled=true)
     public void testResourceSingularlyInvalid() throws IOException, ClassNotFoundException{
+        validatedFixture.purge(Event.class, null);
+        
         validatedFixture.purge(User.class, null);
         assertTrue(!userDao.exists(1L));
         assertTrue(!userDao.exists(2L));
@@ -86,6 +89,8 @@ public class ValidatedFixture_IT extends AbstractTestNGSpringContextTests {
     }
     @Test(enabled=true)
     public void testEntityClassSingularly() throws IOException, ClassNotFoundException{
+        validatedFixture.purge(Event.class, null);
+        
         validatedFixture.purge(User.class, null);
         assertTrue(!userDao.exists(1L));
         assertTrue(!userDao.exists(2L));

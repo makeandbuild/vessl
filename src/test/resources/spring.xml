@@ -50,10 +50,10 @@
 		<property name="entityManagers">
 			<list>
 				<bean class="com.makeandbuild.vessl.fixture.DaoEntityManagerImpl">
-					<constructor-arg ref="userDao"/>
+					<constructor-arg ref="eventDao"/>
 				</bean>
 				<bean class="com.makeandbuild.vessl.fixture.DaoEntityManagerImpl">
-					<constructor-arg ref="eventDao"/>
+					<constructor-arg ref="userDao"/>
 				</bean>
 				<bean class="com.makeandbuild.vessl.fixture.DaoEntityManagerImpl">
 					<constructor-arg ref="carDao"/>
@@ -76,6 +76,9 @@
 		<property name="entityManagers">
 			<list>
 				<bean class="com.makeandbuild.vessl.fixture.ValidatedDaoEntityManagerImpl">
+					<constructor-arg ref="eventDao"/>
+				</bean>
+				<bean class="com.makeandbuild.vessl.fixture.ValidatedDaoEntityManagerImpl">
 					<constructor-arg ref="userDao"/>
 					<constructor-arg>
 						<null />
@@ -86,9 +89,6 @@
 							<value>nondata</value>
 						</list>
 					</constructor-arg>
-				</bean>
-				<bean class="com.makeandbuild.vessl.fixture.ValidatedDaoEntityManagerImpl">
-					<constructor-arg ref="eventDao"/>
 				</bean>
 			</list>
 		</property>
