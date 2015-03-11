@@ -28,11 +28,6 @@ import com.makeandbuild.vessl.validation.ValidationProxyManager;
 import com.makeandbuild.vessl.validation.exception.BeanValidationException;
 import com.makeandbuild.vessl.validation.validators.NonDataValidator;
 
-/**
- * User: Jeremy Dyer
- * Date: 3/6/14
- * Time: 5:07 PM
- */
 @Test(groups = {"function"})
 @ContextConfiguration(locations={"classpath*:spring.xml"})
 public class ValidationProxyManager_IT
@@ -43,7 +38,7 @@ public class ValidationProxyManager_IT
 
     @Autowired
     UserDao userDao;
-    
+
     @Autowired
     NonDataValidator nonDataValidator;
 

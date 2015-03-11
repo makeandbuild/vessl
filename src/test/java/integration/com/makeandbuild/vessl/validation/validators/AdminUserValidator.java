@@ -7,16 +7,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-/**
- * Provides lower level validation for the AdminUser than can be presented in the JSR-303 annotations
- * that decorate the AdminUser class. Example connecting to DB to determine if AdminUser permissions
- * have been invoked for this user or not, or connecting to a microcontroller device and make sure the
- * admin isn't drunk logging into the production environment, etc.
- *
- * User: Jeremy Dyer
- * Date: 3/7/14
- * Time: 8:55 AM
- */
 public class AdminUserValidator
         implements Validator {
 

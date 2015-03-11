@@ -12,13 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.makeandbuild.vessl.persistence.Dao;
 
-/**
- * Proxy to examine the Security context and ensure that
- *
- * User: Jeremy Dyer
- * Date: 3/7/14
- * Time: 1:42 PM
- */
+
 @SuppressWarnings({ "rawtypes" })
 public class SecurityValidationProxy
         implements InvocationHandler {

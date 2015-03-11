@@ -20,15 +20,6 @@ import com.makeandbuild.vessl.persistence.jdbc.BaseDao;
 import com.makeandbuild.vessl.validation.ValidationType;
 import com.makeandbuild.vessl.validation.exception.BeanValidationException;
 
-/**
- * Creates a dynamic proxy for a DAO that extends BaseDao. That dynamic proxy will in turn
- * validate any beans that passed to any BaseDao methods which the dao itself supports based
- * on it entity class.
- *
- * User: Jeremy Dyer
- * Date: 3/6/14
- * Time: 4:54 PM
- */
 @SuppressWarnings({ "unused", "rawtypes" })
 public class BeanValidationProxy
         implements InvocationHandler {

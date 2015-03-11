@@ -8,13 +8,6 @@ import org.springframework.validation.Validator;
 
 import com.makeandbuild.vessl.persistence.User;
 
-/**
- * Provides more low level validation that can occur on the User bean.
- *
- * User: Jeremy Dyer
- * Date: 3/6/14
- * Time: 6:01 PM
- */
 public class UserValidator
     implements Validator {
 

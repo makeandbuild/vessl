@@ -35,7 +35,7 @@ public class AdminUserDao_IT extends AbstractTestNGSpringContextTests{
         user.setLatitude(33.801078);
         user.setLongitude(-84.436287);
         user.setLoginCount(1);
-        user.setUsername("azuercher");
+        user.setUsername("azuercher888");
         user.setUserType(UserType.simple);
         user.setApiKey("TestKeys");
         
@@ -46,7 +46,7 @@ public class AdminUserDao_IT extends AbstractTestNGSpringContextTests{
         user.setUserType(UserType.admin);
         user = (AdminUser) userDao.save(user);
         
-        List<AdminUser> adminUserList = adminUserDao.findAdminUserByUserName("azuercher");
+        List<AdminUser> adminUserList = adminUserDao.findAdminUserByUserName("azuercher888");
         assertNotNull(adminUserList);
         assertTrue(adminUserList.size()>0);
         

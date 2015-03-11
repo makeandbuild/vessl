@@ -10,13 +10,6 @@ import javax.validation.ValidatorFactory;
 
 import java.util.Set;
 
-/**
- * JSR-303 spec bean validator. validates a bean based on the JSR-303 annotations that are present in the bean.
- *
- * User: Jeremy Dyer
- * Date: 3/7/14
- * Time: 11:19 AM
- */
 public class JSR303BeanValidator
     implements org.springframework.validation.Validator, InitializingBean {
 

@@ -29,12 +29,7 @@ import com.makeandbuild.vessl.rest.serializers.ObjectNotFoundExceptionSerializer
 import com.makeandbuild.vessl.rest.serializers.RuntimeExceptionSerializer;
 import com.makeandbuild.vessl.validation.exception.BeanValidationException;
 
-/**
- * Base class for restful web service endpoint classes.  Will provide standard helper methods for configuration and response builders.
- *
- * User: telrod
- * Date: 1/25/14
- */
+
 public class ResourceBase {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     private ObjectMapper objectMapper = null;
@@ -51,16 +46,10 @@ public class ResourceBase {
             addModuleSerializers(testModule);
             objectMapper.registerModule(testModule);
         }
-        return objectMapper;        
+        return objectMapper;
     }
     protected void addModuleSerializers(SimpleModule testModule){}
 
-    /**
-     * To be used to build OK response with passed json as the response payload.  Will return response code of 200 unless
-     * jsonObject is null, then will call buildExceptionResponse().
-     * @param jsonObject
-     * @return will return response code of 200 or 500 if json object is null.
-     */
     protected Response buildOkResponse(JSONObject jsonObject) {
         if(jsonObject != null) {
             // the 2 parameter to toString() method causes pretty print
@@ -76,31 +65,11 @@ public class ResourceBase {
         }
     }
 
-    /**
-     * To be used to build common response back to the client making restful request.  Will include the exception message along with the message passed.
-     * The status to respond with can also be specified.
-     * @param status response status to provide to caller
-     * @param ex exception thrown when processing request
-     * @param message end user message to be provided
-     * @param devMessage message meant for developer
-     * @param code application specific code
-     * @return
-     */
     protected Response buildExceptionResponse(Response.Status status, Throwable ex, String message, String devMessage, int code) {
         return buildExceptionResponse(status, ex, null, message, devMessage, code);
     }
 
-    /**
-     * To be used to build common response back to the client making restful request.  Will include the exception message along with the message passed.
-     * The status to respond with can also be specified.
-     * @param status response status to provide to caller
-     * @param ex exception thrown when processing request
-     * @param propertyName name of property that caused error or related to cause
-     * @param message end user message to be provided
-     * @param devMessage message meant for developer
-     * @param code application specific code
-     * @return
-     */
+
     protected Response buildExceptionResponse(Response.Status status, Throwable ex, String propertyName, String message, String devMessage, int code) {
         try {
             return Response.status(status).entity(new ObjectMapper().writeValueAsString(failure(status.getStatusCode(), propertyName, message, ex, devMessage, code))).build();
@@ -108,7 +77,7 @@ public class ResourceBase {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
-    
+
     protected Response buildExceptionResponse(Throwable ex, String message) {
         return buildExceptionResponse(Response.Status.INTERNAL_SERVER_ERROR, ex, message);
     }
@@ -134,7 +103,7 @@ public class ResourceBase {
 
         result.put("status", statusCode);
         if (code != null) {
-            result.put("code", code);            
+            result.put("code", code);
         }
         if(propertyName != null) {
             result.put("property", propertyName);

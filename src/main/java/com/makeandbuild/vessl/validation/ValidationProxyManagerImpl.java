@@ -17,13 +17,6 @@ import com.makeandbuild.vessl.persistence.jdbc.BaseDao;
 import com.makeandbuild.vessl.validation.proxy.BeanValidationProxy;
 import com.makeandbuild.vessl.validation.proxy.SecurityValidationProxy;
 
-/**
- * ValidationProxyManager implementation
- *
- * User: Jeremy Dyer
- * Date: 3/6/14
- * Time: 4:59 PM
- */
 @SuppressWarnings({ "unused", "rawtypes" })
 public class ValidationProxyManagerImpl
     implements ValidationProxyManager {
