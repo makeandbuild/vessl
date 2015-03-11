@@ -27,7 +27,7 @@ The BaseDao has a lot of built in functionality including
 * find by id
 * exists finders
 * delete helpers
-* supports domain model specialization inheritance  - see the [@Specialize](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/Specialize.java) annotation and the [UserDao_IT.testSpecialized()](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java) test
+* supports domain model specialization inheritance  - see the [@Specialize](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/Specialize.java) annotation implmented in [User](https://github.com/makeandbuild/vessl/blob/master/src/test/java/integration/com/makeandbuild/vessl/persistence/User.java) and tested in [UserDao_IT.testSpecialized()](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java)
 * join logic for advanced criteria support in [BaseDaoImpl.addQueryJoinSupport()](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDaoImpl.java) which you call explicity in the constructor of your specialized Daos see see [EventDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/EventDaoImpl.java)
 * cascade deletes for dao based dependencies - simply by annotating your Daos with [@CascadeDelete](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/CascadeDelete.java) see [UserDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDaoImpl.java)
 
