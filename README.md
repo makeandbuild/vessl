@@ -41,6 +41,29 @@ The BaseDao has a lot of built in functionality including
 * join logic for advanced criteria support in [BaseDaoImpl.addQueryJoinSupport()](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDaoImpl.java) which you call explicity in the constructor of your specialized Daos see see [EventDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/EventDaoImpl.java)
 * cascade deletes for dao based dependencies - simply by annotating your Daos with [@CascadeDelete](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/CascadeDelete.java) see [UserDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDaoImpl.java)
 
+These are the minimal things you'll have to do:
+* define your model class - [User](https://github.com/makeandbuild/vessl/blob/master/src/test/java/integration/com/makeandbuild/vessl/persistence/User.java)
+* define your dao interface - [UserDao](https://github.com/makeandbuild/vessl/blob/master/src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao.java)
+* define your dao implementations - [UserDaoImpl](https://github.com/makeandbuild/vessl/blob/master/src/test/java/integration/com/makeandbuild/vessl/persistence/UserDaoImpl.java)
+* define your dao bean in your [spring.xml](./src/test/resources/spring.xml) along with your dataSource and txManager
+
+## Couch Based Persistence
+
+As we evolved the JDBC side of our persistence implementation, we also found that the couch side could also be implemented in an abstract way that could make use of many of the things that the JDBC implementation did, in particular:
+* criteria based finders
+* paging
+* find by id
+* exists finders
+* delete helpers
+
+The contract for this is very course grained and maps to jackson ArrayNode and ObjectNode data types - the overhead to support a fine grained interface goes a bit against the NOSQL approach anyway.  The steps are a bit simpler for Couch than for JDBC because we've moved to a course grained model class:
+* you dont have to define a Dao interface unless you want to augment the dao services
+* you dont need to define a model class
+* you dont need to define domain mappers
+
+So really, all you have to to do is define a spring bean that extends [CouchDbJacksonImpl](./src/main/java/com/makeandbuild/vessl/persistence/couch/CouchDbJacksonImpl.java) in your [spring.xml](./src/test/resources/spring.xml) (ex: carDao)
+
+
 ## Fixtures
 
 You can also make use of the fixture functionality to load test data from class resources.  The solution seperates two seperate conceptual elements:
