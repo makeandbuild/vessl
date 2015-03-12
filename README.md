@@ -9,7 +9,7 @@ Welcome to the Make & Build vessl framework which provides application developer
 
 Make & Build vessl is licensed under the Apache Public License, Version 2.0 (see [LICENSE](./LICENSE))
 
-Please see the sibling project for an example web app https://github.com/makeandbuild/vessl-webapp
+Please see the sibling [vessl-webapp](https://github.com/makeandbuild/vessl-webapp) project for an example web app
 
 ## Why we created vessl
 
