@@ -506,3 +506,17 @@ Now you can run the function test
      mvn integration-test -Pft
 
 For a bigger example please see the sibling web app project https://github.com/makeandbuild/vessl-webapp
+
+## Including in your project
+
+vessl is distributed in maven central, you can find the latest versions there.  The current gradle entry (from [build.gradle](https://github.com/makeandbuild/vessl-webapp/blob/master/build.gradle)):
+
+    compile 'com.makeandbuild:vessl:1.0.52'
+
+and here for those of you that still use maven pom files for your projects:
+
+    <dependency>
+        <groupId>com.makeandbuild</groupId>
+        <artifactId>vessl</artifactId>
+        <version>1.0.52</version>
+    </dependency>
