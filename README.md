@@ -105,7 +105,7 @@ To get a simple fixture working create your model JSON file like [com.makeandbui
         }
     ]
 
-Define your fixture bean in [spring.xml](src/test/resources/spring.xml).  Its important to order your entityManager by dependent to least dependent.  Conversly order your entityLoaders from least dependent to most dependent.
+Define your fixture bean in [spring.xml](src/test/resources/spring.xml).  Its important to order your entityManager from most dependent to least dependent.  Conversly order your entityLoaders from least dependent to most dependent.
 
     <bean class="com.makeandbuild.vessl.fixture.FixtureImpl" id="fixture" scope="singleton">
         <property name="entityLoaders">
