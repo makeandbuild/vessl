@@ -188,6 +188,32 @@ If you look at [EventResource](https://github.com/makeandbuild/vessl-webapp/blob
 * PUT {resource}/#id
 * POST {resource}
 
+Here is an example in Here is a sample in [UserResource](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/UserResource.java)
+
+    @Path("/users")
+    public class UserResource extends ResourceSerializedBase<User, Long> {
+        @Autowired
+        UserDao userDao;
+
+        public UserResource() {
+            super(User.class);
+        }
+
+        @Override
+        protected BaseDao<User, Long> getDao() {
+            return userDao;
+        }
+
+        @Autowired
+        UserSerializer userSerializer;
+
+        @Override
+        protected void addModuleSerializers(SimpleModule testModule){
+            testModule.addSerializer(User.class, userSerializer);
+        }
+    }
+
+
 NOTE that POST and PUT expect shallow objects.  GET methods can support rendering nested/full objects, if the developer implements the serializers in the REST resource - see [EventResource](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/EventResource.java) and [EventSerializer](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/serializers/EventSerializer.java)
 
     GET http://localhost:8080/vessl-webapp/rest/events
