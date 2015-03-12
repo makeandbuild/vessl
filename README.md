@@ -182,7 +182,7 @@ Here is a sample in [UserValidator](src/test/java//integration/com/makeandbuild/
 
 # REST resources
 
-There is a lot built into a [ResourceSerializedBase](./src/main/java/com/makeandbuild/vessl/rest/ResourceSerializedBase.java)) class including:
+There is a lot built into a [ResourceSerializedBase](./src/main/java/com/makeandbuild/vessl/rest/ResourceSerializedBase.java) class including:
 * GET {resource}/#id
 * GET {resource}
 * PUT {resource}/#id
