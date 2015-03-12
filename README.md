@@ -188,7 +188,7 @@ There is a lot built into a [ResourceSerializedBase](./src/main/java/com/makeand
 * PUT {resource}/#id
 * POST {resource}
 
-Here is an example in Here is a sample in [EventResource](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/EventResource.java)
+Here is an example in [EventResource](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/EventResource.java)
 
     @Path("/events")
     public class EventResource extends ResourceSerializedBase<Event,String> {
