@@ -161,7 +161,7 @@ against the same object. This is controlled by the supports(...) method of your 
 validation error is encountered the proxy dao instance will throw a RuntimeException ([BeanValidationException](./src/main/java/com/makeandbuild/vessl/validation/exception/BeanValidationException.java)) that
 contains a list of ObjectError objects defining the validation errors that occured.
 
-Here is the a sample [UserValidator](src/test/java//integration/com/makeandbuild/vessl/validation/validators/UserValidator.java)
+Here is a sample in [UserValidator](src/test/java//integration/com/makeandbuild/vessl/validation/validators/UserValidator.java)
 
     public class UserValidator implements Validator {
         @Override
