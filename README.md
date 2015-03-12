@@ -63,7 +63,8 @@ The contract for this is very course grained and maps to jackson ArrayNode and O
 
 So really, all you have to to do is define a spring bean that extends [CouchDbJacksonImpl](./src/main/java/com/makeandbuild/vessl/persistence/couch/CouchDbJacksonImpl.java) in your [spring.xml](./src/test/resources/spring.xml) (ex: carDao)
 
-    <bean class="com.makeandbuild.vessl.persistence.couch.CouchDbJacksonImpl" id="carDao" init-method="init" scope="singleton">
+    <bean class="com.makeandbuild.vessl.persistence.couch.CouchDbJacksonImpl"
+            id="carDao" init-method="init" scope="singleton">
         <property name="template" ref="restTemplate"/>
         <property name="baseUrl" value="http://127.0.0.1:5984"/>
         <property name="databaseName" value="cars"/>
