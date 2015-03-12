@@ -37,9 +37,9 @@ The BaseDao has a lot of built in functionality including
 * find by id
 * exists finders
 * delete helpers
-* supports domain model specialization inheritance  - see the [@Specialize](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/Specialize.java) annotation implmented in [User](https://github.com/makeandbuild/vessl/blob/master/src/test/java/integration/com/makeandbuild/vessl/persistence/User.java) and tested in [UserDao_IT.testSpecialized()](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java)
-* join logic for advanced criteria support in [BaseDaoImpl.addQueryJoinSupport()](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDaoImpl.java) which you call explicity in the constructor of your specialized Daos see see [EventDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/EventDaoImpl.java)
-* cascade deletes for dao based dependencies - simply by annotating your Daos with [@CascadeDelete](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/CascadeDelete.java) see [UserDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDaoImpl.java)
+* specialization - domain model inheritance, see the [@Specialize](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/Specialize.java) annotation implmented in [User](https://github.com/makeandbuild/vessl/blob/master/src/test/java/integration/com/makeandbuild/vessl/persistence/User.java) and tested in [UserDao_IT.testSpecialized()](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java)
+* joined criteria - join logic for advanced criteria support in [BaseDaoImpl.addQueryJoinSupport()](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDaoImpl.java) which you call explicity in the constructor of your specialized Daos see see [EventDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/EventDaoImpl.java)
+* cascade deletes - for dao based dependencies simply by annotating your Daos with [@CascadeDelete](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/CascadeDelete.java) see [UserDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDaoImpl.java)
 
 These are the minimal things you'll have to do:
 * define your model class - [User](https://github.com/makeandbuild/vessl/blob/master/src/test/java/integration/com/makeandbuild/vessl/persistence/User.java)
@@ -82,7 +82,7 @@ You can also make use of the fixture functionality to load test data from class 
 
 Fixtures have been implemented to support full set loading of the fixture data into memory which is great for small data sets.  This however, becomes an issue when you want to load extremely large data sets which we refer to as "Mega Fixures".  To support this, we wanted to create a iterated loader that allows you to consume a stream and work with an active entity to persist it atomically.  The entityManager's really already support this, so doing so just required us to modify the loader implementation.
 
-To get a simple fixture working create your {modelClass}.json files like [src/test/resources/fixtures/com.makeandbuild.vessl.persistence.User.json](./src/test/resources/fixtures/com.makeandbuild.vessl.persistence.User.json)
+To get a simple fixture working create your {modelClass}.json files like [com.makeandbuild.vessl.persistence.User.json](./src/test/resources/fixtures/com.makeandbuild.vessl.persistence.User.json)
 
     [
         {
@@ -105,7 +105,7 @@ To get a simple fixture working create your {modelClass}.json files like [src/te
         }
     ]
 
-Define your fixture bean in [src/test/resources/spring.xml](src/test/resources/spring.xml).  Its important to order your entityManager by dependent to least dependent.  Conversly order your entityLoaders from least dependent to most dependent.
+Define your fixture bean in [spring.xml](src/test/resources/spring.xml).  Its important to order your entityManager by dependent to least dependent.  Conversly order your entityLoaders from least dependent to most dependent.
 
     <bean class="com.makeandbuild.vessl.fixture.FixtureImpl" id="fixture" scope="singleton">
         <property name="entityLoaders">
