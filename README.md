@@ -182,7 +182,7 @@ Here is a sample in [UserValidator](src/test/java//integration/com/makeandbuild/
 
 # REST resources
 
-If you look at [EventResource](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/EventResource.java) you'll see that there is a lot built into a class including:
+There is a lot built into a [ResourceSerializedBase](./src/main/java/com/makeandbuild/vessl/rest/ResourceSerializedBase.java)) class including:
 * GET {resource}/#id
 * GET {resource}
 * PUT {resource}/#id
