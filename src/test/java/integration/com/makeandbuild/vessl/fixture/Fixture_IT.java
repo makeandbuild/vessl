@@ -78,7 +78,7 @@ public class Fixture_IT extends AbstractTestNGSpringContextTests {
         assertTrue(userDao.exists(2L));
     }
     @Test
-    public void tesDao() throws IOException, ClassNotFoundException{
+    public void testCouchDao() throws IOException, ClassNotFoundException{
         fixture.purge(ObjectNode.class, "car");
         fixture.load(ObjectNode.class, "car");
         ObjectNode car = carDao.find(new CouchId("123123123"));
