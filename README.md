@@ -144,7 +144,7 @@ Fixtures have been implemented to support full set loading of the fixture data i
         <property name="entityClass" value="com.makeandbuild.vessl.persistence.User"/>
     </bean>
 
-The mega fxitures are defined in [resources/fixturesgen/com.makeandbuild.vessl.persistence.User.json](./src/test/resources/fixturesgen/com.makeandbuild.vessl.persistence.User.json).  To regenerate them again:
+The mega fixtures are defined in [resources/fixturesgen/com.makeandbuild.vessl.persistence.User.json](./src/test/resources/fixturesgen/com.makeandbuild.vessl.persistence.User.json).  To regenerate them again:
 
     cd src/fixturesgen
     npm install
