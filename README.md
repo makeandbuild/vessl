@@ -24,28 +24,29 @@ This project is the accumlation of several different aspects that we enjoyed fro
 
 ## JDBC Based Persistence
 
-This framework is an extension of the spring JDBC implementation providing the following services:
-* makes use of JPA annotations in your models - see [User](./src/test/java/integration/com/makeandbuild/vessl/persistence/User.java)
- as an example
-* can use the simplified [ReflectionBasedJdbcMapper](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/ReflectionBasedJdbcMapper.java) to easily create your DAOs.  This supports all sorts of types including Date, Integer, Long, Enums (as string column mappings), String - see [UserDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDaoImpl.java) as an example
-* if you dont want the overhead of Reflection you can create those implementations as well by extending [BaseDaoImpl](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDaoImpl.java)
-
-The BaseDao has a lot of built in functionality including
-* criteria based finders
+This framework is an extension of the spring JDBC implementation providing the following baseline services
+* criteria based finders, find by ID, and joined criteria as well
 * paging
 * sorting
-* find by id
 * exists finders
 * delete helpers
-* specialization - domain model inheritance, see the [@Specialize](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/Specialize.java) annotation implmented in [User](https://github.com/makeandbuild/vessl/blob/master/src/test/java/integration/com/makeandbuild/vessl/persistence/User.java) and tested in [UserDao_IT.testSpecialized()](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java)
-* joined criteria - join logic for advanced criteria support in [BaseDaoImpl.addQueryJoinSupport()](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDaoImpl.java) which you call explicity in the constructor of your specialized Daos see see [EventDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/EventDaoImpl.java)
-* cascade deletes - for dao based dependencies simply by annotating your Daos with [@CascadeDelete](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/CascadeDelete.java) see [UserDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDaoImpl.java)
+* specialization for domain model inheritance
+* cascade deletes
 
 These are the minimal things you'll have to do:
 * define your model class - [User](https://github.com/makeandbuild/vessl/blob/master/src/test/java/integration/com/makeandbuild/vessl/persistence/User.java)
 * define your dao interface - [UserDao](https://github.com/makeandbuild/vessl/blob/master/src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao.java)
 * define your dao implementations - [UserDaoImpl](https://github.com/makeandbuild/vessl/blob/master/src/test/java/integration/com/makeandbuild/vessl/persistence/UserDaoImpl.java)
 * define your dao bean in your [spring.xml](./src/test/resources/spring.xml) along with your dataSource and txManager
+
+Additionally:
+* makes use of JPA annotations in your models - see [User](./src/test/java/integration/com/makeandbuild/vessl/persistence/User.java)
+ as an example
+* can use the simplified [ReflectionBasedJdbcMapper](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/ReflectionBasedJdbcMapper.java) to easily create your DAOs.  This supports all sorts of types including Date, Integer, Long, Enums (as string column mappings), String - see [UserDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDaoImpl.java) as an example
+* if you dont want the overhead of Reflection you can create those implementations as well by extending [BaseDaoImpl](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDaoImpl.java)
+* specialization - domain model inheritance, see the [@Specialize](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/Specialize.java) annotation implmented in [User](https://github.com/makeandbuild/vessl/blob/master/src/test/java/integration/com/makeandbuild/vessl/persistence/User.java) and tested in [UserDao_IT.testSpecialized()](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDao_IT.java)
+* joined criteria - join logic for advanced criteria support in [BaseDaoImpl.addQueryJoinSupport()](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDaoImpl.java) which you call explicity in the constructor of your specialized Daos see see [EventDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/EventDaoImpl.java)
+* cascade deletes - for dao based dependencies simply by annotating your Daos with [@CascadeDelete](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/CascadeDelete.java) see [UserDaoImpl](./src/test/java/integration/com/makeandbuild/vessl/persistence/UserDaoImpl.java)
 
 ## Couch Based Persistence
 
