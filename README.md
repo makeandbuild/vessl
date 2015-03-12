@@ -150,7 +150,7 @@ The mega fixtures are defined in [resources/fixturesgen/com.makeandbuild.vessl.p
     npm install
     ./load.sh
 
-[vess-webapp](https://github.com/makeandbuild/vessl-webapp)  has some nice utility gradle tasks to suppor this
+[vess-webapp](https://github.com/makeandbuild/vessl-webapp)  has some nice utility gradle tasks to suppor this and [FixtureUtil.testMega()](./src/test/java/integration/com/makeandbuild/vessl/fixture/Fixture_IT.java) provides some local coverage
 
 ## Validation
 
