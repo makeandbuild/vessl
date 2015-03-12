@@ -146,6 +146,12 @@ If you want to use megaFixtures, make sure that your entityLoader is defined as 
         <property name="entityClass" value="com.makeandbuild.vessl.persistence.User"/>
     </bean>
 
+The mega fxitures are defined in [resources/fixturesgen/com.makeandbuild.vessl.persistence.User.json](./src/test/resources/fixturesgen/com.makeandbuild.vessl.persistence.User.json).  To regenerate them again:
+
+    cd src/fixturesgen
+    npm install
+    ./load.sh
+
 ## Validation
 
 Validation is supported via JSR-303 annotations and custom spring Validator instances you define. Simply defining an
