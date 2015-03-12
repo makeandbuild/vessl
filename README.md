@@ -18,6 +18,8 @@ About 3 years ago we were working on a not entirely small java project that was 
 * REST endpoints
 * validation logic
 
+That problem faced another issue as well - how to build a set of assets to be used for deployment and still be able to have environmentally specific configurations.  Our packaging was split across a war file and a set of subproject jar files with resources in them.  We found that the propery configuration approach included in vessl solved this in a elegant and very reusable way.  Its a nice compliment to the items identified above.
+
 This project is the accumlation of several different aspects that we enjoyed from other technolocies/frameworks and have pulled into here to help make application development easier.  We'd really like you to use it, the documentation below explains a bit of that, but our recommendation to see an example of this to pull into or start a new project quickly is to take a look at the [vess-webapp](https://github.com/makeandbuild/vessl-webapp) example project as a consumer of the vessl project would.
 
 ## JDBC Based Persistence
@@ -67,18 +69,6 @@ Multiple validators can be ran
 against the same object. This is controlled by the supports(...) method of your custom Validator instance. If a
 validation error is encountered the proxy dao instance will throw a RuntimeException ([BeanValidationException](./src/main/java/com/makeandbuild/vessl/validation/exception/BeanValidationException.java)) that
 contains a list of ObjectError objects defining the validation errors that occured.
-
-## Property Configuration
-
-It's possible to configure your application via an environment name which will match to a resource property file included in the classpath.  This is great if you dont mind including environment settings in your packaging.  For a full example, please see the [SpringEnvironmentPropertyPlaceholderConfigurerTest](./src/test/java/unit/com/makeandbuild/vessl/propconfig/SpringEnvironmentPropertyPlaceholderConfigurerTest.java).  You can also see the configuration of [src/test/resources/spring-propconfig.xml](./src/test/resources/spring-propconfig.xml).  Here is a snippet in $TOMCAT_HOME/bin/setenv.sh using the environment name (will load [/config-dev.properties](./src/test/resources/config-dev.properties) in classpath)
-
-    JAVA_OPTS="-DenvironmentName=dev -Dlog4j.configuration=file:/home/dev/log4j.properties"
-    export JAVA_OPTS
-
-It's also possible to explicitly define the property file on the local filesystem you want to use.  If you are in dev/ops this is probably what you want to have for your produciton environmets.  Here is a snippet in $TOMCAT_HOME/bin/setenv.sh using the full filename
-
-    JAVA_OPTS="-DenvironmentFilename=/home/dev/config-dev.properties -Dlog4j.configuration=file:/home/dev/log4j.properties"
-    export JAVA_OPTS
 
 # REST resources
 
@@ -395,6 +385,18 @@ As well as descending sorting and multple attributes - here we sort by "type" as
       "totalPages": 1,
       "totalItems": 6
     }
+
+## Property Configuration
+
+It's possible to configure your application via an environment name which will match to a resource property file included in the classpath.  This is great if you dont mind including environment settings in your packaging.  For a full example, please see the [SpringEnvironmentPropertyPlaceholderConfigurerTest](./src/test/java/unit/com/makeandbuild/vessl/propconfig/SpringEnvironmentPropertyPlaceholderConfigurerTest.java).  You can also see the configuration of [src/test/resources/spring-propconfig.xml](./src/test/resources/spring-propconfig.xml).  Here is a snippet in $TOMCAT_HOME/bin/setenv.sh using the environment name (will load [/config-dev.properties](./src/test/resources/config-dev.properties) in classpath)
+
+    JAVA_OPTS="-DenvironmentName=dev -Dlog4j.configuration=file:/home/dev/log4j.properties"
+    export JAVA_OPTS
+
+It's also possible to explicitly define the property file on the local filesystem you want to use.  If you are in dev/ops this is probably what you want to have for your produciton environmets.  Here is a snippet in $TOMCAT_HOME/bin/setenv.sh using the full filename
+
+    JAVA_OPTS="-DenvironmentFilename=/home/dev/config-dev.properties -Dlog4j.configuration=file:/home/dev/log4j.properties"
+    export JAVA_OPTS
 
 ## Integration Tests
 
