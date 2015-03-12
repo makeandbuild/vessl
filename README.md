@@ -58,11 +58,10 @@ As we evolved the JDBC side of our persistence implementation, we also found tha
 * delete helpers
 
 The contract for this is very course grained and maps to jackson ArrayNode and ObjectNode data types - the overhead to support a fine grained interface goes a bit against the NOSQL approach anyway.  The steps are a bit simpler for Couch than for JDBC because we've moved to a course grained model class:
-* you dont have to define a Dao interface unless you want to augment the dao services
-* you dont need to define a model class
-* you dont need to define domain mappers
-
-So really, all you have to to do is define a spring bean that extends [CouchDbJacksonImpl](./src/main/java/com/makeandbuild/vessl/persistence/couch/CouchDbJacksonImpl.java) in your [spring.xml](./src/test/resources/spring.xml) (ex: carDao)
+* you don't have to define a Dao interface unless you want to augment the dao services
+* you don't need to define a model class
+* you don't need to define domain mappers
+* you do need to define a spring bean that extends [CouchDbJacksonImpl](./src/main/java/com/makeandbuild/vessl/persistence/couch/CouchDbJacksonImpl.java) in your [spring.xml](./src/test/resources/spring.xml):
 
     <bean class="com.makeandbuild.vessl.persistence.couch.CouchDbJacksonImpl"
             id="carDao" init-method="init" scope="singleton">
