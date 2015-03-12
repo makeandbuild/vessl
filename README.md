@@ -82,8 +82,6 @@ You can also make use of the fixture functionality to load test data from class 
 * [EntityLoader](./src/main/java/com/makeandbuild/vessl/fixture/EntityLoader.java) - is responsible for loading the fixture data from a source
 * [EntityManager](./src/main/java/com/makeandbuild/vessl/fixture/EntityManager.java) - is responsible for persisting the loaded entity to the target data source
 
-Fixtures have been implemented to support full set loading of the fixture data into memory which is great for small data sets.  This however, becomes an issue when you want to load extremely large data sets which we refer to as "Mega Fixures".  To support this, we wanted to create a iterated loader that allows you to consume a stream and work with an active entity to persist it atomically.  The entityManager's really already support this, so doing so just required us to modify the loader implementation.
-
 To get a simple fixture working create your model JSON file like [com.makeandbuild.vessl.persistence.User.json](./src/test/resources/fixtures/com.makeandbuild.vessl.persistence.User.json)
 
     [
@@ -139,7 +137,7 @@ Define your fixture bean in [spring.xml](src/test/resources/spring.xml).  Its im
         </property>
     </bean>
 
-If you want to use megaFixtures, make sure that your entityLoader is defined as an instance of [IteratedInputStreamEntityLoaderImpl](src/main/java/com.makeandbuild.vessl.fixture.IteratedInputStreamEntityLoaderImpl)
+Fixtures have been implemented to support full set loading of the fixture data into memory which is great for small data sets.  This however, becomes an issue when you want to load extremely large data sets which we refer to as "Mega Fixures".  To support this, we wanted to create a iterated loader that allows you to consume a stream and work with an active entity to persist it atomically.  The entityManager's really already support this, so doing so just required us to modify the loader implementation.  If you want to use megaFixtures, make sure that your entityLoader is defined as an instance of [IteratedInputStreamEntityLoaderImpl](src/main/java/com.makeandbuild.vessl.fixture.IteratedInputStreamEntityLoaderImpl)
 
     <bean class="com.makeandbuild.vessl.fixture.IteratedInputStreamEntityLoaderImpl">
         <property name="inputStream" value="classpath:fixturesgen/com.makeandbuild.vessl.persistence.User.json"/>
