@@ -505,4 +505,4 @@ Now you can run the function test
 
      mvn integration-test -Pft
 
-For a bigger example of please see the sibling project for an example web app https://github.com/makeandbuild/vessl-webapp
+For a bigger example please see the sibling web app project https://github.com/makeandbuild/vessl-webapp
