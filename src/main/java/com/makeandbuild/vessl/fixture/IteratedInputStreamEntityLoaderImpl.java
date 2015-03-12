@@ -92,7 +92,20 @@ public class IteratedInputStreamEntityLoaderImpl implements EntityLoader, Iterat
         }
         return null;
     }
+    @Override
+    public void reInitialize() {
+    	initialized = false;
+    	try {
+//			this.inputStream.reset();
+			this.inputStream = resource.getInputStream();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+
+    Resource resource;
     public void setInputStream(Resource inputStream) throws IOException {
+    	resource = inputStream;
         this.inputStream = inputStream.getInputStream();
     }
     public void setEntityClass(Class entityClass) {

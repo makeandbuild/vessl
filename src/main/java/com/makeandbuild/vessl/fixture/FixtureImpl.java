@@ -67,6 +67,7 @@ public class FixtureImpl implements Fixture {
     private void doLoad(EntityLoader loader, EntityManager manager) throws IOException{
         if (loader instanceof IteratedLoader){
             IteratedLoader iteratedLoader = (IteratedLoader)loader;
+            iteratedLoader.reInitialize();
             Object value = iteratedLoader.read();
             while(value != null){
                 manager.save(value);
@@ -103,6 +104,7 @@ public class FixtureImpl implements Fixture {
     private void doPurge(EntityManager manager, EntityLoader loader) throws IOException {
         if (loader instanceof IteratedLoader){
             IteratedLoader iteratedLoader = (IteratedLoader)loader;
+            iteratedLoader.reInitialize();
             Object value = iteratedLoader.read();
             while(value != null){
                 manager.delete(value);

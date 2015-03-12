@@ -93,6 +93,23 @@
 			</list>
 		</property>
 	</bean>
+	<bean class="com.makeandbuild.vessl.fixture.FixtureImpl" id="megaFixture" scope="singleton">
+		<property name="entityLoaders">
+			<list>
+				<bean class="com.makeandbuild.vessl.fixture.IteratedInputStreamEntityLoaderImpl">
+					<property name="inputStream" value="classpath:fixturesgen/com.makeandbuild.vessl.persistence.User.json"/>
+					<property name="entityClass" value="com.makeandbuild.vessl.persistence.User"/>
+				</bean>
+			</list>
+		</property>
+		<property name="entityManagers">
+			<list>
+				<bean class="com.makeandbuild.vessl.fixture.DaoEntityManagerImpl">
+					<constructor-arg ref="userDao"/>
+				</bean>
+			</list>
+		</property>
+	</bean>
 	<bean class="com.makeandbuild.vessl.validation.ValidationProxyManagerImpl" id="validationProxyManager"/>
 	<bean class="com.makeandbuild.vessl.validation.validator.JSR303BeanValidator" id="jsr303BeanValidator"/>
 	<bean class="com.makeandbuild.vessl.validation.validators.UserValidator" id="userValidator"/>

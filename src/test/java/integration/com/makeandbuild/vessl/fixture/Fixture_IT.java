@@ -40,6 +40,9 @@ public class Fixture_IT extends AbstractTestNGSpringContextTests {
     @Autowired
     Fixture fixture;
 
+    @Autowired
+    Fixture megaFixture;
+
     @Test(enabled=true)
     public void testAll() throws IOException{
         fixture.purge();
@@ -95,6 +98,19 @@ public class Fixture_IT extends AbstractTestNGSpringContextTests {
         criterias.add(new Criteria("key", 2003));
         response = carDao.find(new AbstractPagedRequest(), criterias);
         assertTrue(response.getItems().size() ==1);
+    }
+    @Test(enabled=true)
+    public void testMega() throws IOException{
+    	megaFixture.purge();
+        assertTrue(!userDao.exists(1000000L));
+        long start = System.currentTimeMillis();
+        
+        megaFixture.load();
+        long duration = System.currentTimeMillis() - start;
+        
+        assertTrue(userDao.exists(1000000L));
+        assertTrue(duration < 300000);
 
+        megaFixture.purge();
     }
 }

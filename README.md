@@ -72,6 +72,7 @@ So really, all you have to to do is define a spring bean that extends [CouchDbJa
         <property name="designDocumentLocation" value="cars/_design/car"/>
     </bean>
 
+[FixtureUtil.testCouchDao()](./src/test/java/integration/com/makeandbuild/vessl/fixture/Fixture_IT.java) has a good example of usage
 
 ## Fixtures
 
@@ -79,13 +80,69 @@ You can also make use of the fixture functionality to load test data from class 
 * [EntityLoader](./src/main/java/com/makeandbuild/vessl/fixture/EntityLoader.java) - is responsible for loading the fixture data from a source
 * [EntityManager](./src/main/java/com/makeandbuild/vessl/fixture/EntityManager.java) - is responsible for persisting the loaded entity to the target data source
 
-To understand how to use this, please see
-* [src/test/resources/fixtures](./src/test/resources/fixtures) includes json resources to be loaded
-* [src/test/resources/spring.xml](src/test/resources/spring.xml) definition of fixture sets up the meta data for the project and takes into account the ordering
-* [Fixture_IT.testAll()](src/test/java/integration/com/makeandbuild/vessl/fixture/Fixture_IT.java) demonstrates how you can setup a set of resource files to be loaded in spring and purge() or load() as a complete set
-* [Fixture_IT.testResourceSingularly()](src/test/java/integration/com/makeandbuild/vessl/fixture/Fixture_IT.java) demonstrates on how to pass in a resource location to load a resoruce explicity
-* [Fixture_IT.testEntityClassSingularly()](src/test/java/integration/com/makeandbuild/vessl/fixture/Fixture_IT.java)  demonstrates how to purge via a given Model class
+Fixtures have been implemented to support full set loading of the fixture data into memory which is great for small data sets.  This however, becomes an issue when you want to load extremely large data sets which we refer to as "Mega Fixures".  To support this, we wanted to create a iterated loader that allows you to consume a stream and work with an active entity to persist it atomically.  The entityManager's really already support this, so doing so just required us to modify the loader implementation.
 
+To get a simple fixture working create your {modelClass}.json files like [src/test/resources/fixtures/com.makeandbuild.vessl.persistence.User.json](./src/test/resources/fixtures/com.makeandbuild.vessl.persistence.User.json)
+
+    [
+        {
+            "createdAt": "2012-01-01T00:00:00.000+0000",
+            "id": 1,
+            "latitude": 33.801077999999997,
+            "loginCount": 1,
+            "longitude": -84.436286999999993,
+            "userType": "admin",
+            "username": "azuercher"
+        },
+        {
+            "createdAt": "1988-01-01T00:00:00.000+0000",
+            "id": 2,
+            "latitude": 33.801077999999997,
+            "loginCount": 1,
+            "longitude": -84.436286999999993,
+            "userType": "simple",
+            "username": "telrod"
+        }
+    ]
+
+Define your fixture bean in [src/test/resources/spring.xml](src/test/resources/spring.xml).  Its important to order your entityManager by dependent to least dependent.  Conversly order your entityLoaders from least dependent to most dependent.
+
+    <bean class="com.makeandbuild.vessl.fixture.FixtureImpl" id="fixture" scope="singleton">
+        <property name="entityLoaders">
+            <list>
+                <bean class="com.makeandbuild.vessl.fixture.ResourceEntityLoaderImpl">
+                    <constructor-arg value="/fixtures/com.makeandbuild.vessl.persistence.User.json"/>
+                </bean>
+                <bean class="com.makeandbuild.vessl.fixture.ResourceEntityLoaderImpl">
+                    <constructor-arg value="/fixtures/com.makeandbuild.vessl.persistence.Event.json"/>
+                </bean>
+                <bean class="com.makeandbuild.vessl.fixture.ResourceEntityLoaderImpl">
+                    <constructor-arg value="/fixtures/com.fasterxml.jackson.databind.node.ObjectNode-car.json"/>
+                </bean>
+            </list>
+        </property>
+        <property name="entityManagers">
+            <list>
+                <bean class="com.makeandbuild.vessl.fixture.DaoEntityManagerImpl">
+                    <constructor-arg ref="eventDao"/>
+                </bean>
+                <bean class="com.makeandbuild.vessl.fixture.DaoEntityManagerImpl">
+                    <constructor-arg ref="userDao"/>
+                </bean>
+                <bean class="com.makeandbuild.vessl.fixture.DaoEntityManagerImpl">
+                    <constructor-arg ref="carDao"/>
+                    <constructor-arg value="car"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+If you want to use megaFixtures, make sure that your entityLoader is defined as an instance of [IteratedInputStreamEntityLoaderImpl](src/main/java/com.makeandbuild.vessl.fixture.IteratedInputStreamEntityLoaderImpl)
+
+    <bean class="com.makeandbuild.vessl.fixture.IteratedInputStreamEntityLoaderImpl">
+        <property name="inputStream" value="classpath:fixturesgen/com.makeandbuild.vessl.persistence.User.json"/>
+        <property name="entityClass" value="com.makeandbuild.vessl.persistence.User"/>
+    </bean>
 
 ## Validation
 
