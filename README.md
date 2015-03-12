@@ -173,7 +173,8 @@ Here is the a sample [UserValidator](src/test/java//integration/com/makeandbuild
             User user = (User) o;
             DateTime dt = new DateTime(user.getCreatedAt().getTime());
             if (dt.year().get() <= 1900) {
-                errors.rejectValue("createdAt", "local.error.dateold", "User must have been created after 1900");
+                errors.rejectValue("createdAt", "local.error.dateold",
+                    "User must have been created after 1900");
             }
         }
     }
