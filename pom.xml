@@ -4,7 +4,7 @@
 	<groupId>com.makeandbuild</groupId>
 	<artifactId>vessl</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.51</version>
+	<version>1.0.52</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>a lightweight persistence, REST, fixture, property configuration, and validation framework</description>
 	<url>http://makeandbuild.com</url>
