@@ -1,13 +1,13 @@
-# Make and Build Vessl
+# Make and Build vessl
 
-Welcome to the Make & Build Vessl framework which provides application developers with tools to:
+Welcome to the Make & Build vessl framework which provides application developers with tools to:
 * perform data access in a lightweight manner
 * create and execute fixtures for loading data
 * perform validation logic with the data services
 * expose REST resources to the underlying persistance functionality
 * configure applications specific to different environments without requiring seperate packaging
 
-Make & Build Vessl is licensed under the Apache Public License, Version 2.0 (see [LICENSE](./LICENSE))
+Make & Build vessl is licensed under the Apache Public License, Version 2.0 (see [LICENSE](./LICENSE))
 
 Please see the sibling project for an example web app https://github.com/makeandbuild/vessl-webapp
 
