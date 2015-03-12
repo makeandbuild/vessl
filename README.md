@@ -82,7 +82,7 @@ You can also make use of the fixture functionality to load test data from class 
 
 Fixtures have been implemented to support full set loading of the fixture data into memory which is great for small data sets.  This however, becomes an issue when you want to load extremely large data sets which we refer to as "Mega Fixures".  To support this, we wanted to create a iterated loader that allows you to consume a stream and work with an active entity to persist it atomically.  The entityManager's really already support this, so doing so just required us to modify the loader implementation.
 
-To get a simple fixture working create your {modelClass}.json files like [com.makeandbuild.vessl.persistence.User.json](./src/test/resources/fixtures/com.makeandbuild.vessl.persistence.User.json)
+To get a simple fixture working create your model JSON file like [com.makeandbuild.vessl.persistence.User.json](./src/test/resources/fixtures/com.makeandbuild.vessl.persistence.User.json)
 
     [
         {
