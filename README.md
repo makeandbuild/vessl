@@ -162,6 +162,7 @@ validation error is encountered the proxy dao instance will throw a RuntimeExcep
 contains a list of ObjectError objects defining the validation errors that occured.
 
 Here is the a sample [UserValidator](src/test/java//integration/com/makeandbuild/vessl/validation/validators/UserValidator.java)
+
     public class UserValidator implements Validator {
         @Override
         public boolean supports(Class<?> aClass) {
