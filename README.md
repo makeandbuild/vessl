@@ -11,6 +11,14 @@ Make & Build Vessl is licensed under the Apache Public License, Version 2.0 (see
 
 Please see the sibling project for an example web app https://github.com/makeandbuild/vessl-webapp
 
+## Why we created vessl
+
+About 3 years ago we were working on a not entirely small java project that was using hibernate for persistence.  We found that the object maps and the services we built to serialize them had some unintended consequences - even with lazy loading, the object graphs were pulling unecessarily large amounts of data in the complex objects.  The service contract locked directly into the model and this meant we had to carry excessively large amounts of data around just for some simple update/creates as well as full object graph rendering.  We liked aspects of the spring JDBC framework - it was lightweight, had the concept of domain mappers, and also allowed for direct execution of prepared statements in a secure way so we went with that, unifying the implementation in a course grain way that would allow us to extend it into some other areas, namely:
+* fixtures
+* REST endpoints
+* validation logic
+
+This project is the accumlation of several different aspects that we enjoyed from other technolocies/frameworks and have pulled into here to help make application development easier.  We'd really like you to use it, the documentation below explains a bit of that, but our recommendation to see an example of this to pull into or start a new project quickly is to take a look at the [vess-webapp](https://github.com/makeandbuild/vessl-webapp) example project as a consumer of the vessl project would.
 
 ## JDBC Based Persistence
 
