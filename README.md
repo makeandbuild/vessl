@@ -562,7 +562,7 @@ For a bigger example please see the sibling web app project https://github.com/m
 
 ## Including in your project
 
-vessl is distributed in maven central, you can find the latest versions there.  The current gradle entry (from [build.gradle](https://github.com/makeandbuild/vessl-webapp/blob/master/build.gradle)):
+vessl is distributed in [maven central](https://search.maven.org/#browse%7C-958470226), you can find the latest versions there.  The current gradle entry (from [build.gradle](https://github.com/makeandbuild/vessl-webapp/blob/master/build.gradle)):
 
     compile 'com.makeandbuild:vessl:1.0.52'
 
