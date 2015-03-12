@@ -61,7 +61,9 @@ The contract for this is very course grained and maps to jackson ArrayNode and O
 * you don't have to define a Dao interface unless you want to augment the dao services
 * you don't need to define a model class
 * you don't need to define domain mappers
-* you do need to define a spring bean that extends [CouchDbJacksonImpl](./src/main/java/com/makeandbuild/vessl/persistence/couch/CouchDbJacksonImpl.java) in your [spring.xml](./src/test/resources/spring.xml):
+* you do need to define a spring bean that extends [CouchDbJacksonImpl](./src/main/java/com/makeandbuild/vessl/persistence/couch/CouchDbJacksonImpl.java) in your [spring.xml](./src/test/resources/spring.xml)
+
+Here is the bean definition
 
     <bean class="com.makeandbuild.vessl.persistence.couch.CouchDbJacksonImpl"
             id="carDao" init-method="init" scope="singleton">
