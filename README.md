@@ -188,27 +188,31 @@ If you look at [EventResource](https://github.com/makeandbuild/vessl-webapp/blob
 * PUT {resource}/#id
 * POST {resource}
 
-Here is an example in Here is a sample in [UserResource](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/UserResource.java)
+Here is an example in Here is a sample in [EventResource](https://github.com/makeandbuild/vessl-webapp/blob/master/src/main/java/com/makeandbuild/vessl/sample/rest/EventResource.java)
 
-    @Path("/users")
-    public class UserResource extends ResourceSerializedBase<User, Long> {
+    @Path("/events")
+    public class EventResource extends ResourceSerializedBase<Event,String> {
         @Autowired
-        UserDao userDao;
+        EventDao eventDao;
 
-        public UserResource() {
-            super(User.class);
-        }
-
-        @Override
-        protected BaseDao<User, Long> getDao() {
-            return userDao;
-        }
+        @Autowired
+        EventSerializer eventSerializer;
 
         @Autowired
         UserSerializer userSerializer;
 
+        public EventResource() {
+            super(Event.class);
+        }
+
+        @Override
+        protected BaseDao<Event, String> getDao() {
+            return this.eventDao;
+        }
+
         @Override
         protected void addModuleSerializers(SimpleModule testModule){
+            testModule.addSerializer(Event.class, eventSerializer);
             testModule.addSerializer(User.class, userSerializer);
         }
     }
