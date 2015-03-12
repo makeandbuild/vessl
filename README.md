@@ -150,6 +150,8 @@ The mega fixtures are defined in [resources/fixturesgen/com.makeandbuild.vessl.p
     npm install
     ./load.sh
 
+[vess-webapp](https://github.com/makeandbuild/vessl-webapp)  has some nice utility gradle tasks to suppor this
+
 ## Validation
 
 Validation is supported via JSR-303 annotations and custom spring Validator instances you define. Simply defining an
