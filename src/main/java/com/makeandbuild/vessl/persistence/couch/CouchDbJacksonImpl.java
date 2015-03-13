@@ -268,7 +268,7 @@ public class CouchDbJacksonImpl extends CouchDBBaseImpl implements CouchDbJackso
     @Override
     public boolean exists(List<Criteria> criterias) throws DaoException {
         AbstractPagedResponse<ObjectNode, ArrayNode> response = find(new AbstractPagedRequest(), criterias);
-        return response.getTotalItems()>0;
+        return response.getItems().size()>0;
     }
 
     @Override
@@ -337,10 +337,6 @@ public class CouchDbJacksonImpl extends CouchDBBaseImpl implements CouchDbJackso
                 items.add(rows.get(i).get("value"));
             }
             pagedResponse.setItems(items);
-            long totalItems = response.get("total_rows").asLong();
-            pagedResponse.setTotalItems(totalItems);
-            int totalPages = (int)Math.ceil(totalItems/request.getPageSize());
-            pagedResponse.setTotalPages(totalPages);
             return pagedResponse;
         } catch (RestClientException e) {
             logger.error("problem fetching "+url, e);
@@ -405,7 +401,7 @@ public class CouchDbJacksonImpl extends CouchDBBaseImpl implements CouchDbJackso
     public void delete(List<Criteria> criterias) throws DaoException {
         AbstractPagedRequest request = new AbstractPagedRequest();
         AbstractPagedResponse<ObjectNode, ArrayNode> response = find(request, criterias);
-        while(response.getTotalItems() > 0 && response.getItems().size() > 0){
+        while(response.getItems().size() > 0){
             ArrayNode items = response.getItems();
             for (int i=0;i<items.size();i++){
                 ObjectNode item = (ObjectNode)items.get(i);
