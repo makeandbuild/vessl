@@ -168,18 +168,14 @@ The mega fixtures are defined in [resources/fixturesgen/com.makeandbuild.vessl.p
 
 ## Validation
 
-Validation is supported via JSR-303 annotations and custom spring Validator instances you define. Simply defining an
-instance of [ValidationProxyManagerImpl](./src/main/java/com/makeandbuild/vessl/validation/ValidationProxyManagerImpl.java) in the application context will suffice to load (and cache) all custom
-Validators you have also defined in the application context. Validation does not occur by default on any of your Dao
-classes.
+Validation is supported via JSR-303 annotations and custom spring Validator instances you define. Simply defining an instance of [ValidationProxyManagerImpl](./src/main/java/com/makeandbuild/vessl/validation/ValidationProxyManagerImpl.java) in the application context will suffice to load (and cache) all custom Validators you have also defined in the application context. Validation does not occur by default on any of your Dao classes.
 
-To enable bean validation you should create a dynamic proxy instance of your Dao (make sure it extends [BaseDao](./src/main/java/com/makeandbuild/vessl/persistence/jdbc/BaseDao.java)) and perform your methods through that proxy. All calls made through your dao proxy instance will have its
-parameters ran through a Validator instance that supports the parameters object type.
+    <bean class="com.makeandbuild.vessl.validation.ValidationProxyManagerImpl" id="validationProxyManager"/>
+    <bean class="com.makeandbuild.vessl.validation.validator.JSR303BeanValidator" id="jsr303BeanValidator"/>
+    <bean class="com.makeandbuild.vessl.validation.validators.UserValidator" id="userValidator"/>
 
-Multiple validators can be ran
-against the same object. This is controlled by the supports(...) method of your custom Validator instance. If a
-validation error is encountered the proxy dao instance will throw a RuntimeException ([BeanValidationException](./src/main/java/com/makeandbuild/vessl/validation/exception/BeanValidationException.java)) that
-contains a list of ObjectError objects defining the validation errors that occured.
+
+Multiple validators can be ran against the same object. This is controlled by the supports(...) method of your custom Validator instance. If a validation error is encountered the proxy dao instance will throw a RuntimeException ([BeanValidationException](/src/main/java/com/makeandbuild/vessl/validation/exception/BeanValidationException.java)) that contains a list of ObjectError objects defining the validation errors that occured.
 
 Here is a sample in [UserValidator](src/test/java//integration/com/makeandbuild/vessl/validation/validators/UserValidator.java)
 
@@ -199,6 +195,23 @@ Here is a sample in [UserValidator](src/test/java//integration/com/makeandbuild/
         }
     }
 
+
+To enable bean validation you should create a dynamic proxy instance of your Dao and perform your methods through that proxy ("validationUserDao" below). All calls made through your dao proxy instance will have its parameters ran through a Validator instance that supports the parameters object type.
+
+    @Autowired
+    ValidationProxyManager validationProxyManager;
+
+    @Autowired
+    UserDao userDao;
+
+    @Test
+    public void testExclude() {
+        AdminUser user = new AdminUser();
+        validationUserDao = (UserDao) validationProxyManager.newBeanValidatorProxy(userDao);
+        validationUserDao.save(user);   //Will throw a validation exception
+    }
+
+This is what our REST resources below use to apply validation to the underlying DAOs that they expose.
 
 # REST resources
 
