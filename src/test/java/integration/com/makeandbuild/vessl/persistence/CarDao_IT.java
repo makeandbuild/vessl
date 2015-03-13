@@ -46,14 +46,11 @@ public class CarDao_IT extends AbstractTestNGSpringContextTests {
     	createCar(2011);
     	createCar(2012);
 
-        criterias = new ArrayList<Criteria>();
-        criterias.add(new Criteria("view", "_design/car/_view/byMake"));
-        criterias.add(new Criteria("key", "toyota"));
-        response = carDao.find(new AbstractPagedRequest(0,2), criterias);
+        response = carDao.find(new AbstractPagedRequest(0,2), new Criteria("view", "_design/car/_view/byMake"), new Criteria("key", "toyota"));
         assertTrue(response.getItems().size() >1);
-        response = carDao.find(new AbstractPagedRequest(1,2), criterias);
+        response = carDao.find(new AbstractPagedRequest(1,2), new Criteria("view", "_design/car/_view/byMake"), new Criteria("key", "toyota"));
         assertTrue(response.getItems().size() >1);
-        
+
         carDao.delete(new Criteria("key", "toyota"),new Criteria("view", "_design/car/_view/byMake"));
     }
 
