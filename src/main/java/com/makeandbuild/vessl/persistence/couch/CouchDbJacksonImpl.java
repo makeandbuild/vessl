@@ -405,7 +405,7 @@ public class CouchDbJacksonImpl extends CouchDBBaseImpl implements CouchDbJackso
     public void delete(List<Criteria> criterias) throws DaoException {
         AbstractPagedRequest request = new AbstractPagedRequest();
         AbstractPagedResponse<ObjectNode, ArrayNode> response = find(request, criterias);
-        while(response.getTotalItems() > 0){
+        while(response.getTotalItems() > 0 && response.getItems().size() > 0){
             ArrayNode items = response.getItems();
             for (int i=0;i<items.size();i++){
                 ObjectNode item = (ObjectNode)items.get(i);

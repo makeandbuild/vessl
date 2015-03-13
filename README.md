@@ -74,7 +74,21 @@ Here is the bean definition for carDao
         <property name="designDocumentLocation" value="cars/_design/car"/>
     </bean>
 
-[FixtureUtil.testCouchDao()](./src/test/java/integration/com/makeandbuild/vessl/fixture/Fixture_IT.java) has a good example of usage
+you will need to identify a couple aspsects with regards to the design documents.  Here is a sample [car.json](./src/test/resources/_design/car.json) that has the two defined views in it:
+
+    {
+        "_id": "_design/car",
+        "views": {
+            "byMake": {
+                "map": "function(doc) { emit(doc.make, doc)}"
+            },
+            "byYear": {
+                "map": "function(doc) { emit(doc.year, doc)}"
+            }
+        }
+    }
+
+[CarDao_IT](./src/test/java/integration/com/makeandbuild/vessl/persistence/CarDao_IT.java) shows usage of both of these views with paging
 
 ## Fixtures
 
