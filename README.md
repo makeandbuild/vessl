@@ -88,7 +88,7 @@ you will need to identify a couple aspsects with regards to the design documents
         }
     }
 
-[CarDao_IT](./src/test/java/integration/com/makeandbuild/vessl/persistence/CarDao_IT.java) shows usage of both of these views with paging
+[CarDao_IT](./src/test/java/integration/com/makeandbuild/vessl/persistence/CarDao_IT.java) shows usage of both of these views with paging.  NOTE: couchdb doesn't allow us to determine the total number of pages nor the total number of items, but it does allow us to page through the result set.
 
 ## Fixtures
 
